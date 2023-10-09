@@ -1,4 +1,6 @@
 # The Rasterizer
+Here will be the rasterizer code.
+
 ### Current status of Rasterizer :
 
 * all testing done with a .PPM file.
@@ -6,8 +8,6 @@
 * [More functionality will be appended here]
 
 ### Development Diary : 
-
-Here will be the rasterizer code.
 
 Converting C++ to Java is hell. Java doesn't let you do anything. I miss ``` const vec2& ``` T_T 
 
