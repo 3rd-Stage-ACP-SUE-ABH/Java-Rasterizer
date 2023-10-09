@@ -1,4 +1,10 @@
 # The Rasterizer
+Current status of Rasterizer :
+
+* all testing done with a .PPM file.
+* Renderer has ```setPixel(int x, int y, Color someColor)``` function
+* [More functionality will be appended here]
+
 
 Here will be the rasterizer code.
 
