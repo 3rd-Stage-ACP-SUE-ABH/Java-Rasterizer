@@ -3,6 +3,6 @@
 
 public class Main {
     public static void main(String[] args) {
-
+        Pixel p0 = new Pixel(3, 4);
     }
 }

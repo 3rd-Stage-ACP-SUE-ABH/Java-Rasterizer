@@ -1,88 +1,62 @@
-public class Pixel
+public abstract class Vector
 {
-    public  Pixel()
+    Vector(Number...params)
     {
-        x=0;
-        y=0;
+        raw = new Number[params.length];
+        System.arraycopy(params, 0, raw, 0, params.length);
     }
-    public  Pixel(int x, int y)
+    public int getDimensions()
     {
-        this.x=x;
-        this.y=y;
-    }
-    public  Pixel(float x, float y)
-    {
-        this.x=(int)x;
-        this.y=(int)y;
-    }
-    public Pixel(Pixel p)
-    {
-        this.x = p.x;
-        this.y = p.y;
+        return raw.length;
     }
     @Override
-    public String toString ()
+    public String toString()
     {
-        return  (x + " " + y);
+        String returnValue = "";
+        for (int i =0; i<this.getDimensions(); i++)
+        {
+            returnValue += raw[i]+" ";
+        }
+        return returnValue;
     }
-    public static Pixel add(Pixel p0, Pixel p1)
-    {
-        return new Pixel(p0.x+p1.x, p0.y+ p1.y);
-    }
-    public static Pixel neg (Pixel p)
-    {
-        return new Pixel(-p.x, -p.y);
-    }
-    public Pixel neg ()
-    {
-        return new Pixel(-x,-y);
-    }
-    public static Pixel sub (Pixel p0, Pixel p1)
-    {
-        return new Pixel(p0.x - p1.x, p0.y - p1.y);
-    }
-    public static int dot (Pixel p0, Pixel p1)
-    {
-        return (p0.x * p1.x) + (p0.y * p1.y);
-    }
-    public static Pixel mul (Pixel p0, Pixel p1)
-    {
-        return new Pixel(p0.x*p1.x, p0.y*p1.y);
-    }
-    public static Pixel mul (Pixel p, int t)
-    {
-        return new Pixel(p.x*t, p.y*t);
-    }
-    public static Pixel mul (Pixel p, float t)
-    {
-        return new Pixel((p.x*t), (p.y*t));
-    }
-    public Pixel mul (int t)
-    {
-        return new Pixel(x*t, y*t);
-    }
-    public Pixel mul (float t)
-    {
-        return new Pixel(x*t, y*t);
-    }
-    public Pixel div(float t)
-    {
-        return new Pixel((float)x/t, (float)y/t);
-    }
-    public float magnitude ()
-    {
-        return (float)Math.sqrt(x*x+y*y);
-    }
-    public static Pixel getNormalized(Pixel p)
-    {
-        return new Pixel(p.div(p.magnitude()));
-    }
-    public final int x, y;
+    //operators
+
+    //fields
+    protected final Number[] raw;
+    public Number x(){return raw[0];}
+    public Number y(){return raw[1];}
+    public Number z(){return raw[2];}
+    public Number w(){return raw[3];}
 }
-class Vec2i extends Pixel
+class Pixel extends Vector
 {
-    public Vec2i (int x, int y)
+    Pixel()
     {
-        super(x,y);
+        super(0, 0 );
+        raw[0] = raw[0].intValue();
+        raw[1] = raw[1].intValue();
+    }
+    Pixel(int x, int y)
+    {
+        super(x, y);
+        raw[0] = raw[0].intValue();
+        raw[1] = raw[1].intValue();
+    }
+}
+class ColorRGB extends Vector
+{
+    ColorRGB ()
+    {
+        super(0.0, 0.0, 0.0);
+        raw[0]=raw[0].floatValue();
+        raw[1]=raw[1].floatValue();
+        raw[2]=raw[2].floatValue();
+    }
+    ColorRGB (float R, float G, float B)
+    {
+        super(R, G, B);
+        raw[0]=raw[0].floatValue();
+        raw[1]=raw[1].floatValue();
+        raw[2]=raw[2].floatValue();
     }
 }
