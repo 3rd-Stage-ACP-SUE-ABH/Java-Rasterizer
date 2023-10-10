@@ -5,7 +5,7 @@ Here will be the rasterizer code.
 
 * all testing done with a .PPM file.
 * Renderer has ```setPixel(int x, int y, Color someColor)``` function
-* Renderer has ```drawLine(Pixel p0, Pixel p1, Color color) and drawTriangle(Pixel p0, Pixel p1, Pixel p2, Color color)``` functions 
+* Renderer has ```drawLine(Pixel p0, Pixel p1, Color color)``` and ```drawTriangle(Pixel p0, Pixel p1, Pixel p2, Color color)``` functions 
 * [More functionality will be appended here]
 
 ### Development Diary : 
