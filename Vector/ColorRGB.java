@@ -17,7 +17,7 @@ public class ColorRGB extends Vector
         raw[2]=raw[2].floatValue();
     }
     //field
-    public Number R(){return super.x().floatValue();}
-    public Number G(){return super.y().floatValue();}
-    public Number B(){return super.z().floatValue();}
+    public Float R(){return super.x().floatValue();}
+    public Float G(){return super.y().floatValue();}
+    public Float B(){return super.z().floatValue();}
 }

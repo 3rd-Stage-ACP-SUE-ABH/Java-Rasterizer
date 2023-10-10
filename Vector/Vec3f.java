@@ -16,8 +16,8 @@ public class Vec3f extends Vector
         raw[1]=raw[1].floatValue();
         raw[2]=raw[2].floatValue();
     }
-    public Number x(){return super.x().floatValue();}
-    public Number y(){return super.y().floatValue();}
-    public Number z(){return super.z().floatValue();}
+    public Float x(){return super.x().floatValue();}
+    public Float y(){return super.y().floatValue();}
+    public Float z(){return super.z().floatValue();}
 }
 

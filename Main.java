@@ -16,13 +16,19 @@ public class Main
         //init PPM
         String init = ("P3\n"+pix_width+" "+pix_height+"\n255\n");
         //process pixelBuffer
-        Renderer myRenderer = new Renderer(pix_width, pix_height);
-        myRenderer.fill(new Color(0.f,0.5f,1.0f));
+        long start = System.nanoTime();
 
+        Renderer myRenderer = new Renderer(pix_width, pix_height);
+        for (int i =0;i<55;i++)
+        {
+            myRenderer.drawTriangle(new Pixel(10+10*i, 10+10*i), new Pixel( 10*i, 30*i), new Pixel(30*i, 10*i), new Color(Math.min(15*i, 255), Math.min(5*i, 255), Math.min(20*i, 255)));
+        }
+
+        long time = System.nanoTime() - start;
+        System.out.println("Processing time :  " + (((double) time/1_000_000_000) + "s"));
         //write pixelBuffer
         StringBuilder bufferData=new StringBuilder(init);
         int[] pixelBuffer = myRenderer.getColorBuffer();
-        long start = System.nanoTime();
         for (int i =0; i<pixelBuffer.length;i++)
         {
             Color tempColor=new Color(pixelBuffer[i]);
@@ -32,8 +38,6 @@ public class Main
             bufferData.append(tempColor.getRed() + " " + tempColor.getGreen() + " " + tempColor.getBlue()+"\n");
         }
         writeToPPM(bufferData.toString());
-        long time = System.nanoTime() - start;
-        System.out.println("write speed : " + ((double)pix_height*pix_width/((double) time/1_000_000_000) + " pixels/s"));
     }
     public static File createPPM(String title)
     {

@@ -1,6 +1,6 @@
 package Vector;
 
-public class Vector
+public abstract class Vector
 {
     public Vector(Number...params)
     {

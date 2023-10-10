@@ -15,7 +15,7 @@ public class Pixel extends Vector
         raw[1] = raw[1].intValue();
     }
     //field
-    public Number x(){return super.x().intValue();}
-    public Number y(){return super.y().intValue();}
-    public Number z(){return super.z().intValue();}
+    public Integer x(){return super.x().intValue();}
+    public Integer y(){return super.y().intValue();}
+    public Integer z(){return super.z().intValue();}
 }
