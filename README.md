@@ -13,3 +13,5 @@ Converting C++ to Java is hell. Java doesn't let you do anything. I miss ``` con
 
 #### october 9th 
 Note to future self and developers : when loading huge data into a string inside a for loop, please use stringBuilder or stringBuffer. I was copying the same string literally millions of times with megabytes worth of data.
+#### october 10th
+Finished setting up the basic renderer. Drawing 55 triangles took 7 seconds, seems kind of slow but won't know until we load actual model.
