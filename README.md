@@ -23,3 +23,12 @@ Another one in the "typos that cost me hours" section
 ![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/f006499c-5418-4b6b-b6cd-c622f5c6f18a)
 
 It should be ```if (std::abs(orthogonal.z)>1e-2)```
+
+Erratic depth map 
+
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/7f9fe3a3-7112-4691-be62-c63a762cf7e5)
+
+This is 3 errors working all at once. One is the typo above, the other is muliplting vertices in the wrong order to determine barycentric coordinates (this is why it looks triangulated), and the final error is that I forgot to initialize my depth buffer with the maximum negative value possible, instead leaving it to the default of 0. 
+
+Correct (I hope!) depth map
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/fec67688-9340-4f38-8e32-0eaf3961b4e1)
