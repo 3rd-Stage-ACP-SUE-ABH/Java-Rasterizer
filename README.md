@@ -32,3 +32,8 @@ This is 3 errors working all at once. One is the typo above, the other is mulipl
 
 Correct (I hope!) depth map
 ![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/fec67688-9340-4f38-8e32-0eaf3961b4e1)
+#### october 12th
+Cool bug.
+
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/a12960e7-5131-4897-8f14-b5eb6b2763a7)
+
