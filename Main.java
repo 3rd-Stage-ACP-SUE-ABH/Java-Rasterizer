@@ -65,6 +65,6 @@ public class Main
         myWriter.close();
     }
     public static final String title ="output";
-    public static final int pix_height = 1000;
-    public static final int pix_width = 1000;
+    public static final int pix_height = 1080;
+    public static final int pix_width = 1920;
 }
