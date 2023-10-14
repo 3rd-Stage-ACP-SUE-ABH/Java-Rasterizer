@@ -7,6 +7,8 @@ Here will be the rasterizer code.
 * Renderer has ```setPixel(int x, int y, Color someColor)``` function.
 * Renderer has ```drawLine(Pixel p0, Pixel p1, Color color)``` and ```drawTriangle(Pixel p0, Pixel p1, Pixel p2, Color color)``` functions.
 * Renderer has Depth testing.
+* Renderer displays to window.
+* Renderer has model loader.
 * [More functionality will be appended here]
 
 ### Development Diary : 
