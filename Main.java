@@ -94,7 +94,7 @@ public class Main
             Vec3f AB = minus(worldCoords[2], worldCoords[0]);
             Vec3f AC = minus(worldCoords[1], worldCoords[0]);
             Vec3f normal = cross(AC, AB).getNormalized();
-            myRenderer.diffuse.lightColor = new Color(0.45f,0.55f,0.65f);
+            myRenderer.diffuse.lightColor = new Color(0.6f,0.55f,0.65f);
             myRenderer.diffuse.direction = new Vec3f(0.5f,0.1f,-0.2f);
             myRenderer.ambient.lightColor = new Color(0.1f,0.2f,0.15f);
             Color diffuseDirectional = myRenderer.diffuseDirectional(normal);
