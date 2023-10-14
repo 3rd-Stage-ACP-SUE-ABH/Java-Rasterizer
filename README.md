@@ -3,7 +3,7 @@ Here will be the rasterizer code.
 
 ### Current status of Rasterizer :
 
-* all testing done with a .PPM file.
+* ~All~ testing done with a .PPM file.
 * Renderer has ```setPixel(int x, int y, Color someColor)``` function.
 * Renderer has ```drawLine(Pixel p0, Pixel p1, Color color)``` and ```drawTriangle(Pixel p0, Pixel p1, Pixel p2, Color color)``` functions.
 * Renderer has Depth testing.
@@ -83,5 +83,24 @@ After implementing depth testing :
 
 What a healthy ball!
 
+#### october 15th
+In celebration of v0.1 of our rasterizer, here are some interesting images : 
 
+Ball
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/b65aeccb-2574-4c5a-ba28-59048a98b84b)
+
+
+Interpolated normals
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/a33b85cb-e9bd-4c69-b84d-147f38b4c9a7)
+
+Non-interpolated normals
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/b0fdfc0b-71ff-4fa0-b90d-46810b738882)
+
+
+Texture sampling 
+
+
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/359e1298-47bc-4957-8c44-5e359dd3affa)
+
+This one might also feature in my bug report, I still don't know if this is what it should look like.
 
