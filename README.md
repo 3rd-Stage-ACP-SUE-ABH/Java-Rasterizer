@@ -46,3 +46,40 @@ minY should obviously take the y value.
 I had to deal with this typo the day before presenting my code, and I troubleshot it for at least an hour.
 Nothing beats the frustration of "How could I miss this?"
 
+
+When I said I would kill that typo I might've been exaggerating. But this bug I would actually kill if I could.
+
+
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/97e49283-7458-412e-8e9a-b4e31ed01f08)
+
+
+What you are looking at is the RGB map of surface normals.
+
+The story of how I struggled for 5 hours with this bug shall remain undisclosed, but suffice it to say the problem was depth buffer testing. This might seem obvious to you but it stumped me. Until @Agab-dev suggested the genius idea that it could be triangles rendering in the back. Even then I doubted it, after all my cpp code worked perfectly without depth buffer testing. Later on we loaded a spherical model (thanks, MIT!) :
+
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/589f40a3-ce7f-41e3-801e-8cf4ac0fb292)
+
+What a sickly ball!
+
+Most importantly, I decided to test every axis separately.
+
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/d30d5174-08d3-4a39-bd16-db2c8f224db1)
+
+The x-axis. Seems right.
+
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/fdcb82c5-afab-4d37-a4d2-555f4d0bc185)
+
+Y. Seems right!
+
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/e599e5ce-8781-490b-aeaa-427da8f1f42b)
+
+Curse you Z-axis.
+
+After implementing depth testing : 
+
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/88678aab-be39-442b-aab1-5b7639d0833b)
+
+What a healthy ball!
+
+
+
