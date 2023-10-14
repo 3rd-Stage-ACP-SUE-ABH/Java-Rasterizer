@@ -36,4 +36,13 @@ Correct (I hope!) depth map
 Cool bug.
 
 ![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/a12960e7-5131-4897-8f14-b5eb6b2763a7)
+#### october 14th
+I would kill this typo if I could.
+
+
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/1eb44dd0-5ae1-440a-a1ff-243f99c8bcc0)
+
+minY should obviously take the y value.
+I had to deal with this typo the day before presenting my code, and I troubleshot it for at least an hour.
+
 
