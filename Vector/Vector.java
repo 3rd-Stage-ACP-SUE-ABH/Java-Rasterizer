@@ -11,7 +11,26 @@ public abstract class Vector
     {
         return raw.length;
     }
-
+    public abstract Vector neg();
+    public abstract Vector getNormalized();
+    protected float[] getNormalizedCoords()
+    {   //not the ideal implementation but I had to code this up quickly
+        float[] normalizedCoords = new float[getDimensions()];
+        for(int i =0 ; i<getDimensions();i++)
+        {
+            normalizedCoords[i]=raw[i].floatValue()/magnitude();
+        }
+        return normalizedCoords;
+    }
+    public float magnitude()
+    {
+        float sum = 0;
+        for(int i =0;i<getDimensions();i++)
+        {
+            sum+=raw[i].floatValue()*raw[i].floatValue();
+        }
+        return (float)Math.sqrt(sum);
+    }
     @Override
     public String toString()
     {
@@ -23,7 +42,8 @@ public abstract class Vector
         return returnValue;
     }
     //fields
-    protected final Number[] raw;
+    //TODO find a way to make this final
+    protected Number[] raw;
     protected Number x(){return raw[0];}
     protected Number y(){return raw[1];}
     protected Number z(){return raw[2];}

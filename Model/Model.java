@@ -15,6 +15,7 @@ public class Model {
     private final ArrayList<int[]> Nindices;
     private final ArrayList<int[]> Tindices;
     private final String filePath;
+
     public Model(String filePath) {
         this.filePath = filePath;
         normalIndices = new ArrayList<>();
@@ -81,7 +82,7 @@ public class Model {
     }
     public float[] getTexCoords(int idx)
     {
-        return normalCoords.get(idx);
+        return texCoords.get(idx);
     }
     public float[] getNormalCoords(int idx)
     {
@@ -99,6 +100,7 @@ public class Model {
     {
         return Tindices.get(idx);
     }
+
     public int nVerts()
     {
         return vertexCoords.size();
