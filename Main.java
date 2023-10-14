@@ -13,6 +13,7 @@ import java.io.IOException;
 import Vector.Vector;
 import ppmWriter.*;
 import Model.*;
+import window.ImageDisplay;
 
 import static Renderer.Renderer.colorBufferToString;
 import static Renderer.Renderer.map;
@@ -43,6 +44,11 @@ public class Main
         {
             zBuffer[i] = -Float.MAX_VALUE;
         }
+        //init window
+        ImageDisplay img = new ImageDisplay(pix_width,pix_height,"test display");
+        img.setSize(pix_width,pix_height);
+        img.setVisible(true);
+
 
         Model africanHead = new Model("C:/Users/msi/Desktop/african_head.obj");
         //process pixelBuffer
@@ -104,13 +110,22 @@ public class Main
                     255); */
             myRenderer.drawTriangle(screenCoords, textureCoords, zBuffer, sumColor);
         }
-
-
-        long time = System.nanoTime() - start;
-        System.out.println("Processing time :  " + (((double) time/1_000_000_000) + "s"));
+        Color[] colorBufferWindow= new Color[myRenderer.colorBuffer.length];
+        for (int i =0;i<myRenderer.colorBuffer.length;i++)
+        {
+            colorBufferWindow[i]=new Color(myRenderer.getColorBuffer()[i]);
+        }
+        while (true)
+        {
+            img.loadBuffer(colorBufferWindow);
+            img.updateBufferedImage();
+            ImageDisplay.imagePanel.repaint();
+        }
+    //    long time = System.nanoTime() - start;
+    //    System.out.println("Processing time :  " + (((double) time/1_000_000_000) + "s"));
         //write pixelBuffer
-        ppmWriter myPPM = new ppmWriter(pix_width, pix_height);
-        myPPM.writeToPPM(colorBufferToString(myRenderer.getColorBuffer()));
+    //    ppmWriter myPPM = new ppmWriter(pix_width, pix_height);
+    //    myPPM.writeToPPM(colorBufferToString(myRenderer.getColorBuffer()));
     }
     public static Pixel mapToScreen (float x, float y, float min, float max)
     {
