@@ -44,5 +44,5 @@ I would kill this typo if I could.
 
 minY should obviously take the y value.
 I had to deal with this typo the day before presenting my code, and I troubleshot it for at least an hour.
-
+Nothing beats the frustration of "How could I miss this?"
 
