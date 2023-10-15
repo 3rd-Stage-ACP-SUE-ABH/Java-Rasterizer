@@ -9,6 +9,7 @@ Here will be the rasterizer code.
 * Renderer has Depth testing.
 * Renderer displays to window.
 * Renderer has model loader.
+* Renderer can load textures and interpolate texture coordinates.
 * [More functionality will be appended here]
 
 ### Development Diary : 
@@ -103,4 +104,13 @@ Texture sampling
 ![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/359e1298-47bc-4957-8c44-5e359dd3affa)
 
 This one might also feature in my bug report, I still don't know if this is what it should look like.
+
+
+It turns out I was wrong. Everything was right. The bug eludes me. I just used my ```map()``` function, instead of doing the operations directly, and the texture loaded perfectly.
+I don't understand, but this is no time for understanding. The code worked, hurrah!
+
+![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/fb0c7f2c-c2c9-4e03-b070-b8f15ad50a42)
+
+
+For future reference the texture was loading all fucked up when I didn't use ```map()```.
 
