@@ -4,8 +4,7 @@ Here will be the rasterizer code.
 ### Current status of Rasterizer :
 
 * ~All~ testing done with a .PPM file.
-* Renderer has ```setPixel(int x, int y, Color someColor)``` function.
-* Renderer has ```drawLine(Pixel p0, Pixel p1, Color color)``` and ```drawTriangle(Pixel p0, Pixel p1, Pixel p2, Color color)``` functions.
+* Renderer has functions to draw lines, triangles, and set single pixels.
 * Renderer has Depth testing.
 * Renderer displays to window.
 * Renderer has model loader.
