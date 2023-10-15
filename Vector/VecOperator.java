@@ -1,9 +1,16 @@
 package Vector;
 
+import java.awt.*;
+import static java.lang.Math.min;
+
 public final class VecOperator
 {
     private VecOperator()
     {
+    }
+    public static Color coloMul (Color u, Color v)
+    {   //returns color equal to scaling u by v
+        return new Color( min(u.getRed()*v.getRed()/255, 255),  min(u.getGreen()*v.getGreen()/255, 255), min(u.getBlue()*v.getBlue()/255, 255));
     }
     public static Vec3f minus (Vec3f u, Vec3f v)
     {   //non ideal implementation

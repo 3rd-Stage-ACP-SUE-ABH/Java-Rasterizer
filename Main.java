@@ -94,9 +94,9 @@ public class Main
             Vec3f AB = minus(worldCoords[2], worldCoords[0]);
             Vec3f AC = minus(worldCoords[1], worldCoords[0]);
             Vec3f normal = cross(AC, AB).getNormalized();
-            myRenderer.diffuse.lightColor = new Color(0.6f,0.55f,0.65f);
-            myRenderer.diffuse.direction = new Vec3f(0.5f,0.1f,-0.2f);
-            myRenderer.ambient.lightColor = new Color(0.1f,0.2f,0.15f);
+            myRenderer.diffuse.lightColor = new Color(0.8f,0.95f,1.0f);
+            myRenderer.diffuse.direction = new Vec3f(0.5f,-1.0f,-0.2f);
+            myRenderer.ambient.lightColor = new Color(0.1f,0.05f,0.0f);
             Color diffuseDirectional = myRenderer.diffuseDirectional(normal);
             Color sumColor = new Color(min(diffuseDirectional.getRed()+myRenderer.ambient.lightColor.getRed(), 255),
                     min(diffuseDirectional.getGreen()+myRenderer.ambient.lightColor.getGreen(), 255),
@@ -110,6 +110,17 @@ public class Main
                     255); */
             myRenderer.drawTriangle(screenCoords, textureCoords, zBuffer, sumColor);
         }
+        //testing: displays texture onto screen
+    /*    for (int i =0; i<myRenderer.texHeight;i++)
+        {
+            for (int j = 0; j<myRenderer.texWidth;j++)
+            {
+                myRenderer.setPixel(new Pixel(map(0, myRenderer.texWidth-1, 0, pix_width-1, j).intValue(),
+                        map(0, myRenderer.texHeight-1, 0, pix_height-1, i).intValue()), myRenderer.textureData[j+i*myRenderer.texWidth]);
+            }
+        } */
+        long time = System.nanoTime() - start;
+        System.out.println("Processing time :  " + (((double) time/1_000_000_000) + "s"));
         Color[] colorBufferWindow= new Color[myRenderer.colorBuffer.length];
         for (int i =0;i<myRenderer.colorBuffer.length;i++)
         {
@@ -121,8 +132,6 @@ public class Main
             img.updateBufferedImage();
             ImageDisplay.imagePanel.repaint();
         }
-    //    long time = System.nanoTime() - start;
-    //    System.out.println("Processing time :  " + (((double) time/1_000_000_000) + "s"));
         //write pixelBuffer
     //    ppmWriter myPPM = new ppmWriter(pix_width, pix_height);
     //    myPPM.writeToPPM(colorBufferToString(myRenderer.getColorBuffer()));

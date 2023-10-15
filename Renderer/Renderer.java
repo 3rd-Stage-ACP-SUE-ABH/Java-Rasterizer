@@ -163,14 +163,17 @@ public class Renderer {
                 sum = interpolate(new float[]{pts[0].z(), pts[1].z(), pts[2].z()}, test, sum);
                 P.setDepth(sum);
                 //interpolate texture X Y coordinate
+                //TODO the texture only works when I map() the interpolated coordinates, why?
                 float texX = 0, texY = 0;
                 texX = interpolate(new float[]{texPts[0].x(), texPts[1].x(), texPts[2].x()}, test, texX);
                 texY = interpolate(new float[]{texPts[0].y(), texPts[1].y(), texPts[2].y()}, test, texY);
-                Color textureColor = textureData[(int)(texY*texHeight*texWidth+texX*texWidth)];
+                Pixel fragmentScreenSpace = new Pixel(map(0,1,0,texWidth, texX).intValue(),
+                        map(0,1,0,texHeight, texY).intValue() );
+                Color textureColor = textureData[fragmentScreenSpace.x()+fragmentScreenSpace.y()*texWidth];
                 if (depthBuffer[(int)(P.x()+P.y()*width)]<P.z())
                 {
                     depthBuffer[(int)(P.x()+P.y()*width)]=P.z();
-                    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), color);
+                    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), VecOperator.coloMul(textureColor, color));
                 }
             }
         }
