@@ -120,3 +120,6 @@ For future reference the texture was loading all fucked up when I didn't use ```
 Finally! we have real-time rendering, but...at what cost?
 It's very slow. VERY.
 Currently only outputting about 0.5FPS with a single model loaded. I don't even have any ideas on how to make it faster anymore, other than multithreading.
+#### october 17th
+I am lucky that I worked with OpenGL before. I was wondering why my model wasn't rendering every frame (even though I was clearing the color buffer), and it just occured to me that we also clear the depth buffer in OpenGL every frame.
+Bless [LearnOpenGL](https://learnopengl.com/)!
