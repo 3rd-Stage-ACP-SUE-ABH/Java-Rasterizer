@@ -16,6 +16,7 @@ public class Renderer {
     Vec3f[][] normalCoords;
     float[] depthBuffer;
     //TODO structure : probably better to use an entire array of lights. Improve the general structure.
+
     public void loadModelData(Model modelObject)
     {   //loads vertex, normal, and texture coords in the order specified by faces
         vertexCoords = new Vec3f[modelObject.nFaces()][3];
@@ -64,6 +65,10 @@ public class Renderer {
         depthBuffer= new float[height*width];
         //instantiate depth buffer
         //TODO structure :  might be better to move this elsewhere
+        Arrays.fill(depthBuffer, -Float.MAX_VALUE);
+    }
+    public void clearDepthBuffer()
+    {
         Arrays.fill(depthBuffer, -Float.MAX_VALUE);
     }
     public Color[] textureData;

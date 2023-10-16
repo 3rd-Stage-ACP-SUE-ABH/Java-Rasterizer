@@ -16,7 +16,7 @@ import Model.*;
 import window.ImageDisplay;
 
 import static Renderer.Renderer.colorBufferToString;
-import static Renderer.Renderer.map;
+import static Renderer.Renderer.*;
 import static Vector.VecOperator.*;
 import static java.lang.Math.*;
 
@@ -65,10 +65,11 @@ public class Main
         while (true)
         {
             long start = System.nanoTime();
-            //reset buffer at the beginning of the frame
+            //clear buffers at the beginning of the frame
             myRenderer.fill(new Color(50,50,50));
+            myRenderer.clearDepthBuffer();
             //as proof of concept, render something cool
-            int radius = 50+(int)((sin((double) System.currentTimeMillis() /250)+1)/2*25);
+         /*   int radius = 50+(int)((sin((double) System.currentTimeMillis() /250)+1)/2*25);
             Pixel center = new Pixel(i%(pix_width-1)+(int)(((sin((double) System.currentTimeMillis() /1000)+1)/2)*100),
                     i%(pix_height)+(int)(((sin((double) System.currentTimeMillis() /1000)+1)/2)*100));
             for (int j =center.y()-radius;j<center.y()+radius;j++)
@@ -84,9 +85,13 @@ public class Main
                                 (int)((sin((double) System.currentTimeMillis() /900)+1)/2*255), (int)((sin((double) System.currentTimeMillis() /800)+1)/2*255), 255));
                     }
                 }
-            }
-            //TODO bug fixing : model render gets removed after one frame
-        //  myRenderer.renderModel(africanHead);
+            } */
+            //get a random direction and color every frame
+              myRenderer.diffuse.direction = new Vec3f(map(0,1,-1,1,random()).floatValue(),
+                      map(0,1,-1,1,random()).floatValue(),
+                      map(0,1,-1,1,random()).floatValue());
+              myRenderer.diffuse.lightColor = new Color((int)(random()*255), (int)(random()*255), (int)(random()*255), 255);
+              myRenderer.renderModel(africanHead);
 
             //copy renderer output to screen buffer
             for (int j =0;j<myRenderer.colorBuffer.length;j++)
