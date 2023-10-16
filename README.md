@@ -1,5 +1,7 @@
 # The Rasterizer
-Here will be the rasterizer code.
+This is (an attempt at) a real-time software rasterizer. The main graphics logic is based on the renderer described in [Tiny Renderer](https://github.com/ssloy/tinyrenderer/wiki/Lesson-0:-getting-started).
+
+This project uses no dependencies other than the Java Class library.
 
 ### Current status of Rasterizer :
 
