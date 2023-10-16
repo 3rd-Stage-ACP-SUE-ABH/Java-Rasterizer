@@ -8,9 +8,13 @@ public final class VecOperator
     private VecOperator()
     {
     }
-    public static Color coloMul (Color u, Color v)
-    {   //returns color equal to scaling u by v
+    public static Color mulColor (Color u, Color v)
+    {   //returns color equal to scaling u by v, clipping to 255
         return new Color( min(u.getRed()*v.getRed()/255, 255),  min(u.getGreen()*v.getGreen()/255, 255), min(u.getBlue()*v.getBlue()/255, 255));
+    }
+    public static Color sumColor (Color u, Color v)
+    {   //returns plain sum clipping to 255
+        return new Color(min (u.getRed()+v.getRed(), 255), min(u.getGreen()+v.getGreen(), 255), min(u.getBlue()+v.getBlue(), 255));
     }
     public static Vec3f minus (Vec3f u, Vec3f v)
     {   //non ideal implementation

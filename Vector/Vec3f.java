@@ -20,6 +20,13 @@ public class Vec3f extends Vector
         raw[1]=raw[1].floatValue();
         raw[2]=raw[2].floatValue();
     }
+    public Vec3f (float[] data)
+    {      //TODO assigning raw values to their type here is probably redundant
+        super(data[0], data[1], data[2]);
+        raw[0]=raw[0].floatValue();
+        raw[1]=raw[1].floatValue();
+        raw[2]=raw[2].floatValue();
+    }
     @Override
     public Vec3f getNormalized() {
         return new Vec3f(getNormalizedCoords()[0], getNormalizedCoords()[1], getNormalizedCoords()[2]);

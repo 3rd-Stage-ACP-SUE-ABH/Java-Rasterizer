@@ -3,21 +3,57 @@ package Renderer;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Arrays;
+
+import Model.Model;
 import Vector.*;
 import static java.lang.Math.*;
 import static Vector.VecOperator.*;
 import ppmWriter.*;
 public class Renderer {
-    //TODO probably better to use an entire array of lights. Improve the general structure.
-    public Color[] textureData;
-    public int texHeight, texWidth;
-    public Light diffuse = new Light();
-    public Light ambient = new Light();
-    {
-
-        diffuse.lightColor= Color.white;
-        diffuse.direction = new Vec3f(0.5f,0.0f,0.3f);
-        ambient.lightColor = new Color(0.3f,0.15f,0.2f);
+    //model data. stored such that index 0 corresponds to the 3 3D coordinates specified by face 0.
+    Vec3f[][] vertexCoords;
+    Vec3f[][] textureCoords;
+    Vec3f[][] normalCoords;
+    float[] depthBuffer;
+    //TODO structure : probably better to use an entire array of lights. Improve the general structure.
+    public void loadModelData(Model modelObject)
+    {   //loads vertex, normal, and texture coords in the order specified by faces
+        vertexCoords = new Vec3f[modelObject.nFaces()][3];
+        textureCoords = new Vec3f[modelObject.nFaces()][3];
+        normalCoords = new Vec3f[modelObject.nFaces()][3];
+        for (int i = 0; i<modelObject.nFaces(); i++)
+        {
+            for (int j = 0; j<3;j++)
+            {   //iterate through every face 3 times to get every index
+                //indexV is a single index, representing one Vec3f object
+                int indexV = modelObject.getVertexIndices(i)[j];
+                vertexCoords[i][j] = new Vec3f (modelObject.getVertexCoords(indexV));
+                int indexT = modelObject.getTextureIndices(i)[j];
+                textureCoords[i][j] = new Vec3f(modelObject.getTexCoords(indexT));
+                int indexN = modelObject.getNormalIndices(i)[j];
+                normalCoords[i][j] = new Vec3f(modelObject.getNormalCoords(indexN));
+            }
+        }
+    }
+    public void renderModel(Model modelObject)
+    {   //calls drawTriangle function on loaded model data
+        //TODO error handling : assumes model data is loaded
+        //TODO error handling : this function assumes nFaces() always matches coords size
+        for (int i = 0; i<modelObject.nFaces(); i++)
+        {
+            //calculate normal on every face
+            Vec3f AB = minus(vertexCoords[i][2], vertexCoords[i][0]);
+            Vec3f AC = minus(vertexCoords[i][1], vertexCoords[i][0]);
+            Vec3f normal = cross(AC, AB).getNormalized();
+            //deliver data
+            drawTriangle(new Vec3f[]{vertexCoords[i][0], vertexCoords[i][1], vertexCoords[i][2]},
+                    new Vec3f[]{textureCoords[i][0], textureCoords[i][1], textureCoords[i][2]}, depthBuffer,
+                    shadeDiffuseAmbient(normal));
+        }
+    }
+    public Color shadeDiffuseAmbient (Vec3f normal)
+    {   //returns intensity*diffuse+ambient
+        return sumColor(diffuseDirectional(normal), ambient.lightColor);
     }
     public Renderer(int screenWidth, int screenHeight)
     {
@@ -25,13 +61,20 @@ public class Renderer {
         height=screenHeight;
         colorBuffer = new int[width*height];
         fill(new Color(0.2f,0.2f,0.2f));
+        depthBuffer= new float[height*width];
+        //instantiate depth buffer
+        //TODO structure :  might be better to move this elsewhere
+        Arrays.fill(depthBuffer, -Float.MAX_VALUE);
     }
-    public Renderer(int screenWidth, int screenHeight, Color backgroundFill)
+    public Color[] textureData;
+    public int texHeight, texWidth;
+    public Light diffuse = new Light();
+    public Light ambient = new Light();
     {
-        width=screenWidth;
-        height=screenHeight;
-        colorBuffer = new int[width*height];
-        fill(backgroundFill);
+        //default values
+        diffuse.lightColor= Color.white;
+        diffuse.direction = new Vec3f(0.5f,0.0f,0.3f);
+        ambient.lightColor = new Color(0.3f,0.15f,0.2f);
     }
     //pixel manipulation
     public void testTexture () throws IOException
@@ -47,6 +90,7 @@ public class Renderer {
     }
     public void setPixel(Pixel p, Color RGBcolor)
     {   // max range for p.x and p.y is width-1 and height-1 respectively
+        // we load y in reverse so that (0, 0) is at the left bottom of the screen
         colorBuffer[(height-p.y()-1)*width+p.x()]= RGBcolor.getRGB();
     }
     public void drawLine (Pixel p0, Pixel p1, Color color)
@@ -106,7 +150,7 @@ public class Renderer {
         }
     }
     public Color diffuseDirectional (Vec3f normal)
-    {
+    {   //returns diffuse color multiplied by intensity according to angle with respect to normal
         float intensity =max(dot(normal.getNormalized(), diffuse.direction.getNormalized().neg()), 0.0f);
         return new Color((int) min(intensity*diffuse.lightColor.getRed(), 255),
                 (int) min(intensity*diffuse.lightColor.getGreen(), 255),
@@ -136,11 +180,22 @@ public class Renderer {
         return  value;
     }
     public void drawTriangle (Vec3f[] pts, Vec3f[] texPts,float[] depthBuffer,Color color)
-    {
+    {    //takes 3 object/world space points, 3 texture coordinates, the depthBuffer, and a color
+        //and draws triangle (after depth testing) in the color specified scaled by interpolated texture color
+        //TODO structure : this function is doing too much and should be broken up
+
+
+        for (int i = 0; i<3;i++)
+        {   //map to screen coordinates first
+            float[] screenSpaceCoords = new float[]{map(-1,1,0,width, pts[i].x()).floatValue(),
+                    map(-1,1,0,height, pts[i].y()).floatValue(), pts[i].z()};
+            pts[i] = new Vec3f(screenSpaceCoords);
+        }
+
         float minX = width-1, minY = height-1;
         float maxX = 0, maxY = 0;
         for (int i =0;i<3;i++)
-        {   //TODO TEST (probably works)
+        {
             minX= max(0, min(minX, pts[i].x()));
             minY= max(0, min(minY, pts[i].y()));
             maxX = min(width-1, max(maxX, pts[i].x()));
@@ -163,7 +218,7 @@ public class Renderer {
                 sum = interpolate(new float[]{pts[0].z(), pts[1].z(), pts[2].z()}, test, sum);
                 P.setDepth(sum);
                 //interpolate texture X Y coordinate
-                //TODO the texture only works when I map() the interpolated coordinates, why?
+                //TODO bug fixing : the texture only works when I map() the interpolated coordinates, why?
                 float texX = 0, texY = 0;
                 texX = interpolate(new float[]{texPts[0].x(), texPts[1].x(), texPts[2].x()}, test, texX);
                 texY = interpolate(new float[]{texPts[0].y(), texPts[1].y(), texPts[2].y()}, test, texY);
@@ -173,7 +228,7 @@ public class Renderer {
                 if (depthBuffer[(int)(P.x()+P.y()*width)]<P.z())
                 {
                     depthBuffer[(int)(P.x()+P.y()*width)]=P.z();
-                    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), VecOperator.coloMul(textureColor, color));
+                    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), VecOperator.mulColor(textureColor, color));
                 }
             }
         }
@@ -185,6 +240,7 @@ public class Renderer {
     public int[] getColorBuffer() {
         return colorBuffer;
     }
+
     public static  <N extends Number> Double map (N srcMin, N srcMax, N destMin, N destMax, N value)
     {   //maps a Number from range [srcMin, srcMax] to [destMin, destMAX]
 
@@ -192,6 +248,7 @@ public class Renderer {
         //mapping value to [0, 1]
         double ratio = (value.doubleValue()-srcMin.doubleValue())/(srcMax.doubleValue()-srcMin.doubleValue());
         //TODO error handling: what if value is outside the bounds? what if max-min==0?
+        //TODO structure : write map() as a functional interface for stream maps
         return ((destMax.doubleValue() * ratio) + ((1 - ratio) * destMin.doubleValue()));
     }
     public static String colorBufferToString(int[] colorBuffer) {
@@ -207,6 +264,6 @@ public class Renderer {
         return bufferData.toString();
     }
     //fields
-    public int width, height;
+    public final int width, height;
     public int[] colorBuffer;        //pixel buffer
 }
