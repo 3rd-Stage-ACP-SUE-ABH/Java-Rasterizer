@@ -33,13 +33,6 @@ public class Main
                 textureData[(textureReader.getHeight()-i-1)*textureReader.getWidth()+j]=(textureReader.getRGB(j,i));
             }
         }
-
-
-        //instantiate zBuffer
-        for (int i =0; i<zBuffer.length; i++)
-        {
-            zBuffer[i] = -Float.MAX_VALUE;
-        }
         //init window
         ImageDisplay img = new ImageDisplay(pix_width,pix_height,"test display");
         img.setSize(pix_width,pix_height);
@@ -64,14 +57,20 @@ public class Main
 
 
         //TODO make breaking of while loop dependent on user input
+        myRenderer.diffuse.lightColor = new Color(0.65f, 0.85f,1.0f);
+    //  myRenderer.diffuse.direction = new Vec3f(0.45f, -0.3f, -0.15f);
+        myRenderer.ambient.lightColor = new Color(0.0F,0.05F,0.05F);
         int i = 0;
         Color[] colorBufferWindow= new Color[myRenderer.colorBuffer.length];
         while (true)
         {
             long start = System.nanoTime();
+            //reset buffer at the beginning of the frame
+            myRenderer.fill(new Color(50,50,50));
             //as proof of concept, render something cool
-            int radius = 50;
-            Pixel center = new Pixel(i%(pix_width-1),i%(pix_height));
+            int radius = 50+(int)((sin((double) System.currentTimeMillis() /1000)+1)/2*50);
+            Pixel center = new Pixel(i%(pix_width-1)+(int)(((sin((double) System.currentTimeMillis() /1000)+1)/2)*100),
+                    i%(pix_height)+(int)(((sin((double) System.currentTimeMillis() /1000)+1)/2)*100));
             for (int j =center.y()-radius;j<center.y()+radius;j++)
             {
                 for (int k = center.x()-radius;k<center.x()+radius;k++)
@@ -81,12 +80,14 @@ public class Main
                     {
                         Pixel point = new Pixel (abs (candidate.x()%(pix_width-1)), abs(candidate.y()%(pix_height-1)));
 
-                        myRenderer.setPixel(point, new Color((int)(random()*255), (int)(random()*255), (int)(random()*255), 255));
+                        myRenderer.setPixel(point, new Color((int)((sin((double) System.currentTimeMillis() /1200)+1)/2*255),
+                                (int)((sin((double) System.currentTimeMillis() /900)+1)/2*255), (int)((sin((double) System.currentTimeMillis() /800)+1)/2*255), 255));
                     }
                 }
             }
-            //
-       //     myRenderer.renderModel(africanHead);
+            //TODO bug fixing : model render gets removed after one frame
+        //  myRenderer.renderModel(africanHead);
+
             //copy renderer output to screen buffer
             for (int j =0;j<myRenderer.colorBuffer.length;j++)
             {
@@ -106,7 +107,6 @@ public class Main
     }
     public static final int pix_height = 1000;
     public static final int pix_width = 1000;
-    public static float[] zBuffer = new float[pix_height*pix_width];
 }
 // we keep this code in case of need
         /* testing
