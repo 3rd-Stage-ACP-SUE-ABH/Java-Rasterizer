@@ -68,7 +68,7 @@ public class Main
             //reset buffer at the beginning of the frame
             myRenderer.fill(new Color(50,50,50));
             //as proof of concept, render something cool
-            int radius = 50+(int)((sin((double) System.currentTimeMillis() /1000)+1)/2*50);
+            int radius = 50+(int)((sin((double) System.currentTimeMillis() /250)+1)/2*25);
             Pixel center = new Pixel(i%(pix_width-1)+(int)(((sin((double) System.currentTimeMillis() /1000)+1)/2)*100),
                     i%(pix_height)+(int)(((sin((double) System.currentTimeMillis() /1000)+1)/2)*100));
             for (int j =center.y()-radius;j<center.y()+radius;j++)
