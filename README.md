@@ -9,6 +9,7 @@ Here will be the rasterizer code.
 * Renderer displays to window.
 * Renderer has model loader.
 * Renderer can load textures and interpolate texture coordinates.
+* Window can display rendering output in real time
 * [More functionality will be appended here]
 
 ### Development Diary : 
@@ -113,3 +114,7 @@ I don't understand, but this is no time for understanding. The code worked, hurr
 
 For future reference the texture was loading all fucked up when I didn't use ```map()```.
 
+#### october 16th
+Finally! we have real-time rendering, but...at what cost?
+It's very slow. VERY.
+Currently only outputting about 0.5FPS with a single model loaded. I don't even have any ideas on how to make it faster anymore, other than multithreading.
