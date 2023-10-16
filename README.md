@@ -60,7 +60,7 @@ When I said I would kill that typo I might've been exaggerating. But this bug I 
 
 What you are looking at is the RGB map of surface normals.
 
-The story of how I struggled for 5 hours with this bug shall remain undisclosed, but suffice it to say the problem was depth buffer testing. This might seem obvious to you but it stumped me. Until [Agab](https://github.com/Agab-dev) suggested the genius idea that it could be triangles rendering in the back. Even then I doubted it, after all my cpp code worked perfectly without depth buffer testing. Later on we loaded a spherical model (thanks, MIT!) :
+The story of how I struggled for 5 hours with this bug shall remain undisclosed, but suffice it to say the problem was depth buffer testing. This might seem obvious to you but it stumped me. Until [Agab](https://github.com/Agab-dev) suggested the genius idea that it could be triangles rendering in the back. Even then I doubted it, after all my cpp code worked perfectly without depth buffer testing. Later on we loaded a spherical model [(thanks, MIT!)](https://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj) :
 
 ![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/589f40a3-ce7f-41e3-801e-8cf4ac0fb292)
 
