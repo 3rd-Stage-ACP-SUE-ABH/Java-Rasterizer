@@ -116,6 +116,7 @@ I don't understand, but this is no time for understanding. The code worked, hurr
 
 For future reference the texture was loading all fucked up when I didn't use ```map()```.
 
+
 #### october 16th
 Finally! we have real-time rendering, but...at what cost?
 It's very slow. VERY.
@@ -123,3 +124,16 @@ Currently only outputting about 0.5FPS with a single model loaded. I don't even 
 #### october 17th
 I am lucky that I worked with OpenGL before. I was wondering why my model wasn't rendering every frame (even though I was clearing the color buffer), and it just occured to me that we also clear the depth buffer in OpenGL every frame.
 Bless [LearnOpenGL](https://learnopengl.com/)!
+#### october 18th
+No real updates today except some cool gifs :
+
+
+![ezgif-5-0261ae3332](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/fb7ca27f-b182-44c2-8da9-e3f467fc25d1)
+
+
+![ezgif-5-b3d88de14d](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/d1be0a90-b37d-4654-9a48-8f8c34e6efb3)
+
+
+![ezgif-5-713d5d5e29](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/4943b1e1-9728-4bb6-8136-cc9392742b0b)
+
+Generally speaking, you get a lot of cool bugs in graphics, but this one really caught my eye. The most intentiona looking bug I've had so far. I was forgetting to clear the color buffer every frame.
