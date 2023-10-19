@@ -33,7 +33,7 @@ Erratic depth map
 
 ![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/7f9fe3a3-7112-4691-be62-c63a762cf7e5)
 
-This is 3 errors working all at once. One is the typo above, the other is muliplting vertices in the wrong order to determine barycentric coordinates (this is why it looks triangulated), and the final error is that I forgot to initialize my depth buffer with the maximum negative value possible, instead leaving it to the default of 0. 
+This is 3 errors working all at once. One is the typo above, the other is multiplying vertices in the wrong order to determine barycentric coordinates (this is why it looks triangulated), and the final error is that I forgot to initialize my depth buffer with the maximum negative value possible, instead leaving it to the default of 0. 
 
 Correct (I hope!) depth map
 ![image](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/fec67688-9340-4f38-8e32-0eaf3961b4e1)
@@ -136,4 +136,4 @@ No real updates today except some cool gifs :
 
 ![ezgif-5-713d5d5e29](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/4943b1e1-9728-4bb6-8136-cc9392742b0b)
 
-Generally speaking, you get a lot of cool bugs in graphics, but this one really caught my eye. The most intentiona looking bug I've had so far. I was forgetting to clear the color buffer every frame.
+Generally speaking, you get a lot of cool bugs in graphics, but this one really caught my eye. The most intentional looking bug I've had so far. I was forgetting to clear the color buffer every frame.
