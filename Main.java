@@ -79,9 +79,9 @@ public class Main
                     }
                 }
             } */
-            myRenderer.diffuse.direction = new Vec3f( (float)sin((double) System.currentTimeMillis() /100),
+            myRenderer.diffuse.direction = new Vec3f( (float)sin((double) System.currentTimeMillis() /1000),
                       -0.5f,
-                      (float)cos((double) System.currentTimeMillis() /100));
+                      (float)cos((double) System.currentTimeMillis() /1000));
             myRenderer.diffuse.lightColor = new Color((int)(random()*255), (int)(random()*255), (int)(random()*255), 255);
             myRenderer.renderModel();
 
