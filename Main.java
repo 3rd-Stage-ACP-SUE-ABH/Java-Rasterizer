@@ -11,7 +11,7 @@ import Model.*;
 import window.ImageDisplay;
 import static Renderer.Renderer.*;
 import static java.lang.Math.*;
-
+import static Vector.VecOperator.*;
 public class Main
 {
     public static void main(String[]args) throws IOException {
@@ -91,7 +91,7 @@ public class Main
             ImageDisplay.imagePanel.repaint();
             i++;
             long time = System.nanoTime() - start;
-            System.out.println("processing time :  " + (((double) time/1_000_000_000) + "s"));
+        //    System.out.println("processing time :  " + (((double) time/1_000_000_000) + "s"));
         }
     }
     public static Pixel mapToScreen (float x, float y, float min, float max)

@@ -80,6 +80,9 @@ public class Renderer {
         //TODO error handling : this function assumes nFaces() always matches coords size
         for (int i = 0; i<modelObject.nFaces(); i++)
         {
+            vertexCoords[i][0] = transform(vertexCoords[i][0]);
+            vertexCoords[i][1] = transform(vertexCoords[i][1]);
+            vertexCoords[i][2] = transform(vertexCoords[i][2]);
             //deliver data. sacrificing readability for some speed
             drawTriangle
             (
@@ -216,14 +219,33 @@ public class Renderer {
         //not returning this
         return new Vec3f(-1.f,1.f,1.f);
     }
+    public Vec3f transform(Vec3f u)
+    {
+        Vec3f eye = new Vec3f(1,1,3);
+        Vec3f center = new Vec3f(0,0,0);
+        Matrix modelView = lookAt(eye, center, new Vec3f(0,1,0));
+
+        Matrix projection = Matrix.getIdentityMatrix(4);
+        projection.setElement(3, 2, -1.f/(minus(eye,center).magnitude()));
+
+        Matrix viewPort =viewport(width/8, height/8, width*3/4, height*3/4);
+
+        Matrix m = new Matrix(u);
+        Matrix tansformMatrix = mul(modelView, m);
+        tansformMatrix = mul(projection, tansformMatrix);
+        tansformMatrix = mul(viewPort, tansformMatrix);
+        return new Vec3f(tansformMatrix);
+    }
     public float objectAmp = 120;
     public void drawTriangle (Vec3f[] pts, Vec3f[] texPts,float[] depthBuffer,Color color)
     {   //1900-1950ms
+        //TODO structure : this function is doing too much and should be broken up
+
         //takes 3 object/world space points, 3 texture coordinates, the depthBuffer, and a color
         //and draws triangle (after depth testing) in the color specified scaled by interpolated texture color
-        //TODO structure : this function is doing too much and should be broken up
+
         //mapping to screen coords
-        for (int i = 0; i<3;i++)    //<2ms
+    /*    for (int i = 0; i<3;i++)    //<2ms
         {   //map to screen coordinates first
             float[] screenSpaceCoords = new float[]{map(-objectAmp, objectAmp,0,width-1, pts[i].x()).floatValue(),
                     map(-objectAmp,objectAmp,0,height-1, pts[i].y()).floatValue(), pts[i].z()};
@@ -233,7 +255,7 @@ public class Renderer {
             float[] perspectiveProjection = new float[]{screenSpaceCoords[0]/(1-screenSpaceCoords[2]/d),
                     screenSpaceCoords[1]/(1-screenSpaceCoords[2]/d), screenSpaceCoords[2]/(1-screenSpaceCoords[2]/d)};
             pts[i] = new Vec3f(perspectiveProjection);
-        }
+        }*/
         //find bounding box <0.5ms
         float minX = width-1, minY = height-1;
         float maxX = 0, maxY = 0;
@@ -282,10 +304,9 @@ public class Renderer {
                 {
                     depthBuffer[(int)(P.x()+P.y()*width)]=P.z();
                     //set pixel ~150ms per face. some overhead to check texture availability.
-                    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), texPts==null? color : VecOperator.mulColor(textureColor, color));
+                    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), Color.cyan);
+                //    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), texPts==null? color : VecOperator.mulColor(textureColor, color));
                 }
-
-
             }
         }
     }
