@@ -24,7 +24,7 @@ public class Model {
         texCoords = new ArrayList<>();
         normalCoords = new ArrayList<>();
         vertexCoords = new ArrayList<>();
-        //load data AFTER istantiating the fields
+        //load data AFTER instantiating the fields
         loadData();
         Vindices = new ArrayList<>();
         Nindices = new ArrayList<>();
@@ -86,7 +86,7 @@ public class Model {
     }
     public float[] getNormalCoords(int idx)
     {
-        return vertexCoords.get(idx);
+        return normalCoords.get(idx);
     }
     public int[] getVertexIndices(int idx)
     {
@@ -155,17 +155,21 @@ public class Model {
 
                 if (P[0].equals("f"))
                 {
-                    if (P[1].contains("/"))
+                    //TODO bug fixing :  as far as I'm aware this condition is unnecessary,
+                    // and can miss faces in some formats. Check with team.
+                    if (true)   // previous condition : P[1].contains("/")
                     {
                         for (int i = 1; i < P.length; i++)
                         {
+                            int coordCounter = 0;
                             parts = P[i].split("/"); // '1 1 1'
                             //-1 because indices in .obj format start from 1
-                            vertexIndices.add(Integer.parseInt(parts[0])-1);
-                            textureIndices.add(Integer.parseInt(parts[1])-1);
-                            normalIndices.add(Integer.parseInt(parts[2])-1);
+                            vertexIndices.add(Integer.parseInt(parts[coordCounter++])-1);
+                            if (!texCoords.isEmpty())
+                                textureIndices.add(Integer.parseInt(parts[coordCounter++])-1);
+                            if (!normalCoords.isEmpty())
+                                 normalIndices.add(Integer.parseInt(parts[coordCounter++])-1);
                         }
-
                     }
                 }
 
