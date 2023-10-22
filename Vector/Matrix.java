@@ -1,7 +1,5 @@
 package Vector;
 
-import java.util.Arrays;
-
 public class Matrix {
     public static final int defaultAllocation = 4;
     private float[][] matrix;

@@ -83,6 +83,7 @@ public class Renderer {
             //future tip, don't change the coordinates values, only copy them, especially if you're updating every frame :)
             //deliver data
             Vec3f[] transformedVertices = new Vec3f[]{transform(vertexCoords[i][0]), transform(vertexCoords[i][1]), transform(vertexCoords[i][2])};
+            //deliver data.
             drawTriangle
             (
                     transformedVertices,
@@ -162,7 +163,6 @@ public class Renderer {
         //not returning this
         return new Vec3f(-1.f,1.f,1.f);
     }
-
     public Vec3f cameraPos = new Vec3f(0,0.5f,3);
     public Vec3f lookAtCenter = new Vec3f(0,0,0);
     public Vec3f transform(Vec3f u)
@@ -177,23 +177,12 @@ public class Renderer {
         transformMatrix = mul(viewPort, transformMatrix);
         return new Vec3f(transformMatrix);
     }
-    public static int objectAmp = 1;
     public void drawTriangle (Vec3f[] pts, Vec3f[] texPts,float[] depthBuffer,Color color)
     {   //1900-1950ms
-        //TODO structure : this function is doing too much and should be broken up
-
         //takes 3 object/world space points, 3 texture coordinates, the depthBuffer, and a color
         //and draws triangle (after depth testing) in the color specified scaled by interpolated texture color
-
-        //mapping to screen coords
-    /*    for (int i = 0; i<3;i++)    //<2ms
-        {   //map to screen coordinates first
-            float[] screenSpaceCoords = new float[]{map(-objectAmp, objectAmp,0,width-1, pts[i].x()).floatValue(),
-                    map(-objectAmp,objectAmp,0,height-1, pts[i].y()).floatValue(), pts[i].z()};
-            pts[i] = new Vec3f(screenSpaceCoords);
-        }*/
+        //TODO structure : this function is doing too much and should be broken up
         //find bounding box <0.5ms
-
         float minX = width-1, minY = height-1;
         float maxX = 0, maxY = 0;
         for (int i =0;i<3;i++)
@@ -203,9 +192,6 @@ public class Renderer {
             maxX = min(width-1, max(maxX, pts[i].x()));
             maxY = min(height-1, max(maxY, pts[i].y()));
         }
-
-
-
         //test every pixel in the bounding box and render those which pass. almost all the runtime is here
         Vec3f P;
         int traversalX, traversalY;
@@ -241,7 +227,6 @@ public class Renderer {
                 {
                     depthBuffer[(int)(P.x()+P.y()*width)]=P.z();
                     //set pixel ~150ms per face. some overhead to check texture availability.
-                //    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), Color.cyan);
                     setPixel(new Pixel(P.x().intValue(), P.y().intValue()), texPts==null? color : VecOperator.mulColor(textureColor, color));
                 }
             }

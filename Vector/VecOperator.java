@@ -7,21 +7,23 @@ import static java.lang.Math.*;
 public final class VecOperator
 {
     private VecOperator()
-    { //static class
+    {
     }
-    //color
     public static Color mulColor (Color u, Color v)
-    {   //returns color equal to "scaling" u by v, clipping at 255
+    {   //returns color equal to scaling u by v, clipping to 255
         return new Color( min(u.getRed()*v.getRed()/255, 255),  min(u.getGreen()*v.getGreen()/255, 255), min(u.getBlue()*v.getBlue()/255, 255));
     }
     public static Color sumColor (Color u, Color v)
-    {   //returns plain element wise sum, clipping at 255
+    {   //returns plain sum clipping to 255
         return new Color(min (u.getRed()+v.getRed(), 255), min(u.getGreen()+v.getGreen(), 255), min(u.getBlue()+v.getBlue(), 255));
     }
-    //vector
     public static Vec3f minus (Vec3f u, Vec3f v)
     {   //non ideal implementation
         return new Vec3f(u.x()-v.x(), u.y()-v.y(), u.z()-v.z());
+    }
+    public static float dot (Vec3f u, Vec3f v)
+    {
+        return u.x()*v.x()+u.y()*v.y()+u.z()*v.z();
     }
     public static  <V extends Vector> float dot (V u, V v)
     {
