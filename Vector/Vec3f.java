@@ -27,6 +27,13 @@ public class Vec3f extends Vector
         raw[1]=raw[1].floatValue();
         raw[2]=raw[2].floatValue();
     }
+    public Vec3f (Matrix m)
+    {   //divide by homogenous coordinate
+        super(m.getElement(0,0)/m.getElement(3,0), m.getElement(1,0)/m.getElement(3,0), m.getElement(2,0)/m.getElement(3,0));
+        raw[0]=raw[0].floatValue();
+        raw[1]=raw[1].floatValue();
+        raw[2]=raw[2].floatValue();
+    }
     @Override
     public Vec3f getNormalized() {
         return new Vec3f(getNormalizedCoords()[0], getNormalizedCoords()[1], getNormalizedCoords()[2]);

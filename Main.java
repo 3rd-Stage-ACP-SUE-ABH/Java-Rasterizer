@@ -28,7 +28,6 @@ public class Main
         Model africanHead = new Model("C:/Users/msi/Desktop/african_head.obj");
         //process pixelBuffer
         Renderer myRenderer = new Renderer(pix_width, pix_height);
-        myRenderer.objectAmp=1;
         myRenderer.fill(new Color(50,50,50));
 
         myRenderer.textureData = new Color[textureData.length];
@@ -48,8 +47,8 @@ public class Main
 
         //TODO make breaking of while loop dependent on user input
         myRenderer.diffuse.lightColor = new Color(0.65f, 0.85f,1.0f);
-    //  myRenderer.diffuse.direction = new Vec3f(0.45f, -0.3f, -0.15f);
-        myRenderer.ambient.lightColor = new Color(0.05F,0.075F,0.15F);
+        myRenderer.diffuse.direction = new Vec3f(0.45f, -0.3f, -0.15f);
+        myRenderer.ambient.lightColor = new Color(0.15F,0.075F,0.15F);
         int i = 0;
         Color[] colorBufferWindow= new Color[myRenderer.colorBuffer.length];
         //render loop
@@ -61,28 +60,7 @@ public class Main
             myRenderer.fill(new Color(50,50,50));
             myRenderer.clearDepthBuffer();
 
-            //as proof of concept, render something cool
-       /*     int radius = 50+(int)((sin((double) System.currentTimeMillis() /250)+1)/2*25);
-            Pixel center = new Pixel(i%(pix_width-1)+(int)(((sin((double) System.currentTimeMillis() /1000)+1)/2)*100),
-                    i%(pix_height)+(int)(((sin((double) System.currentTimeMillis() /1000)+1)/2)*100));
-            for (int j =center.y()-radius;j<center.y()+radius;j++)
-            {
-                for (int k = center.x()-radius;k<center.x()+radius;k++)
-                {
-                    Pixel candidate = new Pixel(k,j);
-                    if ( new Pixel(candidate.x()-center.x(),candidate.y()-center.y()).magnitude()<radius )
-                    {
-                        Pixel point = new Pixel (abs (candidate.x()%(pix_width-1)), abs(candidate.y()%(pix_height-1)));
-
-                        myRenderer.setPixel(point, new Color((int)((sin((double) System.currentTimeMillis() /1200)+1)/2*255),
-                                (int)((sin((double) System.currentTimeMillis() /900)+1)/2*255), (int)((sin((double) System.currentTimeMillis() /800)+1)/2*255), 255));
-                    }
-                }
-            } */
-            myRenderer.diffuse.direction = new Vec3f( (float)sin((double) System.currentTimeMillis() /1000),
-                      -0.5f,
-                      (float)cos((double) System.currentTimeMillis() /1000));
-            myRenderer.diffuse.lightColor = new Color((int)(random()*255), (int)(random()*255), (int)(random()*255), 255);
+            rotationAngle = i;
             myRenderer.renderModel();
 
             //write to the buffer after doing all processing.
@@ -97,6 +75,26 @@ public class Main
     public static Pixel mapToScreen (float x, float y, float min, float max)
     {
         return new Pixel(map(min, max,0, pix_width-1, x).intValue(), map(min,max,0, pix_height-1, y).intValue());
+    }
+    public static void drawBouncyCircle(Renderer yourRenderer, int i)
+    {   //this was cluttering the loop
+        int radius = 50+(int)((sin((double) System.currentTimeMillis() /250)+1)/2*25);
+        Pixel center = new Pixel(i%(pix_width-1)+(int)(((sin((double) System.currentTimeMillis() /1000)+1)/2)*100),
+                i%(pix_height)+(int)(((sin((double) System.currentTimeMillis() /1000)+1)/2)*100));
+        for (int j =center.y()-radius;j<center.y()+radius;j++)
+        {
+            for (int k = center.x()-radius;k<center.x()+radius;k++)
+            {
+                Pixel candidate = new Pixel(k,j);
+                if ( new Pixel(candidate.x()-center.x(),candidate.y()-center.y()).magnitude()<radius )
+                {
+                    Pixel point = new Pixel (abs (candidate.x()%(pix_width-1)), abs(candidate.y()%(pix_height-1)));
+
+                    yourRenderer.setPixel(point, new Color((int)((sin((double) System.currentTimeMillis() /1200)+1)/2*255),
+                            (int)((sin((double) System.currentTimeMillis() /900)+1)/2*255), (int)((sin((double) System.currentTimeMillis() /800)+1)/2*255), 255));
+                }
+            }
+        }
     }
     public static final int pix_height = 500;
     public static final int pix_width = 500;
