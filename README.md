@@ -12,6 +12,7 @@ This project uses no dependencies other than the Java Class library.
 * Renderer has model loader.
 * Renderer can load textures and interpolate texture coordinates.
 * Window can display rendering output in real time
+* Renderer has transformations.
 * [More functionality will be appended here]
 
 ### Development Diary : 
@@ -137,3 +138,22 @@ No real updates today except some cool gifs :
 ![ezgif-5-713d5d5e29](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/4943b1e1-9728-4bb6-8136-cc9392742b0b)
 
 Generally speaking, you get a lot of cool bugs in graphics, but this one really caught my eye. The most intentional looking bug I've had so far. I was forgetting to clear the color buffer every frame.
+
+#### october 22nd
+Long time no update!
+Let's get started with this funny bug : 
+
+![changingCoordsEveryFrame](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/7eb3f973-f4af-48e4-b541-418d37c6966a)
+
+Instead of copying the vertex coordinates, I was changing them every frame, thus applying the same transform cumulatively.
+
+
+
+Also, he's rotating.
+
+
+![rotate](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/6683c68e-1e86-4ece-a848-80a6d3fe970e)
+
+
+
+
