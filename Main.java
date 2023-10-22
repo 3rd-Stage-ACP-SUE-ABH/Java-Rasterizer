@@ -26,10 +26,8 @@ public class Main
             }
         }
         Model africanHead = new Model("C:/Users/msi/Desktop/african_head.obj");
-        //process pixelBuffer
+        //init renderer
         Renderer myRenderer = new Renderer(pix_width, pix_height);
-        myRenderer.fill(new Color(50,50,50));
-
         myRenderer.textureData = new Color[textureData.length];
         for (int i =0; i<textureData.length;i++)
         {
@@ -37,7 +35,6 @@ public class Main
         }
         myRenderer.texHeight=textureReader.getHeight();
         myRenderer.texWidth=textureReader.getWidth();
-
         myRenderer.loadModelData(africanHead);
 
         //init window
