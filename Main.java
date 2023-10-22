@@ -11,7 +11,7 @@ import Model.*;
 import window.ImageDisplay;
 import static Renderer.Renderer.*;
 import static java.lang.Math.*;
-
+import static Vector.VecOperator.*;
 public class Main
 {
     public static void main(String[]args) throws IOException {
