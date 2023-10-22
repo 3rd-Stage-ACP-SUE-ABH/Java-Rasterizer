@@ -1,7 +1,8 @@
 package Vector;
 
 import java.awt.*;
-import static java.lang.Math.min;
+
+import static java.lang.Math.*;
 
 public final class VecOperator
 {
@@ -64,11 +65,21 @@ public final class VecOperator
         }
         return resultMatrix;
     }
+    public static Matrix yRotationMatrix (float angle)
+    {
+        Matrix rotation = Matrix.getIdentityMatrix(4);
+        rotation.setElement(0,0, (float)cos(angle));
+        rotation.setElement(0,2, (float)sin(angle));
+        rotation.setElement(2,0, (float)-sin(angle));
+        rotation.setElement(2,2, (float)cos(angle));
+        return rotation;
+    }
+    public static float rotationAngle = 0;
     public static Matrix lookAt(Vec3f eye, Vec3f center, Vec3f up)
     {
-        Vec3f z = minus(eye, center);
-        Vec3f x = cross(up, z);
-        Vec3f y = cross(z, x);
+        Vec3f z = minus(eye, center).getNormalized();
+        Vec3f x = cross(up, z).getNormalized();
+        Vec3f y = cross(z, x).getNormalized();
         Matrix minv = Matrix.getIdentityMatrix(4);
         Matrix tr = Matrix.getIdentityMatrix(4);
         for (int i = 0; i<3; i++)
@@ -76,21 +87,24 @@ public final class VecOperator
             minv.setElement(0, i, x.raw[i].floatValue());
             minv.setElement(1, i, y.raw[i].floatValue());
             minv.setElement(2, i, z.raw[i].floatValue());
-            tr.setElement(i, 3, -eye.raw[i].floatValue());
+            tr.setElement(i, 3, -center.raw[i].floatValue());
         }
-        return mul(minv, tr);
+        //rotate the object before lookAt
+        Matrix lookAt = mul(minv, tr);
+        return mul(lookAt, yRotationMatrix(rotationAngle));
     }
     public static int depth = 255;
-    public static Matrix viewport (int x, int y, int w, int h)
+    public static Matrix viewport (int horizontalPXOffset, int verticalPXOffset, int w, int h)
     {
         Matrix resultMatrix = Matrix.getIdentityMatrix(4);
-        resultMatrix.setElement(0,3, x+w/2.f);
-        resultMatrix.setElement(1,3, y+h/2.f);
+
+        resultMatrix.setElement(0,3, horizontalPXOffset+w/2.f);
+        resultMatrix.setElement(1,3, verticalPXOffset+h/2.f);
         resultMatrix.setElement(2,3, depth/2.f);
 
         resultMatrix.setElement(0,0, w/2);
         resultMatrix.setElement(1,1, h/2);
-        resultMatrix.setElement(2,2, h/2);
+        resultMatrix.setElement(2,2, depth/2);
 
         return resultMatrix;
     }

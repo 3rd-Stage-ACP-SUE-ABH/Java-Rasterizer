@@ -80,20 +80,18 @@ public class Renderer {
         //TODO error handling : this function assumes nFaces() always matches coords size
         for (int i = 0; i<modelObject.nFaces(); i++)
         {
-            vertexCoords[i][0] = transform(vertexCoords[i][0]);
-            vertexCoords[i][1] = transform(vertexCoords[i][1]);
-            vertexCoords[i][2] = transform(vertexCoords[i][2]);
-            //deliver data. sacrificing readability for some speed
+            //future tip, don't change the coordinates values, only copy them, especially if you're updating every frame :)
+            //deliver data
+            Vec3f[] transformedVertices = new Vec3f[]{transform(vertexCoords[i][0]), transform(vertexCoords[i][1]), transform(vertexCoords[i][2])};
             drawTriangle
             (
-                    new Vec3f[]{vertexCoords[i][0], vertexCoords[i][1], vertexCoords[i][2]},
+                    transformedVertices,
                     modelObject.nTextures()==0? null: new Vec3f[]{textureCoords[i][0], textureCoords[i][1], textureCoords[i][2]},
                     depthBuffer,
-                    shadeDiffuseAmbient(cross(minus(vertexCoords[i][1], vertexCoords[i][0]),
-                            minus(vertexCoords[i][2], vertexCoords[i][0])).getNormalized())
+                    shadeDiffuseAmbient(cross(minus(transformedVertices[1], transformedVertices[0]),
+                            minus(transformedVertices[2], transformedVertices[0])).getNormalized())
             );
         }
-
     }
     public Color shadeDiffuseAmbient (Vec3f normal)
     {   //returns intensity*diffuse+ambient
@@ -129,6 +127,161 @@ public class Renderer {
     public void printBuffer()
     {
         pixelBuffer.setRGB(0,0,width,height, colorBuffer,0,width);
+    }
+
+    public Color diffuseDirectional (Vec3f normal)
+    {   //returns diffuse color multiplied by intensity according to angle with respect to normal
+        float intensity =max(dot(normal.getNormalized(), diffuse.direction.getNormalized().neg()), 0.0f);
+        return new Color((int) min(intensity*diffuse.lightColor.getRed(), 255),
+                (int) min(intensity*diffuse.lightColor.getGreen(), 255),
+                (int) min(intensity*diffuse.lightColor.getBlue(), 255), 255);
+    }
+
+    private float interpolate(float[]pts, Vec3f barycentric,float value)
+    {//interpolates value between 3 points. Assumes value = 0 at start
+        float[] screen = new float[]{barycentric.x(),barycentric.y(), barycentric.z()};
+        for (int i = 0; i<pts.length; i++)
+        {
+            value+=pts[i]*screen[i];
+        }
+        return  value;
+    }
+    private Vec3f barycentric (Vec3f A, Vec3f B, Vec3f C, Vec3f P)
+    {       //<1.10ms
+
+        Vec3f[] intervals = new Vec3f[2];
+        intervals[0]=new Vec3f(C.x()-A.x(), B.x()-A.x(), A.x()-P.x());
+        intervals[1]=new Vec3f(C.y()-A.y(), B.y()-A.y(), A.y()-P.y());
+        Vec3f orthogonalVector = VecOperator.cross(intervals[0], intervals[1]);
+
+        if (abs(orthogonalVector.z())>1e-2)
+        {
+            return new Vec3f(1.0f-((orthogonalVector.x()+orthogonalVector.y())/orthogonalVector.z()),
+                    orthogonalVector.y()/ orthogonalVector.z(), orthogonalVector.x()/ orthogonalVector.z());
+        }
+        //not returning this
+        return new Vec3f(-1.f,1.f,1.f);
+    }
+
+    public Vec3f cameraPos = new Vec3f(0,0.5f,3);
+    public Vec3f lookAtCenter = new Vec3f(0,0,0);
+    public Vec3f transform(Vec3f u)
+    {
+        Matrix transformMatrix = new Matrix(u, true);
+        Matrix modelView = lookAt(cameraPos, lookAtCenter, new Vec3f(0,1,0));
+        transformMatrix = mul(modelView, transformMatrix);
+        Matrix projection = Matrix.getIdentityMatrix(4);
+        projection.setElement(3,2, -1.f/cameraPos.z());
+        transformMatrix= mul(projection, transformMatrix);
+        Matrix viewPort = viewport(0,0,width, height);
+        transformMatrix = mul(viewPort, transformMatrix);
+        return new Vec3f(transformMatrix);
+    }
+    public static int objectAmp = 1;
+    public void drawTriangle (Vec3f[] pts, Vec3f[] texPts,float[] depthBuffer,Color color)
+    {   //1900-1950ms
+        //TODO structure : this function is doing too much and should be broken up
+
+        //takes 3 object/world space points, 3 texture coordinates, the depthBuffer, and a color
+        //and draws triangle (after depth testing) in the color specified scaled by interpolated texture color
+
+        //mapping to screen coords
+    /*    for (int i = 0; i<3;i++)    //<2ms
+        {   //map to screen coordinates first
+            float[] screenSpaceCoords = new float[]{map(-objectAmp, objectAmp,0,width-1, pts[i].x()).floatValue(),
+                    map(-objectAmp,objectAmp,0,height-1, pts[i].y()).floatValue(), pts[i].z()};
+            pts[i] = new Vec3f(screenSpaceCoords);
+        }*/
+        //find bounding box <0.5ms
+
+        float minX = width-1, minY = height-1;
+        float maxX = 0, maxY = 0;
+        for (int i =0;i<3;i++)
+        {
+            minX= max(0, min(minX, pts[i].x()));
+            minY= max(0, min(minY, pts[i].y()));
+            maxX = min(width-1, max(maxX, pts[i].x()));
+            maxY = min(height-1, max(maxY, pts[i].y()));
+        }
+
+
+
+        //test every pixel in the bounding box and render those which pass. almost all the runtime is here
+        Vec3f P;
+        int traversalX, traversalY;
+        for (traversalX=(int)minX; traversalX<maxX; traversalX++)
+        {
+            for (traversalY=(int) minY; traversalY<maxY; traversalY++)
+            {
+                //barycentric test  <650ms per face, <0.66ms per pixel
+                P = new Vec3f(traversalX, traversalY, 0.0f);
+                Vec3f test = barycentric(pts[0], pts[1], pts[2], P);
+                if (test.x()<0||test.y()<0||test.z()<0)
+                {
+                    continue;
+                }
+                float sum = 0;
+                //interpolate sum between the 3 Z coordinates of the face ~150ms per face
+                sum = interpolate(new float[]{pts[0].z(), pts[1].z(), pts[2].z()}, test, sum);
+                P.setDepth(sum);
+                Color textureColor = new Color(0,0,0);
+                if (texPts!=null)
+                {
+                    //interpolate texture X Y coordinate
+                    //TODO bug fixing : the texture only works when I map() the interpolated coordinates, why?
+                    float texX = 0, texY = 0;
+                    texX = interpolate(new float[]{texPts[0].x(), texPts[1].x(), texPts[2].x()}, test, texX);
+                    texY = interpolate(new float[]{texPts[0].y(), texPts[1].y(), texPts[2].y()}, test, texY);
+                    Pixel fragmentScreenSpace = new Pixel(map(0,1,0,texWidth, texX).intValue(),
+                            map(0,1,0,texHeight, texY).intValue() );
+                    textureColor = textureData[fragmentScreenSpace.x()+fragmentScreenSpace.y()*texWidth];
+                }
+                //depth test ~180ms per face
+                if (depthBuffer[(int)(P.x()+P.y()*width)]<P.z())
+                {
+                    depthBuffer[(int)(P.x()+P.y()*width)]=P.z();
+                    //set pixel ~150ms per face. some overhead to check texture availability.
+                //    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), Color.cyan);
+                    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), texPts==null? color : VecOperator.mulColor(textureColor, color));
+                }
+            }
+        }
+    }
+    int funcCounter=0;
+    double sum = 0;
+    public void averageRunTime(long time)
+    {
+        sum += time;
+        double average = sum/funcCounter;
+        System.out.println("average processing time :  " + (((double) average/1_000_000)*nrModelFaces + "ms"));
+    }
+    public int[] getColorBuffer() {
+        return colorBuffer;
+    }
+    public BufferedImage getPixelBuffer(){return pixelBuffer;}
+
+    public static  <N extends Number> Double map (N srcMin, N srcMax, N destMin, N destMax, N value)
+    {
+        //maps a Number from range [srcMin, srcMax] to [destMin, destMAX]
+
+        //it's always safe to cast float or int to double then cast back
+        //mapping value to [0, 1]
+        double ratio = (value.doubleValue()-srcMin.doubleValue())/(srcMax.doubleValue()-srcMin.doubleValue());
+        //TODO error handling: what if value is outside the bounds? what if max-min==0?
+        //TODO structure : write map() as a functional interface for stream maps
+        return ((destMax.doubleValue() * ratio) + ((1 - ratio) * destMin.doubleValue()));
+    }
+    public static String colorBufferToString(int[] colorBuffer) {
+        StringBuilder bufferData=new StringBuilder();
+        for (int i =0; i<colorBuffer.length;i++)
+        {
+            Color tempColor=new Color(colorBuffer[i]);
+            //concatting strings is extremely slow, since each time we concat the string has to be copied, meaning
+            //we are copying the same string hundreds of thousands of times.
+            //for building strings in for loops, use string builder or string buffer.
+            bufferData.append(tempColor.getRed()).append(" ").append(tempColor.getGreen()).append(" ").append(tempColor.getBlue()).append("\n");
+        }
+        return bufferData.toString();
     }
     public void drawLine (Pixel p0, Pixel p1, Color color)
     {   // max range for p.x and p.y is width-1 and height-1 respectively
@@ -186,166 +339,4 @@ public class Renderer {
             }
         }
     }
-    public Color diffuseDirectional (Vec3f normal)
-    {   //returns diffuse color multiplied by intensity according to angle with respect to normal
-        float intensity =max(dot(normal.getNormalized(), diffuse.direction.getNormalized().neg()), 0.0f);
-        return new Color((int) min(intensity*diffuse.lightColor.getRed(), 255),
-                (int) min(intensity*diffuse.lightColor.getGreen(), 255),
-                (int) min(intensity*diffuse.lightColor.getBlue(), 255), 255);
-    }
-
-    private float interpolate(float[]pts, Vec3f barycentric,float value)
-    {//interpolates value between 3 points. Assumes value = 0 at start
-        float[] screen = new float[]{barycentric.x(),barycentric.y(), barycentric.z()};
-        for (int i = 0; i<pts.length; i++)
-        {
-            value+=pts[i]*screen[i];
-        }
-        return  value;
-    }
-    private Vec3f barycentric (Vec3f A, Vec3f B, Vec3f C, Vec3f P)
-    {       //<1.10ms
-
-        Vec3f[] intervals = new Vec3f[2];
-        intervals[0]=new Vec3f(C.x()-A.x(), B.x()-A.x(), A.x()-P.x());
-        intervals[1]=new Vec3f(C.y()-A.y(), B.y()-A.y(), A.y()-P.y());
-        Vec3f orthogonalVector = VecOperator.cross(intervals[0], intervals[1]);
-
-        if (abs(orthogonalVector.z())>1e-2)
-        {
-            return new Vec3f(1.0f-((orthogonalVector.x()+orthogonalVector.y())/orthogonalVector.z()),
-                    orthogonalVector.y()/ orthogonalVector.z(), orthogonalVector.x()/ orthogonalVector.z());
-        }
-        //not returning this
-        return new Vec3f(-1.f,1.f,1.f);
-    }
-    public Vec3f transform(Vec3f u)
-    {
-        Vec3f eye = new Vec3f(1,1,3);
-        Vec3f center = new Vec3f(0,0,0);
-        Matrix modelView = lookAt(eye, center, new Vec3f(0,1,0));
-
-        Matrix projection = Matrix.getIdentityMatrix(4);
-        projection.setElement(3, 2, -1.f/(minus(eye,center).magnitude()));
-
-        Matrix viewPort =viewport(width/8, height/8, width*3/4, height*3/4);
-
-        Matrix m = new Matrix(u);
-        Matrix tansformMatrix = mul(modelView, m);
-        tansformMatrix = mul(projection, tansformMatrix);
-        tansformMatrix = mul(viewPort, tansformMatrix);
-        return new Vec3f(tansformMatrix);
-    }
-    public float objectAmp = 120;
-    public void drawTriangle (Vec3f[] pts, Vec3f[] texPts,float[] depthBuffer,Color color)
-    {   //1900-1950ms
-        //TODO structure : this function is doing too much and should be broken up
-
-        //takes 3 object/world space points, 3 texture coordinates, the depthBuffer, and a color
-        //and draws triangle (after depth testing) in the color specified scaled by interpolated texture color
-
-        //mapping to screen coords
-    /*    for (int i = 0; i<3;i++)    //<2ms
-        {   //map to screen coordinates first
-            float[] screenSpaceCoords = new float[]{map(-objectAmp, objectAmp,0,width-1, pts[i].x()).floatValue(),
-                    map(-objectAmp,objectAmp,0,height-1, pts[i].y()).floatValue(), pts[i].z()};
-            //apply perspective projection
-            //assume camera distance from origin is d
-            int d = 10000;
-            float[] perspectiveProjection = new float[]{screenSpaceCoords[0]/(1-screenSpaceCoords[2]/d),
-                    screenSpaceCoords[1]/(1-screenSpaceCoords[2]/d), screenSpaceCoords[2]/(1-screenSpaceCoords[2]/d)};
-            pts[i] = new Vec3f(perspectiveProjection);
-        }*/
-        //find bounding box <0.5ms
-        float minX = width-1, minY = height-1;
-        float maxX = 0, maxY = 0;
-        for (int i =0;i<3;i++)
-        {
-            minX= max(0, min(minX, pts[i].x()));
-            minY= max(0, min(minY, pts[i].y()));
-            maxX = min(width-1, max(maxX, pts[i].x()));
-            maxY = min(height-1, max(maxY, pts[i].y()));
-        }
-
-
-
-        //test every pixel in the bounding box and render those which pass. almost all the runtime is here
-        Vec3f P;
-        int traversalX, traversalY;
-        for (traversalX=(int)minX; traversalX<maxX; traversalX++)
-        {
-            for (traversalY=(int) minY; traversalY<maxY; traversalY++)
-            {
-                //barycentric test  <650ms per face, <0.66ms per pixel
-                P = new Vec3f(traversalX, traversalY, 0.0f);
-                Vec3f test = barycentric(pts[0], pts[1], pts[2], P);
-                if (test.x()<0||test.y()<0||test.z()<0)
-                {
-                    continue;
-                }
-                float sum = 0;
-                //interpolate sum between the 3 Z coordinates of the face ~150ms per face
-                sum = interpolate(new float[]{pts[0].z(), pts[1].z(), pts[2].z()}, test, sum);
-                P.setDepth(sum);
-                Color textureColor = new Color(0,0,0);
-                if (texPts!=null)
-                {
-                    //interpolate texture X Y coordinate
-                    //TODO bug fixing : the texture only works when I map() the interpolated coordinates, why?
-                    float texX = 0, texY = 0;
-                    texX = interpolate(new float[]{texPts[0].x(), texPts[1].x(), texPts[2].x()}, test, texX);
-                    texY = interpolate(new float[]{texPts[0].y(), texPts[1].y(), texPts[2].y()}, test, texY);
-                    Pixel fragmentScreenSpace = new Pixel(map(0,1,0,texWidth, texX).intValue(),
-                            map(0,1,0,texHeight, texY).intValue() );
-                    textureColor = textureData[fragmentScreenSpace.x()+fragmentScreenSpace.y()*texWidth];
-                }
-                //depth test ~180ms per face
-                if (depthBuffer[(int)(P.x()+P.y()*width)]<P.z())
-                {
-                    depthBuffer[(int)(P.x()+P.y()*width)]=P.z();
-                    //set pixel ~150ms per face. some overhead to check texture availability.
-                    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), Color.cyan);
-                //    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), texPts==null? color : VecOperator.mulColor(textureColor, color));
-                }
-            }
-        }
-    }
-    int funcCounter=0;
-    double sum = 0;
-    public void averageRunTime(long time)
-    {
-        sum += time;
-        double average = sum/funcCounter;
-        System.out.println("average processing time :  " + (((double) average/1_000_000)*nrModelFaces + "ms"));
-    }
-    public int[] getColorBuffer() {
-        return colorBuffer;
-    }
-    public BufferedImage getPixelBuffer(){return pixelBuffer;}
-
-    public static  <N extends Number> Double map (N srcMin, N srcMax, N destMin, N destMax, N value)
-    {
-        //maps a Number from range [srcMin, srcMax] to [destMin, destMAX]
-
-        //it's always safe to cast float or int to double then cast back
-        //mapping value to [0, 1]
-        double ratio = (value.doubleValue()-srcMin.doubleValue())/(srcMax.doubleValue()-srcMin.doubleValue());
-        //TODO error handling: what if value is outside the bounds? what if max-min==0?
-        //TODO structure : write map() as a functional interface for stream maps
-        return ((destMax.doubleValue() * ratio) + ((1 - ratio) * destMin.doubleValue()));
-    }
-    public static String colorBufferToString(int[] colorBuffer) {
-        StringBuilder bufferData=new StringBuilder();
-        for (int i =0; i<colorBuffer.length;i++)
-        {
-            Color tempColor=new Color(colorBuffer[i]);
-            //concatting strings is extremely slow, since each time we concat the string has to be copied, meaning
-            //we are copying the same string hundreds of thousands of times.
-            //for building strings in for loops, use string builder or string buffer.
-            bufferData.append(tempColor.getRed()).append(" ").append(tempColor.getGreen()).append(" ").append(tempColor.getBlue()).append("\n");
-        }
-        return bufferData.toString();
-    }
-    //fields
-
 }

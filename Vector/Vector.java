@@ -42,7 +42,7 @@ public abstract class Vector
         return returnValue;
     }
     //fields
-    //TODO find a way to make this final
+    //TODO find a way to make these final
     protected Number[] raw;
     protected Number x(){return raw[0];}
     protected Number y(){return raw[1];}

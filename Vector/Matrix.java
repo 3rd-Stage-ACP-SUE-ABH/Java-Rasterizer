@@ -22,7 +22,7 @@ public class Matrix {
         nColumns=c;
         initMatrix();
     }
-    public Matrix (Vec3f u)
+    public Matrix (Vec3f u, boolean isPoint)
     {
         nRows = 4;
         nColumns = 1;
@@ -30,6 +30,7 @@ public class Matrix {
         matrix[0][0] = u.x();
         matrix[1][0] = u.y();
         matrix[2][0] = u.z();
+        matrix[3][0] = isPoint? 1.f : 0.f;
     }
     //TODO error handling : all indices should be positive
     public float[] getRow(int i)
