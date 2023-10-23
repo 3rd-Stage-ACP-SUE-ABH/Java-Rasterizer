@@ -1,53 +1,44 @@
-
-import javax.imageio.ImageIO;
 import Vector.Pixel;
 import Vector.*;
 import Renderer.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import Model.*;
 import window.ImageDisplay;
+
 import static Renderer.Renderer.*;
 import static java.lang.Math.*;
 import static Vector.VecOperator.*;
 public class Main
 {
-    public static void main(String[]args) throws IOException {
-        //load texture inverted around x-axis
-        BufferedImage textureReader = ImageIO.read(new File("C:/Users/msi/Desktop/african_head_diffuse.png"));
-        int[] textureData = new int[textureReader.getHeight()*textureReader.getWidth()];
-        for (int i =textureReader.getHeight()-1;i>=0;i--)
-        {
-            for (int j =0; j<textureReader.getWidth();j++)
-            {
-                textureData[(textureReader.getHeight()-i-1)*textureReader.getWidth()+j]=(textureReader.getRGB(j,i));
-            }
-        }
+    public static void main(String[]args) throws IOException
+    {
+        //load model
+        //TODO structure : make this dependent on user input
         Model africanHead = new Model("C:/Users/msi/Desktop/african_head.obj");
         //init renderer
         Renderer myRenderer = new Renderer(pix_width, pix_height);
-        myRenderer.textureData = new Color[textureData.length];
-        for (int i =0; i<textureData.length;i++)
-        {
-            myRenderer.textureData[i]=new Color (textureData[i]);
-        }
-        myRenderer.texHeight=textureReader.getHeight();
-        myRenderer.texWidth=textureReader.getWidth();
+        myRenderer.readTexture("C:/Users/msi/Desktop/african_head_diffuse.png");
         myRenderer.loadModelData(africanHead);
 
         //init window
-        ImageDisplay img = new ImageDisplay(pix_width,pix_height,"test display", myRenderer.getPixelBuffer());
+        ImageDisplay img = new ImageDisplay(pix_width,pix_height,"java rasterizer", myRenderer.getPixelBuffer());
         img.setSize(pix_width,pix_height);
         img.setVisible(true);
 
-        //TODO make breaking of while loop dependent on user input
-        myRenderer.diffuse.lightColor = new Color(0.65f, 0.85f,1.0f);
-        myRenderer.diffuse.direction = new Vec3f(0.45f, -0.3f, -0.15f);
-        myRenderer.ambient.lightColor = new Color(0.15F,0.075F,0.15F);
+        //configure our own light settings
+        PrimitiveShader.clearLights();
+        Light diffuse1 = new Light();
+        diffuse1.lightColor = new Color(0.75f,0.2f,0.2f);
+        diffuse1.direction = new Vec3f(0.5f, 0,0);
+        PrimitiveShader.addLight(diffuse1);
+        Light diffuse2 = new Light();
+        diffuse2.lightColor = new Color(0.7f, 0.7f, 0.7f);
+        diffuse2.direction = new Vec3f(-0.5f, -0.3f, -0.2f);
+        PrimitiveShader.addLight(diffuse2);
+    //    PrimitiveShader.ambient.lightColor= new Color(0.15f, 0.09f, 0.18f);
         int i = 0;
-        Color[] colorBufferWindow= new Color[myRenderer.colorBuffer.length];
+        //TODO structure : make breaking of while loop dependent on user input
         //render loop
         while (true)
         {
@@ -57,7 +48,9 @@ public class Main
             myRenderer.fill(new Color(50,50,50));
             myRenderer.clearDepthBuffer();
 
-            rotationAngle = i;
+            //specify rotation angle of object around y-axis in radians
+            rotationAngle = (float)i/5;
+            //do the magic
             myRenderer.renderModel();
 
             //write to the buffer after doing all processing.
@@ -65,8 +58,9 @@ public class Main
             myRenderer.printBuffer();
             ImageDisplay.imagePanel.repaint();
             i++;
+
             long time = System.nanoTime() - start;
-            System.out.println("processing time :  " + (((double) time/1_000_000_000) + "s"));
+            System.out.println("processing time :  " + (((double) time/1_000_000) + " ms/frame"));
         }
     }
     public static Pixel mapToScreen (float x, float y, float min, float max)

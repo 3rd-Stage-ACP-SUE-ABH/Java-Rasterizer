@@ -30,6 +30,30 @@ public class Matrix {
         matrix[2][0] = u.z();
         matrix[3][0] = isPoint? 1.f : 0.f;
     }
+    public static Matrix getIdentityMatrix(int dimensions)
+    {   //initializes a matrix with 1.0 on the main diagonal
+        Matrix I = new Matrix(dimensions, dimensions);
+        for (int i = 0; i<dimensions; i++)
+        {
+            for (int j = 0; j<dimensions; j++)
+            {
+                I.matrix[i][j]= i==j? 1.0f : 0.0f;
+            }
+        }
+        return I;
+    }
+    public static Matrix getIdentityMatrix()
+    {   //initializes a matrix with 1.0 on the main diagonal
+        Matrix I = new Matrix(defaultAllocation, defaultAllocation);
+        for (int i = 0; i<defaultAllocation; i++)
+        {
+            for (int j = 0; j<defaultAllocation; j++)
+            {
+                I.matrix[i][j]= i==j? 1.0f : 0.0f;
+            }
+        }
+        return I;
+    }
     //TODO error handling : all indices should be positive
     public float[] getRow(int i)
     {
@@ -45,18 +69,7 @@ public class Matrix {
     {
         return nColumns;
     }
-    public static Matrix getIdentityMatrix(int dimensions)
-    {   //initializes a matrix with 1.0 on the diagonal
-        Matrix I = new Matrix(dimensions, dimensions);
-        for (int i = 0; i<dimensions; i++)
-        {
-            for (int j = 0; j<dimensions; j++)
-            {
-                I.matrix[i][j]= i==j? 1.0f : 0.0f;
-            }
-        }
-        return I;
-    }
+
     public void printMatrix()
     {
         for (int i = 0; i<nRows;i++)

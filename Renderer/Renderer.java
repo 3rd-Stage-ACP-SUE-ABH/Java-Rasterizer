@@ -2,6 +2,7 @@ package Renderer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -10,11 +11,15 @@ import Vector.*;
 import static java.lang.Math.*;
 import static Vector.VecOperator.*;
 import ppmWriter.*;
+
+import javax.imageio.ImageIO;
+
 public class Renderer {
-    //embed a buffered image in the renderer
     BufferedImage pixelBuffer;
     Model modelObject;
     //model data. stored such that index 0 corresponds to the 3 3D coordinates specified by face 0.
+    //TODO structure : accommodate loading of multiple models
+    //TODO error handling : null handling
     Vec3f[][] vertexCoords;
     Vec3f[][] textureCoords;
     Vec3f[][] normalCoords;
@@ -23,32 +28,33 @@ public class Renderer {
     public int[] colorBuffer;        //pixel buffer
     public Color[] textureData;
     public int texHeight, texWidth;
-    public Light diffuse = new Light();
-    public Light ambient = new Light();
-    {
-        //default values
-        diffuse.lightColor= Color.white;
-        diffuse.direction = new Vec3f(0.5f,0.0f,0.3f);
-        ambient.lightColor = new Color(0.3f,0.15f,0.2f);
-    }
+    Transform myTransform;
     //testing
-    int nrModelFaces;
     //TODO structure : probably better to use an entire array of lights. Improve the general structure.
     public Renderer(int screenWidth, int screenHeight)
     {
         width=screenWidth;
         height=screenHeight;
+        depthBuffer= new float[height*width];
         colorBuffer = new int[width*height];
         pixelBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        //default color
-        fill(new Color(0.2f,0.2f,0.2f));
-        depthBuffer= new float[height*width];
+        myTransform = new Transform(height, width);
+
+        //configure shader with default values
+        Light diffuse = new Light();
+        diffuse.lightColor= Color.white;
+        diffuse.direction = new Vec3f(0.5f,0.0f,0.3f);
+        Light ambient = new Light();
+        ambient.lightColor = new Color(0.3f,0.15f,0.2f);
+        PrimitiveShader.addLight(diffuse);
+        PrimitiveShader.ambient=ambient;
+
         clearDepthBuffer();
     }
     public void loadModelData(Model modelObject)
-    {   //loads vertex, normal, and texture coords in the order specified by faces
+    {
+        //loads vertex, normal, and texture coords in the order specified by faces
         this.modelObject=modelObject;
-        nrModelFaces=modelObject.nFaces();
         vertexCoords = new Vec3f[modelObject.nFaces()][3];
         textureCoords = new Vec3f[modelObject.nFaces()][3];
         normalCoords = new Vec3f[modelObject.nFaces()][3];
@@ -82,23 +88,21 @@ public class Renderer {
         {
             //future tip, don't change the coordinates values, only copy them, especially if you're updating every frame :)
             //deliver data
-            Vec3f[] transformedVertices = new Vec3f[]{transform(vertexCoords[i][0]), transform(vertexCoords[i][1]), transform(vertexCoords[i][2])};
+            Vec3f[] transformedVertices = new Vec3f[]{
+                    myTransform.transform(vertexCoords[i][0]),
+                    myTransform.transform(vertexCoords[i][1]),
+                    myTransform.transform(vertexCoords[i][2])};
             //deliver data.
             drawTriangle
             (
                     transformedVertices,
-                    modelObject.nTextures()==0? null: new Vec3f[]{textureCoords[i][0], textureCoords[i][1], textureCoords[i][2]},
+                    modelObject.nTextures()==0? null : new Vec3f[]{textureCoords[i][0], textureCoords[i][1], textureCoords[i][2]},
                     depthBuffer,
-                    shadeDiffuseAmbient(cross(minus(transformedVertices[1], transformedVertices[0]),
+                    PrimitiveShader.shade(cross(minus(transformedVertices[1], transformedVertices[0]),
                             minus(transformedVertices[2], transformedVertices[0])).getNormalized())
             );
         }
     }
-    public Color shadeDiffuseAmbient (Vec3f normal)
-    {   //returns intensity*diffuse+ambient
-        return sumColor(diffuseDirectional(normal), ambient.lightColor);
-    }
-
     public void clearDepthBuffer()
     {
         Arrays.fill(depthBuffer, -Float.MAX_VALUE);
@@ -107,7 +111,7 @@ public class Renderer {
     {       //10-15ms per frame
         Arrays.fill(colorBuffer, fillColor.getRGB());
     }
-    public void testTexture () throws IOException
+    private void testTexture () throws IOException
     {
         ppmWriter myWriter = new ppmWriter(texWidth, texHeight);
         int[] colorBuffer = new int[texHeight*texWidth];
@@ -129,15 +133,6 @@ public class Renderer {
     {
         pixelBuffer.setRGB(0,0,width,height, colorBuffer,0,width);
     }
-
-    public Color diffuseDirectional (Vec3f normal)
-    {   //returns diffuse color multiplied by intensity according to angle with respect to normal
-        float intensity =max(dot(normal.getNormalized(), diffuse.direction.getNormalized().neg()), 0.0f);
-        return new Color((int) min(intensity*diffuse.lightColor.getRed(), 255),
-                (int) min(intensity*diffuse.lightColor.getGreen(), 255),
-                (int) min(intensity*diffuse.lightColor.getBlue(), 255), 255);
-    }
-
     private float interpolate(float[]pts, Vec3f barycentric,float value)
     {//interpolates value between 3 points. Assumes value = 0 at start
         float[] screen = new float[]{barycentric.x(),barycentric.y(), barycentric.z()};
@@ -163,22 +158,9 @@ public class Renderer {
         //not returning this
         return new Vec3f(-1.f,1.f,1.f);
     }
-    public Vec3f cameraPos = new Vec3f(0,0.5f,3);
-    public Vec3f lookAtCenter = new Vec3f(0,0,0);
-    public Vec3f transform(Vec3f u)
-    {
-        Matrix transformMatrix = new Matrix(u, true);
-        Matrix modelView = lookAt(cameraPos, lookAtCenter, new Vec3f(0,1,0));
-        transformMatrix = mul(modelView, transformMatrix);
-        Matrix projection = Matrix.getIdentityMatrix(4);
-        projection.setElement(3,2, -1.f/cameraPos.z());
-        transformMatrix= mul(projection, transformMatrix);
-        Matrix viewPort = viewport(0,0,width, height);
-        transformMatrix = mul(viewPort, transformMatrix);
-        return new Vec3f(transformMatrix);
-    }
     public void drawTriangle (Vec3f[] pts, Vec3f[] texPts,float[] depthBuffer,Color color)
-    {   //1900-1950ms
+    {
+        //1900-1950ms
         //takes 3 object/world space points, 3 texture coordinates, the depthBuffer, and a color
         //and draws triangle (after depth testing) in the color specified scaled by interpolated texture color
         //TODO structure : this function is doing too much and should be broken up
@@ -231,14 +213,6 @@ public class Renderer {
                 }
             }
         }
-    }
-    int funcCounter=0;
-    double sum = 0;
-    public void averageRunTime(long time)
-    {
-        sum += time;
-        double average = sum/funcCounter;
-        System.out.println("average processing time :  " + (((double) average/1_000_000)*nrModelFaces + "ms"));
     }
     public int[] getColorBuffer() {
         return colorBuffer;
@@ -323,5 +297,22 @@ public class Renderer {
                 }
             }
         }
+    }
+    public Color[] readTexture(String filePath) throws IOException
+    {
+        //loads texture data from a .png, inverted vertically
+        //TODO error handling : try catch
+        BufferedImage textureReader = ImageIO.read(new File(filePath));
+        texHeight= textureReader.getHeight();
+        texWidth=textureReader.getWidth();
+        textureData = new Color[textureReader.getHeight()*textureReader.getWidth()];
+        for (int i =textureReader.getHeight()-1;i>=0;i--)
+        {
+            for (int j =0; j<textureReader.getWidth();j++)
+            {
+                textureData[(textureReader.getHeight()-i-1)*textureReader.getWidth()+j]=new Color(textureReader.getRGB(j,i));
+            }
+        }
+        return textureData;
     }
 }
