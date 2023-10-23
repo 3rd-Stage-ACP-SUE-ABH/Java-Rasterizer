@@ -13,6 +13,7 @@ This project uses no dependencies other than the Java Class library.
 * Renderer can load textures and interpolate texture coordinates.
 * Window can display rendering output in real time
 * Renderer has transformations.
+* Shader can shade any number of directional light sources.
 * [More functionality will be appended here]
 
 ### Development Diary : 
@@ -154,6 +155,13 @@ Also, he's rotating.
 
 ![rotate](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/6683c68e-1e86-4ece-a848-80a6d3fe970e)
 
+#### october 23rd
+More rotaty ones : 
 
+![cube-rotate](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/1aeea375-5dab-4ee5-9a12-151a860e6fc2)
+![stanford-bunny-rotate-5x](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/591d3f9e-10d5-473d-a3e4-2a0044411153)
+![african-head-rotation x4](https://github.com/3rd-Stage-ACP-SUE-ABH/ACP-Project/assets/50342436/87f5c23b-2373-432e-a93d-0a063c0ea873)
 
+The cube gif is not sped up!
 
+You can also notice that we have 2 light sources instead of the usual 1 + ambient. 
