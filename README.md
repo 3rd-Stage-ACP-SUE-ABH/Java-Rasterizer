@@ -18,6 +18,8 @@ This project uses no dependencies other than the Java Class library.
 
 ### Development Diary : 
 
+The following is a diary of any intersting thoughts I had during the development of this rasterizer.
+
 Converting C++ to Java is hell. Java doesn't let you do anything. I miss ``` const vec2& ``` T_T 
 
 #### october 9th 
