@@ -53,6 +53,7 @@ public class Renderer {
     }
     public void loadModelData(Model modelObject)
     {
+        System.out.println("FUNCTION CALL : renderer.loadModelData ");
         //loads vertex, normal, and texture coords in the order specified by faces
         this.modelObject=modelObject;
         vertexCoords = new Vec3f[modelObject.nFaces()][3];
@@ -78,20 +79,34 @@ public class Renderer {
                 }
             }
         }
+        modelLoaded=true;
     }
+    public boolean buttonFlag = false;
+    public boolean modelLoaded = false;
     public void renderModel()
     {
         //calls drawTriangle function on loaded model data
         //TODO error handling : assumes model data is loaded
         //TODO error handling : this function assumes nFaces() always matches coords size
+        if (buttonFlag || !modelLoaded)
+            return;
+        System.out.println("FUNCTION CALL : renderer.rendererModel");
         for (int i = 0; i<modelObject.nFaces(); i++)
         {
             //future tip, don't change the coordinates values, only copy them, especially if you're updating every frame :)
             //deliver data
-            Vec3f[] transformedVertices = new Vec3f[]{
+            //TODO structure : implement this as an optional
+            if (vertexCoords[i][0]==null||vertexCoords[i][1]==null||vertexCoords[i][2]==null)
+            {
+                System.out.println("hey ;)");
+                return;
+            }
+            Vec3f[] transformedVertices = new Vec3f[]
+                    {
                     myTransform.transform(vertexCoords[i][0]),
                     myTransform.transform(vertexCoords[i][1]),
-                    myTransform.transform(vertexCoords[i][2])};
+                    myTransform.transform(vertexCoords[i][2])
+                    };
             //deliver data.
             drawTriangle
             (
@@ -200,8 +215,10 @@ public class Renderer {
                     float texX = 0, texY = 0;
                     texX = interpolate(new float[]{texPts[0].x(), texPts[1].x(), texPts[2].x()}, test, texX);
                     texY = interpolate(new float[]{texPts[0].y(), texPts[1].y(), texPts[2].y()}, test, texY);
+                    //TODO bug fixing : change to get dynamic bounds from object
                     Pixel fragmentScreenSpace = new Pixel(map(0,1,0,texWidth, texX).intValue(),
                             map(0,1,0,texHeight, texY).intValue() );
+                    System.out.println(fragmentScreenSpace.x()+" "+fragmentScreenSpace.y());
                     textureColor = textureData[fragmentScreenSpace.x()+fragmentScreenSpace.y()*texWidth];
                 }
                 //depth test ~180ms per face
@@ -210,6 +227,7 @@ public class Renderer {
                     depthBuffer[(int)(P.x()+P.y()*width)]=P.z();
                     //set pixel ~150ms per face. some overhead to check texture availability.
                     setPixel(new Pixel(P.x().intValue(), P.y().intValue()), texPts==null? color : VecOperator.mulColor(textureColor, color));
+                //    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), color);
                 }
             }
         }
