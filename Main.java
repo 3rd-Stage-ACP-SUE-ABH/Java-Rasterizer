@@ -15,16 +15,18 @@ public class Main
     {
         //load model
         //TODO structure : make this dependent on user input
-        Model africanHead = new Model("C:/Users/msi/Desktop/african_head.obj");
+   //     Model africanHead = new Model("C:/Users/msi/Desktop/dot obj files/african_head.obj");
         //init renderer
         Renderer myRenderer = new Renderer(pix_width, pix_height);
         myRenderer.readTexture("C:/Users/msi/Desktop/african_head_diffuse.png");
-        myRenderer.loadModelData(africanHead);
+   //     myRenderer.loadModelData(africanHead);
 
         //init window
+        buttone c = new buttone(myRenderer);
         ImageDisplay img = new ImageDisplay(pix_width,pix_height,"java rasterizer", myRenderer.getPixelBuffer());
         img.setSize(pix_width,pix_height);
         img.setVisible(true);
+        img.add(c);
 
         //configure our own light settings
         PrimitiveShader.clearLights();
@@ -60,7 +62,7 @@ public class Main
             i++;
 
             long time = System.nanoTime() - start;
-            System.out.println("processing time :  " + (((double) time/1_000_000) + " ms/frame"));
+        //    System.out.println("processing time :  " + (((double) time/1_000_000) + " ms/frame"));
         }
     }
     public static Pixel mapToScreen (float x, float y, float min, float max)
