@@ -24,7 +24,7 @@ public class Main
         Light diffuse1 = new Light();
         diffuse1.lightColor = new Color(0.75f,0.2f,0.2f);
         diffuse1.direction = new Vec3f(0.5f, 0,0);
-        PrimitiveShader.addLight(diffuse1);
+    //    PrimitiveShader.addLight(diffuse1);
         Light diffuse2 = new Light();
         diffuse2.lightColor = new Color(0.7f, 0.7f, 0.7f);
         diffuse2.direction = new Vec3f(-0.5f, -0.3f, -0.2f);
@@ -80,6 +80,6 @@ public class Main
             }
         }
     }
-    public static final int pix_height = 500;
-    public static final int pix_width = 500;
+    public static final int pix_height = 1000;
+    public static final int pix_width = 350;
 }

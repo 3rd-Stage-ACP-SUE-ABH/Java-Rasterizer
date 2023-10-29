@@ -20,6 +20,7 @@ public class Renderer {
     //model data. stored such that index 0 corresponds to the 3 3D coordinates specified by face 0.
     //TODO structure : accommodate loading of multiple models
     //TODO error handling : null handling
+    //TODO structure : implement a way to handle objects that have no texture coords, or false texture coords. Also implement a texture loading function
     Vec3f[][] vertexCoords;
     Vec3f[][] textureCoords;
     Vec3f[][] normalCoords;
@@ -101,7 +102,7 @@ public class Renderer {
                 return;
             }
             Vec3f[] transformedVertices = new Vec3f[]
-                    {
+                    {   //TODO bug fixing : switching from standford bunny to armadillo causes null exception here. Handle with Optional
                     myTransform.transform(vertexCoords[i][0]),
                     myTransform.transform(vertexCoords[i][1]),
                     myTransform.transform(vertexCoords[i][2])
