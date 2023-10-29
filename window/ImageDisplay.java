@@ -14,7 +14,6 @@ public class ImageDisplay extends JFrame {
 	
 	public BufferedImage image;
 	public static Panel imagePanel;
-//	public int[] pixelBuffer;
 	public static int counter = 0;
 	public int width;
 	public int height;
@@ -22,12 +21,10 @@ public class ImageDisplay extends JFrame {
 	private Color backgroundColor = new Color(50,50,50);
 	
 	
-	public ImageDisplay(int width,int height,String frameTitle, BufferedImage pixelBuffer) {
+	public ImageDisplay(int width, int height, String frameTitle, BufferedImage pixelBuffer) {
 		this.width = width;
 		this.height = height;
 		this.frameTitle = frameTitle;
-	//	pixelBuffer = new int[width*height];
-		// updateArray();
 		image = pixelBuffer;
 		setTitle(frameTitle);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,7 +37,6 @@ public class ImageDisplay extends JFrame {
 	        addComponentListener(new ComponentAdapter() {
 	            @Override
 	            public void componentResized(ComponentEvent e) {
-	        //    	updateBufferedImage(); no need to call this when we have access to the buffered image in renderer
 	                imagePanel.repaint();
 	            }
 	        });

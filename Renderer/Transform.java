@@ -2,6 +2,7 @@ package Renderer;
 
 import Vector.Matrix;
 import Vector.Vec3f;
+import Vector.VecOperator;
 
 import static Vector.VecOperator.*;
 import static Vector.VecOperator.mul;
@@ -32,6 +33,12 @@ public class Transform {
         transformMatrix = mul(modelView, transformMatrix);
         transformMatrix= mul(projection, transformMatrix);
         transformMatrix = mul(viewPort, transformMatrix);
+        return new Vec3f(transformMatrix);
+    }
+    public Vec3f mapToNDC(Vec3f u, float maxCoordinateSize)
+    {
+        Matrix transformMatrix = new Matrix(u, true);
+        transformMatrix = mul(VecOperator.mapToNDC(maxCoordinateSize), transformMatrix);
         return new Vec3f(transformMatrix);
     }
 }

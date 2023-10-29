@@ -15,7 +15,8 @@ public class Model {
     private final ArrayList<int[]> Nindices;
     private final ArrayList<int[]> Tindices;
     private final String filePath;
-
+    public float minCoord=0;
+    public float maxCoord=0;
     public Model(String filePath) {
         this.filePath = filePath;
         normalIndices = new ArrayList<>();
@@ -135,6 +136,10 @@ public class Model {
                     float x = Float.parseFloat(P[1]);
                     float y = Float.parseFloat(P[2]);
                     float z = Float.parseFloat(P[3]);
+                    float minCandidate = Math.min(x,Math.min(y,z));
+                    minCoord = Math.min(minCoord, minCandidate);
+                    float maxCandidate = Math.max(x,Math.max(y,z));
+                    maxCoord = Math.max(maxCoord, maxCandidate);
                     vertexCoords.add(new float[]{x, y, z});
                 }
                 if (P[0].equals("vn")) {

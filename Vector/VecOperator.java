@@ -96,12 +96,22 @@ public final class VecOperator
         return mul(lookAt, yRotationMatrix(rotationAngle));
     }
     public static int depth = 255;
+    public static Matrix mapToNDC(float maxCoords)
+    {
+        Matrix resultMatrix = Matrix.getIdentityMatrix(4);
+
+        resultMatrix.setElement(0,0, 1/maxCoords);
+        resultMatrix.setElement(1,1, 1/maxCoords);
+        resultMatrix.setElement(2,2, 1/maxCoords);
+
+        return resultMatrix;
+    }
     public static Matrix viewport (int horizontalPXOffset, int verticalPXOffset, int w, int h)
     {
         Matrix resultMatrix = Matrix.getIdentityMatrix(4);
 
-        resultMatrix.setElement(0,3, horizontalPXOffset+w/2.f);
-        resultMatrix.setElement(1,3, verticalPXOffset+h/2.f);
+        resultMatrix.setElement(0,3, horizontalPXOffset + w/2.f);
+        resultMatrix.setElement(1,3, verticalPXOffset + h/2.f);
         resultMatrix.setElement(2,3, depth/2.f);
 
         resultMatrix.setElement(0,0, w/2);

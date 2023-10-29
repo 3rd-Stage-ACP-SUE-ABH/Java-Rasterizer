@@ -29,6 +29,8 @@ public class Renderer {
     public Color[] textureData;
     public int texHeight, texWidth;
     Transform myTransform;
+    public boolean buttonFlag = false;
+    public boolean modelLoaded = false;
     //testing
     //TODO structure : probably better to use an entire array of lights. Improve the general structure.
     public Renderer(int screenWidth, int screenHeight)
@@ -66,14 +68,14 @@ public class Renderer {
             {   //iterate through every face 3 times to get every index
                 //indexV is a single index, representing one Vec3f object
                 int indexV = modelObject.getVertexIndices(i)[j];
-                vertexCoords[i][j] = new Vec3f (modelObject.getVertexCoords(indexV));
+                vertexCoords[i][j] = myTransform.mapToNDC(new Vec3f (modelObject.getVertexCoords(indexV)), modelObject.maxCoord) ;
                 if (modelObject.nTextures()!=0)
                 {
                     int indexT = modelObject.getTextureIndices(i)[j];
                     textureCoords[i][j] = new Vec3f(modelObject.getTexCoords(indexT));
                 }
                 if (modelObject.nNormals()!=0)
-                {
+                {   //TODO bug fixing : transform normals in their own way
                     int indexN = modelObject.getNormalIndices(i)[j];
                     normalCoords[i][j] = new Vec3f(modelObject.getNormalCoords(indexN));
                 }
@@ -81,8 +83,6 @@ public class Renderer {
         }
         modelLoaded=true;
     }
-    public boolean buttonFlag = false;
-    public boolean modelLoaded = false;
     public void renderModel()
     {
         //calls drawTriangle function on loaded model data
@@ -95,10 +95,9 @@ public class Renderer {
         {
             //future tip, don't change the coordinates values, only copy them, especially if you're updating every frame :)
             //deliver data
-            //TODO structure : implement this as an optional
+            //TODO structure : implement this as an optional?
             if (vertexCoords[i][0]==null||vertexCoords[i][1]==null||vertexCoords[i][2]==null)
             {
-                System.out.println("hey ;)");
                 return;
             }
             Vec3f[] transformedVertices = new Vec3f[]
@@ -218,7 +217,6 @@ public class Renderer {
                     //TODO bug fixing : change to get dynamic bounds from object
                     Pixel fragmentScreenSpace = new Pixel(map(0,1,0,texWidth, texX).intValue(),
                             map(0,1,0,texHeight, texY).intValue() );
-                    System.out.println(fragmentScreenSpace.x()+" "+fragmentScreenSpace.y());
                     textureColor = textureData[fragmentScreenSpace.x()+fragmentScreenSpace.y()*texWidth];
                 }
                 //depth test ~180ms per face
@@ -227,7 +225,6 @@ public class Renderer {
                     depthBuffer[(int)(P.x()+P.y()*width)]=P.z();
                     //set pixel ~150ms per face. some overhead to check texture availability.
                     setPixel(new Pixel(P.x().intValue(), P.y().intValue()), texPts==null? color : VecOperator.mulColor(textureColor, color));
-                //    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), color);
                 }
             }
         }

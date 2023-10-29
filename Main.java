@@ -1,10 +1,10 @@
-import Vector.Pixel;
 import Vector.*;
 import Renderer.*;
 import java.awt.*;
 import java.io.IOException;
-import Model.*;
 import window.ImageDisplay;
+import window.Window;
+import window.buttone;
 
 import static Renderer.Renderer.*;
 import static java.lang.Math.*;
@@ -13,20 +13,11 @@ public class Main
 {
     public static void main(String[]args) throws IOException
     {
-        //load model
-        //TODO structure : make this dependent on user input
-   //     Model africanHead = new Model("C:/Users/msi/Desktop/dot obj files/african_head.obj");
         //init renderer
         Renderer myRenderer = new Renderer(pix_width, pix_height);
         myRenderer.readTexture("C:/Users/msi/Desktop/african_head_diffuse.png");
-   //     myRenderer.loadModelData(africanHead);
 
-        //init window
-        buttone c = new buttone(myRenderer);
-        ImageDisplay img = new ImageDisplay(pix_width,pix_height,"java rasterizer", myRenderer.getPixelBuffer());
-        img.setSize(pix_width,pix_height);
-        img.setVisible(true);
-        img.add(c);
+        Window myWindow = new Window("Java Rasterizer", myRenderer);
 
         //configure our own light settings
         PrimitiveShader.clearLights();
@@ -58,7 +49,7 @@ public class Main
             //write to the buffer after doing all processing.
             //avoid writing multiple times per frame as tearing happens.
             myRenderer.printBuffer();
-            ImageDisplay.imagePanel.repaint();
+            myWindow.update();
             i++;
 
             long time = System.nanoTime() - start;
