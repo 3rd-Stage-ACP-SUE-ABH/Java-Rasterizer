@@ -14,6 +14,7 @@ This project uses no dependencies other than the Java Class library.
 * Window can display rendering output in real time
 * Renderer has transformations.
 * Shader can shade any number of directional light sources.
+* Renderer re-sizes object coordinates based on viewport dimensions, keeping the aspect ratio of the object intact.
 * [More functionality will be appended here]
 
 ### Development Diary : 
