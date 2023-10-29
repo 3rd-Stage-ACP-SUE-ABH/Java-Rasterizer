@@ -7,7 +7,7 @@ This project uses no dependencies other than the Java Class library.
 
 * ~All~ testing done with a .PPM file.
 * Renderer has functions to draw lines, triangles, and set single pixels.
-* Renderer has Depth testing.
+* Renderer has depth testing.
 * Renderer displays to window.
 * Renderer has model loader.
 * Renderer can load textures and interpolate texture coordinates.
