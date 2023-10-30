@@ -1,11 +1,12 @@
 package window;
 import java.awt.Graphics;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
 public class Panel extends JPanel{
-	 private BufferedImage image;
+	 public BufferedImage image;
 
 	    public Panel(BufferedImage image) {
 	        this.image = image;
@@ -23,4 +24,5 @@ public class Panel extends JPanel{
 	        int y = (panelHeight - imageHeight) / 2;
 	        g.drawImage(image, x, y, imageWidth, imageHeight, this);
 	    }
+
 }

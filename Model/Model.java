@@ -15,8 +15,8 @@ public class Model {
     private final ArrayList<int[]> Nindices;
     private final ArrayList<int[]> Tindices;
     private final String filePath;
-    public float minCoord=0;
-    public float maxCoord=0;
+    public float minCoord=Float.MAX_VALUE;
+    public float maxCoord=-Float.MAX_VALUE;
     public Model(String filePath) {
         this.filePath = filePath;
         normalIndices = new ArrayList<>();

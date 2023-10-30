@@ -2,13 +2,15 @@ package  window;
 
 import Renderer.Renderer;
 
-import java.awt.image.BufferedImage;
+
 
 public class Window {
+    Renderer ourRenderer;
     ImageDisplay img;
     public Window(String title, Renderer yourRenderer)
     {
         //init window
+        ourRenderer=yourRenderer;
         buttone c = new buttone(yourRenderer);
         img = new ImageDisplay(yourRenderer.height,yourRenderer.width,title, yourRenderer.getPixelBuffer());
         img.setSize(yourRenderer.width,yourRenderer.height);
@@ -17,6 +19,6 @@ public class Window {
     }
     public void update()
     {
-        ImageDisplay.imagePanel.repaint();
+        img.imagePanel.repaint();
     }
 }

@@ -1,5 +1,7 @@
 package window;
 
+import Renderer.Renderer;
+
 import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,7 +16,6 @@ public class ImageDisplay extends JFrame {
 	
 	public BufferedImage image;
 	public static Panel imagePanel;
-	public static int counter = 0;
 	public int width;
 	public int height;
 	private String frameTitle;
@@ -30,7 +31,7 @@ public class ImageDisplay extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		   imagePanel = new Panel(image);
-		   
+
 	        getContentPane().setLayout(new BorderLayout());
 	        getContentPane().add(imagePanel, BorderLayout.CENTER);
 	       

@@ -25,7 +25,7 @@ public class Renderer {
     Vec3f[][] textureCoords;
     Vec3f[][] normalCoords;
     float[] depthBuffer;
-    public final int width, height;
+    public int width, height;
     public int[] colorBuffer;        //pixel buffer
     public Color[] textureData;
     public int texHeight, texWidth;
@@ -146,7 +146,7 @@ public class Renderer {
     }
     public void printBuffer()
     {
-        pixelBuffer.setRGB(0,0,width,height, colorBuffer,0,width);
+        pixelBuffer.setRGB(0,0, width, height, colorBuffer,0, width);
     }
     private float interpolate(float[]pts, Vec3f barycentric,float value)
     {//interpolates value between 3 points. Assumes value = 0 at start
@@ -225,7 +225,9 @@ public class Renderer {
                 {
                     depthBuffer[(int)(P.x()+P.y()*width)]=P.z();
                     //set pixel ~150ms per face. some overhead to check texture availability.
+                //    Color depthTest = new Color(P.z().intValue()/2, P.z().intValue()/3, P.z().intValue());
                     setPixel(new Pixel(P.x().intValue(), P.y().intValue()), texPts==null? color : VecOperator.mulColor(textureColor, color));
+                 //    setPixel(new Pixel(P.x().intValue(), P.y().intValue()), depthTest);
                 }
             }
         }
@@ -330,5 +332,14 @@ public class Renderer {
             }
         }
         return textureData;
+    }
+    public void resize(int newHeight, int newWidth)
+    {
+        System.out.println("FUNCTION CALL : renderer.resize()" + newHeight + " " + newWidth);
+        height=newHeight;
+        width=newWidth;
+        colorBuffer= new int[height*width];
+        pixelBuffer= new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        depthBuffer= new float[height*width];
     }
 }
