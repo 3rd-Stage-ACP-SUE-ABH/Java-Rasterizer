@@ -97,7 +97,7 @@ public class Matrix {
         return resultMatrix;
     }
     public Matrix inverse()
-    {   //TODO error handling : nRows == nColumns
+    {   //TODO error handling : assert nRows == nColumns
         Matrix resultMatrix = new Matrix(nRows, nColumns*2);
         for (int i = 0; i<nRows;i++)
         {

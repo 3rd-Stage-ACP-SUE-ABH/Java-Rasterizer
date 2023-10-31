@@ -36,7 +36,7 @@ public class Main
         while (true)
         {
             long start = System.nanoTime();
-
+            myRenderer.copyRasterizer();
             //clear buffers at the beginning of the frame. 10-15ms
             myRenderer.fill(new Color(50,50,50));
             myRenderer.clearDepthBuffer();

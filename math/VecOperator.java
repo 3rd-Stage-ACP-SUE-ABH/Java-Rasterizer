@@ -43,6 +43,8 @@ public final class VecOperator
     {
        return new Pixel(p.y(), p.x());
     }
+
+
     //matrix
     public static Matrix mul(Matrix l, Matrix r)
     {   //TODO error handling : throw error here
@@ -107,7 +109,7 @@ public final class VecOperator
         return resultMatrix;
     }
     public static Matrix viewport (int horizontalPXOffset, int verticalPXOffset, int w, int h)
-    {
+    {   //maps NDCs to viewport of specified width and height and with specified offset
         Matrix resultMatrix = Matrix.getIdentityMatrix(4);
 
         resultMatrix.setElement(0,3, horizontalPXOffset + w/2.f);

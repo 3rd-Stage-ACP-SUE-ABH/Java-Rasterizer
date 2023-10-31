@@ -8,6 +8,9 @@ import java.util.Arrays;
 
 import Model.Model;
 import math.*;
+import pipeline.fixed.Rasterizer;
+import pipeline.programmable.CellShader;
+
 import static java.lang.Math.*;
 import static math.VecOperator.*;
 
@@ -41,7 +44,8 @@ public class Renderer {
         colorBuffer = new int[width*height];
         pixelBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         myTransform = new Transform(height, width);
-
+        myRasterizer=new Rasterizer(width, height);
+        myRasterizer.setActiveShader(new CellShader());
         //configure shader with default values
         Light diffuse = new Light();
         diffuse.lightColor= Color.white;
@@ -83,6 +87,7 @@ public class Renderer {
         }
         modelLoaded=true;
     }
+    Rasterizer myRasterizer;
     public void renderModel()
     {
         //calls drawTriangle function on loaded model data
@@ -107,15 +112,20 @@ public class Renderer {
                     myTransform.transform(vertexCoords[i][2])
                     };
             //deliver data.
-            drawTriangle
+            myRasterizer.rasterize(new Vec3f[]{vertexCoords[i][0], vertexCoords[i][1], vertexCoords[i][2]});
+         /*   drawTriangle
             (
                     transformedVertices,
                     modelObject.nTextures()==0? null : new Vec3f[]{textureCoords[i][0], textureCoords[i][1], textureCoords[i][2]},
                     depthBuffer,
                     PrimitiveShader.shade(cross(minus(transformedVertices[1], transformedVertices[0]),
                             minus(transformedVertices[2], transformedVertices[0])).getNormalized())
-            );
+            );*/
         }
+    }
+    public void copyRasterizer()
+    {
+        colorBuffer= myRasterizer.getPixelBuffer();
     }
     public void clearDepthBuffer()
     {
@@ -172,7 +182,7 @@ public class Renderer {
         //not returning this
         return new Vec3f(-1.f,1.f,1.f);
     }
-    public void drawTriangle (Vec3f[] pts, Vec3f[] texPts,float[] depthBuffer,Color color)
+    public void drawTriangle (Vec3f[] pts, Vec3f[] texPts, float[] depthBuffer, Color color)
     {
         //1900-1950ms
         //takes 3 object/world space points, 3 texture coordinates, the depthBuffer, and a color
