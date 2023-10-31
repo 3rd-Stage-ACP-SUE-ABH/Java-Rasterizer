@@ -1,11 +1,11 @@
-package Renderer;
+package renderer;
 
-import Vector.Matrix;
-import Vector.Vec3f;
-import Vector.VecOperator;
+import math.Matrix;
+import math.Vec3f;
+import math.VecOperator;
 
-import static Vector.VecOperator.*;
-import static Vector.VecOperator.mul;
+import static math.VecOperator.*;
+import static math.VecOperator.mul;
 
 public class Transform {
     public Transform (int screenHeight, int screenWidth)

@@ -1,4 +1,4 @@
-package ppmWriter;
+package renderer;
 
 import org.w3c.dom.html.HTMLImageElement;
 

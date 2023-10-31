@@ -1,14 +1,15 @@
-import Vector.*;
-import Renderer.*;
+import math.*;
 import java.awt.*;
 import java.io.IOException;
-import window.ImageDisplay;
-import window.Window;
-import window.buttone;
 
-import static Renderer.Renderer.*;
+import renderer.Light;
+import renderer.PrimitiveShader;
+import renderer.Renderer;
+import window.Window;
+
+import static renderer.Renderer.*;
 import static java.lang.Math.*;
-import static Vector.VecOperator.*;
+import static math.VecOperator.*;
 public class Main
 {
     public static void main(String[]args) throws IOException
@@ -79,6 +80,6 @@ public class Main
             }
         }
     }
-    public static final int pix_height = 500;
-    public static final int pix_width = 500;
+    public static final int pix_height = 250;
+    public static final int pix_width = 250;
 }

@@ -1,4 +1,4 @@
-package Vector;
+package math;
 
 public class Matrix {
     public static final int defaultAllocation = 4;

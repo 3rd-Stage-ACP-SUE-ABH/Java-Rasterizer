@@ -1,6 +1,6 @@
 package  window;
 
-import Renderer.Renderer;
+import renderer.Renderer;
 
 
 

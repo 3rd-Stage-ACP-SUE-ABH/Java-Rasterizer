@@ -1,5 +1,5 @@
-package Renderer;
-import  Vector.*;
+package renderer;
+import math.*;
 
 import java.awt.*;
 

@@ -1,4 +1,4 @@
-package Renderer;
+package renderer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -7,10 +7,9 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import Model.Model;
-import Vector.*;
+import math.*;
 import static java.lang.Math.*;
-import static Vector.VecOperator.*;
-import ppmWriter.*;
+import static math.VecOperator.*;
 
 import javax.imageio.ImageIO;
 
@@ -148,7 +147,7 @@ public class Renderer {
     {
         pixelBuffer.setRGB(0,0, width, height, colorBuffer,0, width);
     }
-    private float interpolate(float[]pts, Vec3f barycentric,float value)
+    private float interpolate(float[]pts, Vec3f barycentric, float value)
     {//interpolates value between 3 points. Assumes value = 0 at start
         float[] screen = new float[]{barycentric.x(),barycentric.y(), barycentric.z()};
         for (int i = 0; i<pts.length; i++)

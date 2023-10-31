@@ -1,13 +1,12 @@
-package Renderer;
+package renderer;
 
-import Vector.Vec3f;
+import math.Vec3f;
 
 import java.awt.*;
-import java.security.PublicKey;
 import java.util.ArrayList;
 
-import static Vector.VecOperator.dot;
-import static Vector.VecOperator.sumColor;
+import static math.VecOperator.dot;
+import static math.VecOperator.sumColor;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
