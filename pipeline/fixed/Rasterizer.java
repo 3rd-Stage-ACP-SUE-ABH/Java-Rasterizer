@@ -19,7 +19,7 @@ public class Rasterizer
         initPixelBuffer();
     }
 
-    private Shader activeShader;
+    public Shader activeShader;
     private int viewportWidth, viewportHeight;
     private int[] pixelBuffer;
     private float[] depthBuffer;

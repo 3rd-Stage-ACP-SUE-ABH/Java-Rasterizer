@@ -96,7 +96,7 @@ public final class VecOperator
         }
         //rotate the object before lookAt
         Matrix lookAt = mul(minv, tr);
-        return mul(lookAt, yRotationMatrix(rotationAngle));
+        return lookAt;
     }
     public static int depthResolution = 255;
     //this depth resolution conveniently allows us to view the depth map without doing any mappings
@@ -142,5 +142,36 @@ public final class VecOperator
     public static float interpolate(Vec3f data, Vec3f barycentricCoords)
     {   //returns interpolated value for a point P inside a triangle from its vertex data using P's barycentric coordinates
         return dot(data, barycentricCoords);
+    }
+
+    //below functions have been temporarily relocated here
+    public static  <N extends Number> Double map (N srcMin, N srcMax, N destMin, N destMax, N value)
+    {
+        //maps a Number from range [srcMin, srcMax] to [destMin, destMAX]
+
+        //it's always safe to cast float or int to double then cast back
+        //mapping value to [0, 1]
+        double ratio = (value.doubleValue()-srcMin.doubleValue())/(srcMax.doubleValue()-srcMin.doubleValue());
+        //TODO error handling: what if value is outside the bounds? what if max-min==0?
+        //TODO structure : write map() as a functional interface for stream maps
+        return ((destMax.doubleValue() * ratio) + ((1 - ratio) * destMin.doubleValue()));
+    }
+    public static Vec3f mapToNDC(Vec3f u, float maxCoordinateSize)
+    {
+        Matrix transformMatrix = new Matrix(u, true);
+        transformMatrix = mul(VecOperator.mapToNDC(maxCoordinateSize), transformMatrix);
+        return new Vec3f(transformMatrix);
+    }
+    public static String colorBufferToString(int[] colorBuffer) {
+        StringBuilder bufferData=new StringBuilder();
+        for (int i =0; i<colorBuffer.length;i++)
+        {
+            Color tempColor=new Color(colorBuffer[i]);
+            //concatting strings is extremely slow, since each time we concat the string has to be copied, meaning
+            //we are copying the same string hundreds of thousands of times.
+            //for building strings in for loops, use string builder or string buffer.
+            bufferData.append(tempColor.getRed()).append(" ").append(tempColor.getGreen()).append(" ").append(tempColor.getBlue()).append("\n");
+        }
+        return bufferData.toString();
     }
 }

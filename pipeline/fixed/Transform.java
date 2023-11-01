@@ -11,6 +11,10 @@ import static math.VecOperator.mul;
 public class Transform
 {   //this class is responsible for combining multiple transformations into a single transform
     public Transform(){}
+    public void clear()
+    {
+        matrices.clear();
+    }
     private ArrayList<Matrix> matrices = new ArrayList<>();
     public void addTransform(Matrix transformMatrix)
     {
