@@ -1,5 +1,5 @@
 # The Rasterizer
-This is (an attempt at) a real-time software rasterizer. The graphics logic is mainly based on the renderer described in [Tiny Renderer](https://github.com/ssloy/tinyrenderer/wiki/Lesson-0:-getting-started).
+This is (an attempt at) a real-time software rasterizer. The graphics logic is mainly based on the renderer described in [Tiny engine.Renderer](https://github.com/ssloy/tinyrenderer/wiki/Lesson-0:-getting-started).
 
 This project uses no dependencies other than the Java Class library.
 
@@ -8,7 +8,7 @@ This project uses no dependencies other than the Java Class library.
 * ~All~ testing done with a .PPM file.
 * Renderer has functions to draw lines, triangles, and set single pixels.
 * Renderer has depth testing.
-* .Renderer displays to window.
+* Renderer displays to window.
 * Renderer has model loader.
 * Renderer can load textures and interpolate texture coordinates.
 * Window can display rendering output in real time

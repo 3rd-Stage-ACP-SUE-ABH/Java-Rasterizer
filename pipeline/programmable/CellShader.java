@@ -7,6 +7,8 @@ import pipeline.fixed.Shader;
 import pipeline.fixed.Transform;
 
 import java.awt.*;
+import java.util.ArrayList;
+import static math.VecOperator.*;
 
 public class CellShader extends Shader
 {
@@ -37,9 +39,63 @@ public class CellShader extends Shader
         transformMatrix.addTransform(viewTransform);
         transformMatrix.addTransform(projectionTransform);
     }
-    public CellShader()
+    public static class Light
     {
+        public Vec3f direction;
+        public Color lightColor;
+        public Light()
+        {
+            direction=new Vec3f(0,0,0);
+            lightColor = new Color(0,0,0);
+        }
+        public Light(Vec3f direction, Color color)
+        {
+            this.direction=direction;
+            lightColor=color;
+        }
     }
+    public static class LightShader
+    {
+        public static Vec3f surfaceNormal;
+        private static ArrayList<Light> diffuseLights = new ArrayList<>();
+        public static Light ambient = new Light();
+        {
+            ambient.direction=null;
+        }
+        public static void addLight(Light yourLight)
+        {
+            diffuseLights.add(yourLight);
+        }
+        public static void clearLights(){diffuseLights.clear();}
+        private static Color shadeDiffuseLight(Light diffuse)
+        {
+            //returns diffuse color scaled by intensity according to angle with respect to normal
+            float intensity =Math.max(dot(surfaceNormal.getNormalized(), diffuse.direction.getNormalized().neg()), 0.0f);
+            return new Color((int) Math.min(intensity*diffuse.lightColor.getRed(), 255),
+                    (int) Math.min(intensity*diffuse.lightColor.getGreen(), 255),
+                    (int) Math.min(intensity*diffuse.lightColor.getBlue(), 255), 255);
+        }
+        public static Color shade(Vec3f normal)
+        {
+            surfaceNormal = normal;
+            Color result = Color.black;
+            for (int i = 0; i<diffuseLights.size(); i++)
+            {
+                //sum every diffuse into result
+                result = sumColor(result, shadeDiffuseLight(diffuseLights.get(i)));
+            }
+            return sumColor(result, ambient.lightColor);
+        }
+    }
+    {
+        LightShader.addLight(new Light(new Vec3f(-1,0,0), Color.WHITE));
+    }
+    private Vec3f calculateNormal(Vec3f[] vertices)
+    {
+        return cross(minus(vertices[1], vertices[0]), minus(vertices[2], vertices[0])).getNormalized();
+    }
+    private Vec3f normal;
+    public CellShader() {}
     @Override
     public void vertex(Vec3f[] objectData)
     {
@@ -47,11 +103,12 @@ public class CellShader extends Shader
         {
             objectData[i] = transformMatrix.transform(objectData[i]);
         }
+        normal = calculateNormal(objectData);
     }
     @Override
     public Color fragment()
     {
-        return Color.PINK;
+        return sumColor(LightShader.shade(normal), new Color(50,0,0));
     }
 
 }
