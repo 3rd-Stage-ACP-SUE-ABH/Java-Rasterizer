@@ -8,7 +8,6 @@ import pipeline.fixed.Transform;
 
 import java.awt.*;
 import java.util.ArrayList;
-
 import static math.VecOperator.*;
 
 public class CellShader extends Shader

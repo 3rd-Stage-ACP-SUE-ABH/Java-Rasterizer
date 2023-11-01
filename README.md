@@ -6,15 +6,16 @@ This project uses no dependencies other than the Java Class library.
 ### Current status of Rasterizer :
 
 * ~All~ testing done with a .PPM file.
-* engine.Renderer has functions to draw lines, triangles, and set single pixels.
-* engine.Renderer has depth testing.
-* engine.Renderer displays to window.
-* engine.Renderer has model loader.
-* engine.Renderer can load textures and interpolate texture coordinates.
+* Renderer has functions to draw lines, triangles, and set single pixels.
+* Renderer has depth testing.
+* Renderer displays to window.
+* Renderer has model loader.
+* Renderer can load textures and interpolate texture coordinates.
 * Window can display rendering output in real time
-* engine.Renderer has transformations.
+* Renderer has transformations.
 * Shader can shade any number of directional light sources.
-* engine.Renderer re-sizes object coordinates based on viewport dimensions, keeping the aspect ratio of the object intact.
+* Renderer re-sizes object coordinates based on viewport dimensions, keeping the aspect ratio of the object intact.
+* Pipeline has programmable vertex and fragment shaders.
 * [More functionality will be appended here]
 
 ### Development Diary : 
