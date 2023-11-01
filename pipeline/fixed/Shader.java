@@ -6,24 +6,15 @@ import math.Vec3f;
 import java.awt.*;
 
 public abstract class Shader
-{   //interface between rasterizer and shader types
-    //all shader types are agnostic to the rendering context
-    protected float[] depthBuffer;
-    public void setDepthBuffer(float[] depthBuffer) {
-        this.depthBuffer = depthBuffer;
-    }
-
-    protected boolean depthTest(Pixel point)
-    {   //returns true if point passes depth test, otherwise updates buffer with new value
-        return false;
-    }
+{   //interface between rasterizer and shader types.
+    //I wanted to make shaders completely agnostic to the rendering context,
+    //but to do screen-space processing we need the viewport data.
+    protected int viewportHeight, viewportWidth;
+    public void setViewportDimensions(int height, int width){viewportHeight=height; viewportWidth=width;}
     public abstract void vertex(Vec3f[] vertexData);
-    //vertex is responsible for transforming the vertex data and sending processed data to fragment
-    //it expects NDCs
+    //vertex shaders are responsible for transforming the raw vertex data into screen space and "sending" processed data to the fragment shader.
+    //it expects data in NDC range
     public abstract Color fragment();
-    //fragment is responsible for determining screen space fragment color and discarding fragments. returns null if fragment is discarded
-    protected float interpolate()
-    {
-        return 0;
-    }
+    //fragment shaders are responsible for determining screen-space pixel color and discarding unwanted pixels. returns null if pixel is discarded.
+    //note: fragment = pixel. typically a fragment is a result of interpolating many data points between 3 vertices of a triangle.
 }

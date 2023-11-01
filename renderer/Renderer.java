@@ -9,6 +9,7 @@ import java.util.Arrays;
 import Model.Model;
 import math.*;
 import pipeline.fixed.Rasterizer;
+import pipeline.fixed.Shader;
 import pipeline.programmable.CellShader;
 
 import static java.lang.Math.*;
@@ -44,8 +45,10 @@ public class Renderer {
         colorBuffer = new int[width*height];
         pixelBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         myTransform = new Transform(height, width);
-        myRasterizer=new Rasterizer(width, height);
+
+        myRasterizer= new Rasterizer(width, height);
         myRasterizer.setActiveShader(new CellShader());
+
         //configure shader with default values
         Light diffuse = new Light();
         diffuse.lightColor= Color.white;

@@ -70,7 +70,7 @@ public final class VecOperator
         return resultMatrix;
     }
     public static Matrix yRotationMatrix (float angle)
-    {
+    {   //this is the model transform
         Matrix rotation = Matrix.getIdentityMatrix(4);
         rotation.setElement(0,0, (float)cos(angle));
         rotation.setElement(0,2, (float)sin(angle));
@@ -80,7 +80,8 @@ public final class VecOperator
     }
     public static float rotationAngle = 0;
     public static Matrix lookAt(Vec3f eye, Vec3f center, Vec3f up)
-    {
+    {   //this view transform is a bit of a mess and needs some work.
+        //we need to make a camera class.
         Vec3f z = minus(eye, center).getNormalized();
         Vec3f x = cross(up, z).getNormalized();
         Vec3f y = cross(z, x).getNormalized();
@@ -97,9 +98,10 @@ public final class VecOperator
         Matrix lookAt = mul(minv, tr);
         return mul(lookAt, yRotationMatrix(rotationAngle));
     }
-    public static int depth = 255;
-    public static Matrix mapToNDC(float maxCoords)
-    {
+    public static int depthResolution = 255;
+    //this depth resolution conveniently allows us to view the depth map without doing any mappings
+    public static Matrix mapToNDC (float maxCoords)
+    {   //maps object data from range [-maxCoords, maxCoords] into normalized device coordinate range [-1, 1]
         Matrix resultMatrix = Matrix.getIdentityMatrix(4);
 
         resultMatrix.setElement(0,0, 1/maxCoords);
@@ -108,18 +110,37 @@ public final class VecOperator
 
         return resultMatrix;
     }
-    public static Matrix viewport (int horizontalPXOffset, int verticalPXOffset, int w, int h)
+    public static Matrix viewportTransform (int horizontalPXOffset, int verticalPXOffset, int w, int h)
     {   //maps NDCs to viewport of specified width and height and with specified offset
         Matrix resultMatrix = Matrix.getIdentityMatrix(4);
 
         resultMatrix.setElement(0,3, horizontalPXOffset + w/2.f);
         resultMatrix.setElement(1,3, verticalPXOffset + h/2.f);
-        resultMatrix.setElement(2,3, depth/2.f);
+        resultMatrix.setElement(2,3, depthResolution /2.f);
 
         resultMatrix.setElement(0,0, w/2);
         resultMatrix.setElement(1,1, h/2);
-        resultMatrix.setElement(2,2, depth/2);
+        resultMatrix.setElement(2,2, depthResolution /2);
 
         return resultMatrix;
+    }
+    public static Vec3f getBarycentricCoords(Vec3f A, Vec3f B, Vec3f C, Vec3f P)
+    {   //this function is a bit of a black box
+        Vec3f[] intervals = new Vec3f[2];
+        intervals[0]=new Vec3f(C.x()-A.x(), B.x()-A.x(), A.x()-P.x());
+        intervals[1]=new Vec3f(C.y()-A.y(), B.y()-A.y(), A.y()-P.y());
+        Vec3f orthogonalVector = VecOperator.cross(intervals[0], intervals[1]);
+
+        if (abs(orthogonalVector.z())>1e-2)
+        {
+            return new Vec3f(1.0f-((orthogonalVector.x()+orthogonalVector.y())/orthogonalVector.z()),
+                    orthogonalVector.y()/ orthogonalVector.z(), orthogonalVector.x()/ orthogonalVector.z());
+        }
+        //return this if triangle is degenerate
+        return new Vec3f(-1.f,1.f,1.f);
+    }
+    public static float interpolate(Vec3f data, Vec3f barycentricCoords)
+    {   //returns interpolated value for a point P inside a triangle from its vertex data using P's barycentric coordinates
+        return dot(data, barycentricCoords);
     }
 }
