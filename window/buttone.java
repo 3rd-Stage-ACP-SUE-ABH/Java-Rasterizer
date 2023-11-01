@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import Model.Model;
-import Renderer.Renderer;
+import renderer.Renderer;
 
 public  class  buttone extends JPanel implements ActionListener {
 	

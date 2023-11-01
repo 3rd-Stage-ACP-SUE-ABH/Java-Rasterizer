@@ -1,4 +1,4 @@
-package Vector;
+package math;
 
 public class Vec3f extends Vector
 {

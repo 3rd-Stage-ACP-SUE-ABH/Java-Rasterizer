@@ -1,4 +1,4 @@
-package Vector;
+package math;
 
 public abstract class Vector
 {

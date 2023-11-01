@@ -1,4 +1,4 @@
-package ppmWriter;
+package renderer;
 
 import org.w3c.dom.html.HTMLImageElement;
 
@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class ppmWriter {
+    //this class outputs a simple .ppm image file.
+    //mainly used for testing purposes.
     public ppmWriter(int width, int height)
     {
         pix_width = width;
