@@ -5,12 +5,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import Model;
-import math.*;
-import pipeline.fixed.Rasterizer;
-import pipeline.fixed.Shader;
+import model.Model;
+import model.math.*;
+import model.pipeline.fixed.Rasterizer;
+import model.pipeline.fixed.Shader;
 
-import static math.VecOperator.*;
+import static model.math.VecOperator.*;
 
 import javax.imageio.ImageIO;
 
