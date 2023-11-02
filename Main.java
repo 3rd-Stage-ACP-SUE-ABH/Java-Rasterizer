@@ -1,8 +1,9 @@
 import java.awt.*;
 import java.io.IOException;
 
-import pipeline.programmable.CellShader;
-import renderer.Renderer;
+
+import pipeline.programmable.*;
+import renderer.*;
 import window.Window;
 
 import static math.VecOperator.*;
@@ -13,8 +14,8 @@ public class Main
         //init renderer
         Renderer myRenderer = new Renderer(pix_width, pix_height);
         myRenderer.readTexture("C:/Users/msi/Desktop/african_head_diffuse.png");
-        CellShader myCellShader = new CellShader();
-        myRenderer.setShader(myCellShader);
+        GouraudShader myGShader = new GouraudShader();
+        myRenderer.setShader(myGShader);
 
         Window myWindow = new Window("Java Rasterizer", myRenderer);
 
@@ -32,8 +33,8 @@ public class Main
             rotationAngle = (float)i/5;
 
             //do the magic
-            myCellShader.rotationAngle = rotationAngle;
-            myCellShader.updateMatrices();
+            myGShader.rotationAngle = rotationAngle;
+            myGShader.updateMatrices();
             myRenderer.renderModel();
 
             //write to the buffer after doing all processing.

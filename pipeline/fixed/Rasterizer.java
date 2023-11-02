@@ -70,10 +70,7 @@ public class Rasterizer
         activeShader.vertex(triangleCoords);
 
         //from here downward triangleCoords should be specified in screen space.
-        //typically, the vertex shader would also convert the raw data to screen space coordinates.
-        //it would thus be inefficient to do this conversion twice for every triangle.However,
-        //we have chosen this approach to keep shaders separated from the rasterizer.
-        Vec3f[] screenSpaceCoords = viewportTransform(triangleCoords);
+        Vec3f[] screenSpaceCoords = viewportTransform(new Vec3f[]{triangleCoords[0], triangleCoords[1], triangleCoords[2]});
 
         //define bounding box of triangle
         float minX = viewportWidth-1, minY = viewportHeight-1;
@@ -102,7 +99,7 @@ public class Rasterizer
                 if(P.z()<depthBuffer[(int)(P.x()+P.y()*viewportWidth)])
                     continue;
                 depthBuffer[(int)(P.x()+P.y()*viewportWidth)]=P.z();
-                Color fragmentColor = activeShader.fragment();
+                Color fragmentColor = activeShader.fragment(P, test);
                 //third test: is this pixel discarded by the shader?
                 if (fragmentColor==null)
                     continue;

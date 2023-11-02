@@ -14,7 +14,7 @@ public abstract class Shader
     public abstract void vertex(Vec3f[] vertexData);
     //vertex shaders are responsible for transforming the raw vertex data into screen space and "sending" processed data to the fragment shader.
     //it expects data in NDC range
-    public abstract Color fragment();
+    public abstract Color fragment(Vec3f fragment, Vec3f bar);
     //fragment shaders are responsible for determining screen-space pixel color and discarding unwanted pixels. returns null if pixel is discarded.
     //note: fragment = pixel. typically a fragment is a result of interpolating many data points between 3 vertices of a triangle.
 }

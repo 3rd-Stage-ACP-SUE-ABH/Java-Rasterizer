@@ -29,4 +29,13 @@ public class Transform
         }
         return new Vec3f(transformMatrix);
     }
+    public Vec3f transformNormals(Vec3f normals)
+    {
+        Matrix transformMatrix = new Matrix(normals, true);
+        for (int i = 0; i<matrices.size(); i++)
+        {
+            transformMatrix = mul(matrices.get(i).inverse().transpose(), transformMatrix);
+        }
+        return new Vec3f(transformMatrix);
+    }
 }

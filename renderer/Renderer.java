@@ -4,15 +4,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 import Model.Model;
 import math.*;
 import pipeline.fixed.Rasterizer;
 import pipeline.fixed.Shader;
-import pipeline.programmable.CellShader;
 
-import static java.lang.Math.*;
 import static math.VecOperator.*;
 
 import javax.imageio.ImageIO;
@@ -99,7 +96,7 @@ public class Renderer {
                 return;
             }
             //deliver data.
-            myRasterizer.rasterize(new Vec3f[]{vertexCoords[i][0], vertexCoords[i][1], vertexCoords[i][2]});
+            myRasterizer.rasterize(new Vec3f[]{vertexCoords[i][0], vertexCoords[i][1], vertexCoords[i][2], normalCoords[i][0], normalCoords[i][1], normalCoords[i][2]});
             copyRasterizer();
         }
     }
