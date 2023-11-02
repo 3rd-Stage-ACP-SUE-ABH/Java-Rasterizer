@@ -10,7 +10,7 @@ import java.awt.*;
 
 import static math.VecOperator.*;
 
-public class GouraudShader  extends Shader
+public class PhongShader extends Shader
 {
     public Vec3f camPos = new Vec3f(0,0,2);
     public Vec3f lookAt = new Vec3f(0,0,0);
@@ -40,10 +40,11 @@ public class GouraudShader  extends Shader
         transformMatrix.addTransform(projectionTransform);
     }
     {
-        LightShader.addLight(new Light(new Vec3f(-1,0,0), Color.WHITE));
-        LightShader.ambient.lightColor=new Color(0.15f,0.05f,0.1f);
+        LightShader.addLight(new Light(new Vec3f(-1,0,0), Color.cyan));
+        LightShader.ambient.lightColor=new Color(0.1f,0,0);
+    //    LightShader.addLight(new Light(new Vec3f(0f,-0.8f,0.2f), new Color(0.5f,0.1f,0.35f)));
     }
-    public GouraudShader () {}
+    public PhongShader() {}
     private Vec3f[] normals = new Vec3f[3];
     @Override
     public void vertex(Vec3f[] objectData)
@@ -61,6 +62,6 @@ public class GouraudShader  extends Shader
         float normalsY = interpolate(new Vec3f(normals[0].y(), normals[1].y(), normals[2].y()), bar);
         float normalsZ = interpolate(new Vec3f(normals[0].z(), normals[1].z(), normals[2].z()), bar);
         Vec3f interpolatedNormal = new Vec3f(normalsX, normalsY, normalsZ);
-        return LightShader.shade(interpolatedNormal);
+        return LightShader.shadeChunky(interpolatedNormal, 5);
     }
 }

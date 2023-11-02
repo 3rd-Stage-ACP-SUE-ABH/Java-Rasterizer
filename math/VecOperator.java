@@ -143,7 +143,12 @@ public final class VecOperator
     {   //returns interpolated value for a point P inside a triangle from its vertex data using P's barycentric coordinates
         return dot(data, barycentricCoords);
     }
-
+    public static Color scaleColor(Color color, float scalar)
+    {
+        return new Color((int) min(255, max(0.0, (color.getRed()*scalar))),
+                (int) min(255, max(0.0, (color.getGreen()*scalar))),
+                (int) min(255, max(0.0, (color.getBlue()*scalar))));
+    }
     //below functions have been temporarily relocated here
     public static  <N extends Number> Double map (N srcMin, N srcMax, N destMin, N destMax, N value)
     {

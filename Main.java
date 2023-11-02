@@ -14,7 +14,7 @@ public class Main
         //init renderer
         Renderer myRenderer = new Renderer(pix_width, pix_height);
         myRenderer.readTexture("C:/Users/msi/Desktop/african_head_diffuse.png");
-        GouraudShader myGShader = new GouraudShader();
+        PhongShader myGShader = new PhongShader();
         myRenderer.setShader(myGShader);
 
         Window myWindow = new Window("Java Rasterizer", myRenderer);
@@ -47,6 +47,6 @@ public class Main
             System.out.println("processing time :  " + (((double) time/1_000_000) + " ms/frame"));
         }
     }
-    public static final int pix_height = 250;
-    public static final int pix_width = 250;
+    public static final int pix_height = 300;
+    public static final int pix_width = 300;
 }
