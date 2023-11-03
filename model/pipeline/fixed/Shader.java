@@ -1,8 +1,10 @@
 package model.pipeline.fixed;
 
+
 import model.math.Vec3f;
 
 import java.awt.*;
+
 
 public abstract class Shader
 {   //interface between rasterizer and shader types.

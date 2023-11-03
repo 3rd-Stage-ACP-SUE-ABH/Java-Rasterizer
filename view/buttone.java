@@ -16,7 +16,6 @@ public  class  buttone extends JPanel implements ActionListener {
 		Renderer renderer;
 		File file;
 		private JButton button;
-		
 	public buttone(Renderer renderer) {
 		this.renderer = renderer;
 		button = new JButton("Import File");

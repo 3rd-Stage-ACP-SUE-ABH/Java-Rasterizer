@@ -2,8 +2,6 @@ package view;
 
 import model.renderer.Renderer;
 
-
-
 public class Window {
     Renderer ourRenderer;
     ImageDisplay img;

@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import static java.lang.Math.*;
 
+
 public class Rasterizer
 {   //responsible for rasterizing triangles
     //this class is agnostic to the type of shader it calls
@@ -19,7 +20,6 @@ public class Rasterizer
         initDepthBuffer();
         initPixelBuffer();
     }
-
     public Shader activeShader;
     private int viewportWidth, viewportHeight;
     private int[] pixelBuffer;
@@ -34,7 +34,8 @@ public class Rasterizer
         Arrays.fill(pixelBuffer, clearColor.getRGB());
     }
 
-    private void initDepthBuffer() {
+    private void initDepthBuffer() 
+    {
         depthBuffer = new float[viewportWidth*viewportHeight];
         clearDepthBuffer();
     }

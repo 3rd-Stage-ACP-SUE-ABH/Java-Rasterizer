@@ -2,6 +2,7 @@ package model.renderer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+
 import java.io.IOException;
 
 import model.object3D.Object3D;
