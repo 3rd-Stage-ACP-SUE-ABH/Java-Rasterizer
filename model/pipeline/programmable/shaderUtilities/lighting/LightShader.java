@@ -46,10 +46,14 @@ public class LightShader {
         }
         return sumColor(result, ambient.lightColor);
     }
-    public static Color shade(Vec3f normal) {
+    public static Color shade(Vec3f normal, Vec3f interpolatedPosition) {
         surfaceNormal = normal;
         Color result = Color.black;
         for (int i = 0; i < diffuseLights.size(); i++) {
+            if(diffuseLights.get(i).position!=null)
+            {
+                diffuseLights.get(i).direction = minus( interpolatedPosition, diffuseLights.get(i).position);
+            }
             //sum every diffuse into result
             result = sumColor(result, shadeDiffuseLight(diffuseLights.get(i)));
         }
