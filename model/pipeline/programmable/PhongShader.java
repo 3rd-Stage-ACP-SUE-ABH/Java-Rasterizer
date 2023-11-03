@@ -47,7 +47,7 @@ public class PhongShader extends Shader
      //   LightShader.addLight(new Light(new Vec3f(-1,0,0.5f),new Color(200,50,100)));
         Light wlight = new Light();
         wlight.lightColor = Color.white;
-        wlight.position = new Vec3f(1.5f, 2.f, -1.5f);
+        wlight.position = new Vec3f(1.0f, 1.45f, 0.f);
         LightShader.addLight(wlight);
     //    LightShader.ambient.lightColor=new Color(0.1f,0,0);
     }
