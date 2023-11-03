@@ -63,7 +63,7 @@ public class FlatShader extends Shader
     @Override
     public Color fragment(Vec3f fragment, Vec3f bar)
     {
-        return sumColor(LightShader.shade(normal), new Color(50,0,0));
+        return sumColor(LightShader.shade(normal, null), new Color(50,0,0));
     }
 
 }

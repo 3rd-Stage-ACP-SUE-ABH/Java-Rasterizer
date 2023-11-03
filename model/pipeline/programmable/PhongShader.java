@@ -44,8 +44,12 @@ public class PhongShader extends Shader
         transformMatrix.addTransform(projectionTransform);
     }
     {
-        LightShader.addLight(new Light(new Vec3f(-1,0,0), Color.white));
-        LightShader.ambient.lightColor=new Color(0.1f,0,0);
+     //   LightShader.addLight(new Light(new Vec3f(-1,0,0.5f),new Color(200,50,100)));
+        Light wlight = new Light();
+        wlight.lightColor = Color.white;
+        wlight.position = new Vec3f(1.5f, 2.f, -1.5f);
+        LightShader.addLight(wlight);
+    //    LightShader.ambient.lightColor=new Color(0.1f,0,0);
     }
     public PhongShader() throws IOException {}
     private Vec3f[] normals = new Vec3f[3];
@@ -67,6 +71,11 @@ public class PhongShader extends Shader
     @Override
     public Color fragment(Vec3f fragment, Vec3f bar)
     {
+        float posX = interpolate(new Vec3f(positions[0].x(), positions[1].x(), positions[2].x()), bar);
+        float posY = interpolate(new Vec3f(positions[0].y(), positions[1].y(), positions[2].y()), bar);
+        float posZ = interpolate(new Vec3f(positions[0].z(), positions[1].z(), positions[2].z()), bar);
+        Vec3f interpolatedPosition = new Vec3f(posX, posY, posZ);
+
         float texturePixelX = interpolate(new Vec3f(texCoords[0].x(), texCoords[1].x(), texCoords[2].x()), bar);
         float texturePixelY = interpolate(new Vec3f(texCoords[0].y(), texCoords[1].y(), texCoords[2].y()), bar);
 
@@ -82,6 +91,6 @@ public class PhongShader extends Shader
         texturePixelX=map(0,1,0,diffuseMap.getWidth(), texturePixelX).floatValue();
         Color fragmentTextureColor = diffuseMap.getPixel((int)texturePixelX, (int)texturePixelY);
 
-        return mulColor(LightShader.shade(normal), fragmentTextureColor) ;
+        return mulColor(LightShader.shade(normal, interpolatedPosition), fragmentTextureColor) ;
     }
 }
