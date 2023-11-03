@@ -168,4 +168,25 @@ More rotaty ones :
 
 The cube gif is not sped up!
 
-You can also notice that we have 2 light sources instead of the usual 1 + ambient. 
+You can also notice that we have 2 light sources instead of the usual 1 + ambient.
+
+#### november 3rd
+I can't believe it's been that long. We have done some fundamental changing to the structure of the codebase.
+Modifiyng shaders and texturing have never been easier!
+
+As usual here are the cool bugs and gifs : 
+
+Hmm, yes. Normal mapping.
+
+
+![so that's what a normal map is](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/1867e9fe-2226-40f4-91a3-35c3d339031f)
+
+Now this is real normal mapping 
+
+
+![normalMapping](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/4e82e1da-2d50-410e-aea0-39c23ab5cce4)
+
+Okay, in this one I projected the normal map as a light source, and did some funky shading 
+
+![normalMapProjection](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/72922be8-7a37-4b08-949c-dcbbde199c1d)
+
