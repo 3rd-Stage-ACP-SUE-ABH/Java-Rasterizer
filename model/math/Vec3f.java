@@ -35,7 +35,8 @@ public class Vec3f extends Vector
         raw[2]=raw[2].floatValue();
     }
     @Override
-    public Vec3f getNormalized() {
+    public Vec3f getNormalized() 
+    {
         return new Vec3f(getNormalizedCoords()[0], getNormalizedCoords()[1], getNormalizedCoords()[2]);
     }
     @Override

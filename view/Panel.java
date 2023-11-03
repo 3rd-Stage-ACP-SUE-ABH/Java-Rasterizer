@@ -2,7 +2,6 @@ package view;
 import java.awt.Graphics;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
-
 import javax.swing.JPanel;
 
 public class Panel extends JPanel{
@@ -24,5 +23,4 @@ public class Panel extends JPanel{
 	        int y = (panelHeight - imageHeight) / 2;
 	        g.drawImage(image, x, y, imageWidth, imageHeight, this);
 	    }
-
 }
