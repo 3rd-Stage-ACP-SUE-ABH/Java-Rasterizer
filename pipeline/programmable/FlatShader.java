@@ -4,7 +4,9 @@ import math.Matrix;
 import math.Vec3f;
 import math.VecOperator;
 import pipeline.fixed.Shader;
-import pipeline.fixed.Transform;
+import pipeline.programmable.shaderUtilities.Transform;
+import pipeline.programmable.shaderUtilities.lighting.Light;
+import pipeline.programmable.shaderUtilities.lighting.LightShader;
 
 import java.awt.*;
 

@@ -9,8 +9,6 @@ public abstract class Shader
 {   //interface between rasterizer and shader types.
     //I wanted to make shaders completely agnostic to the rendering context,
     //but to do screen-space processing we need the viewport data.
-    protected int viewportHeight, viewportWidth;
-    public void setViewportDimensions(int height, int width){viewportHeight=height; viewportWidth=width;}
     public abstract void vertex(Vec3f[] vertexData);
     //vertex shaders are responsible for transforming the raw vertex data into screen space and "sending" processed data to the fragment shader.
     //it expects data in NDC range

@@ -11,7 +11,9 @@ public final class VecOperator
     }
     public static Color mulColor (Color u, Color v)
     {   //returns color equal to scaling u by v, clipping to 255
-        return new Color( min(u.getRed()*v.getRed()/255, 255),  min(u.getGreen()*v.getGreen()/255, 255), min(u.getBlue()*v.getBlue()/255, 255));
+        return new Color( (int)(min(u.getRed()*(float)v.getRed()/255, 255))
+                ,(int) (min(u.getGreen()*(float)v.getGreen()/255, 255)),
+                (int) (min(u.getBlue()*(float)v.getBlue()/255, 255)));
     }
     public static Color sumColor (Color u, Color v)
     {   //returns plain sum clipping to 255

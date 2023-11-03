@@ -72,7 +72,6 @@ public class Renderer {
         }
         modelLoaded=true;
     }
-
     public void setShader(Shader yourShader)
     {
         myShader=yourShader;
@@ -96,7 +95,9 @@ public class Renderer {
                 return;
             }
             //deliver data.
-            myRasterizer.rasterize(new Vec3f[]{vertexCoords[i][0], vertexCoords[i][1], vertexCoords[i][2], normalCoords[i][0], normalCoords[i][1], normalCoords[i][2]});
+            myRasterizer.rasterize(new Vec3f[]{vertexCoords[i][0], vertexCoords[i][1], vertexCoords[i][2],
+                    normalCoords[i][0], normalCoords[i][1], normalCoords[i][2],
+                    textureCoords[i][0], textureCoords[i][1], textureCoords[i][2]});
             copyRasterizer();
         }
     }
@@ -125,23 +126,6 @@ public class Renderer {
         return colorBuffer;
     }
     public BufferedImage getPixelBuffer(){return pixelBuffer;}
-    public Color[] readTexture(String filePath) throws IOException
-    {
-        //loads texture data from a .png, inverted vertically
-        //TODO error handling : try catch
-        BufferedImage textureReader = ImageIO.read(new File(filePath));
-        texHeight= textureReader.getHeight();
-        texWidth=textureReader.getWidth();
-        textureData = new Color[textureReader.getHeight()*textureReader.getWidth()];
-        for (int i =textureReader.getHeight()-1;i>=0;i--)
-        {
-            for (int j =0; j<textureReader.getWidth();j++)
-            {
-                textureData[(textureReader.getHeight()-i-1)*textureReader.getWidth()+j]=new Color(textureReader.getRGB(j,i));
-            }
-        }
-        return textureData;
-    }
     public void resize(int newHeight, int newWidth)
     {
         System.out.println("FUNCTION CALL : renderer.resize()" + newHeight + " " + newWidth);

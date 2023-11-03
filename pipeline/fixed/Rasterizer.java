@@ -2,6 +2,7 @@ package pipeline.fixed;
 
 import math.Vec3f;
 import math.VecOperator;
+import pipeline.programmable.shaderUtilities.Transform;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -49,7 +50,6 @@ public class Rasterizer
     public void setActiveShader(Shader yourShader)
     {
         activeShader=yourShader;
-        activeShader.setViewportDimensions(viewportHeight, viewportWidth);
     }
     private Vec3f[] viewportTransform(Vec3f[] rawData)
     {
