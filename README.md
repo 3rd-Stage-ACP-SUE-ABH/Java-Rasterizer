@@ -1,5 +1,5 @@
 # The Rasterizer
-This is (an attempt at) a real-time software rasterizer. The graphics logic is mainly based on the renderer described in [Tiny Renderer](https://github.com/ssloy/tinyrenderer/wiki/Lesson-0:-getting-started).
+This is (an attempt at) a real-time software rasterizer. The graphics logic is mainly based on the model.renderer described in [Tiny Renderer](https://github.com/ssloy/tinyrenderer/wiki/Lesson-0:-getting-started).
 
 This project uses no dependencies other than the Java Class library.
 
@@ -27,7 +27,7 @@ Converting C++ to Java is hell. Java doesn't let you do anything. I miss ``` con
 #### october 9th 
 Note to future self and developers : when loading huge data into a string inside a for loop, please use stringBuilder or stringBuffer. I was copying the same string literally millions of times with megabytes worth of data.
 #### october 10th
-Finished setting up the basic renderer. Drawing 55 triangles took 7 seconds, seems kind of slow but won't know until we load actual model.
+Finished setting up the basic model.renderer. Drawing 55 triangles took 7 seconds, seems kind of slow but won't know until we load actual model.
 #### october 11th
 Another one in the "typos that cost me hours" section 
 

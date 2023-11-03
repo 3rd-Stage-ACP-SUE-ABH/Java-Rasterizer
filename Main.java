@@ -2,16 +2,16 @@ import java.awt.*;
 import java.io.IOException;
 
 
-import pipeline.programmable.*;
-import renderer.*;
-import window.Window;
+import model.pipeline.programmable.*;
+import model.renderer.*;
+import view.Window;
 
-import static math.VecOperator.*;
+import static model.math.VecOperator.*;
 public class Main
 {
     public static void main(String[]args) throws IOException
     {
-        //init renderer
+        //init model.renderer
         Renderer myRenderer = new Renderer(pix_width, pix_height);
         PhongShader myShader = new PhongShader();
         myRenderer.setShader(myShader);

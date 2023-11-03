@@ -1,12 +1,11 @@
-package pipeline.programmable.shaderUtilities.lighting;
+package model.pipeline.programmable.shaderUtilities.lighting;
 
-import math.Matrix;
-import math.Vec3f;
+import model.math.Vec3f;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-import static math.VecOperator.*;
+import static model.math.VecOperator.*;
 
 public class LightShader {
     public static Vec3f surfaceNormal;

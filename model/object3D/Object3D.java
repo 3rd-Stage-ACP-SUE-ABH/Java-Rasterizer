@@ -1,10 +1,10 @@
-package Model;
+package model.object3D;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-public class Model {
+public class Object3D {
     private final ArrayList<float[]> vertexCoords;
     private final ArrayList<float[]> normalCoords;
     private final ArrayList<float[]> texCoords;
@@ -17,7 +17,7 @@ public class Model {
     private final String filePath;
     public float minCoord=Float.MAX_VALUE;
     public float maxCoord=-Float.MAX_VALUE;
-    public Model(String filePath) {
+    public Object3D(String filePath) {
         this.filePath = filePath;
         normalIndices = new ArrayList<>();
         textureIndices = new ArrayList<>();

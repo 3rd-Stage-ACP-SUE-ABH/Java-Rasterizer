@@ -1,7 +1,6 @@
-package pipeline.fixed;
+package model.pipeline.fixed;
 
-import math.Pixel;
-import math.Vec3f;
+import model.math.Vec3f;
 
 import java.awt.*;
 

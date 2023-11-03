@@ -1,6 +1,6 @@
-package  window;
+package view;
 
-import renderer.Renderer;
+import model.renderer.Renderer;
 
 
 

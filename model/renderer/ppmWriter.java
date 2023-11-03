@@ -1,6 +1,4 @@
-package renderer;
-
-import org.w3c.dom.html.HTMLImageElement;
+package model.renderer;
 
 import java.io.BufferedWriter;
 import java.io.File;

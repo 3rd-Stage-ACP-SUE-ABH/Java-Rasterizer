@@ -1,4 +1,4 @@
-package window;
+package view;
 
 import java.awt.*;
 import java.awt.event.ComponentAdapter;

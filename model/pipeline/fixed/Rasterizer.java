@@ -1,8 +1,8 @@
-package pipeline.fixed;
+package model.pipeline.fixed;
 
-import math.Vec3f;
-import math.VecOperator;
-import pipeline.programmable.shaderUtilities.Transform;
+import model.math.Vec3f;
+import model.math.VecOperator;
+import model.pipeline.programmable.shaderUtilities.Transform;
 
 import java.awt.*;
 import java.util.Arrays;

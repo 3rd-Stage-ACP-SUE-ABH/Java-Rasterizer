@@ -1,4 +1,4 @@
-package pipeline.programmable.shaderUtilities;
+package model.pipeline.programmable.shaderUtilities;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

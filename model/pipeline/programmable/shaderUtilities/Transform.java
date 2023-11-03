@@ -1,12 +1,11 @@
-package pipeline.programmable.shaderUtilities;
+package model.pipeline.programmable.shaderUtilities;
 
-import math.Matrix;
-import math.Vec3f;
+import model.math.Matrix;
+import model.math.Vec3f;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
-import static math.VecOperator.mul;
+import static model.math.VecOperator.mul;
 
 public class Transform
 {   //this class is responsible for combining multiple transformations into a single transform

@@ -1,4 +1,4 @@
-package window;
+package view;
 import java.awt.Graphics;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;

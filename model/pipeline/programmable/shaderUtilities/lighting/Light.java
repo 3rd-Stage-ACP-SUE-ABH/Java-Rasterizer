@@ -1,6 +1,6 @@
-package pipeline.programmable.shaderUtilities.lighting;
+package model.pipeline.programmable.shaderUtilities.lighting;
 
-import math.Vec3f;
+import model.math.Vec3f;
 
 import java.awt.*;
 

@@ -1,4 +1,4 @@
-package math;
+package model.math;
 
 public class Matrix {
     public static final int defaultAllocation = 4;

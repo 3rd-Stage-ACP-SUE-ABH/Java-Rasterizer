@@ -1,4 +1,4 @@
-package window;
+package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,8 +7,8 @@ import javax.swing.*;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import Model.Model;
-import renderer.Renderer;
+import model.object3D.Object3D;
+import model.renderer.Renderer;
 
 public  class  buttone extends JPanel implements ActionListener {
 	
@@ -33,7 +33,7 @@ public  class  buttone extends JPanel implements ActionListener {
 		        if (JFileChooser.APPROVE_OPTION == result){
 					File file = chooser.getSelectedFile();
 					filePath = file.getAbsolutePath();
-					Model objModel = new Model(filePath);
+					Object3D objModel = new Object3D(filePath);
 
 					renderer.buttonFlag=true;
 					renderer.loadModelData(objModel);

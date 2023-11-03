@@ -1,4 +1,4 @@
-package math;
+package model.math;
 
 public class Vec3f extends Vector
 {

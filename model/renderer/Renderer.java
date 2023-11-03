@@ -1,22 +1,19 @@
-package renderer;
+package model.renderer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
-import Model.Model;
-import math.*;
-import pipeline.fixed.Rasterizer;
-import pipeline.fixed.Shader;
+import model.object3D.Object3D;
+import model.math.*;
+import model.pipeline.fixed.Rasterizer;
+import model.pipeline.fixed.Shader;
 
-import static math.VecOperator.*;
-
-import javax.imageio.ImageIO;
+import static model.math.VecOperator.*;
 
 public class Renderer {
     BufferedImage pixelBuffer;
-    Model modelObject;
+    Object3D modelObject;
     //model data. stored such that index 0 corresponds to the 3 3D coordinates specified by face 0.
     //TODO structure : accommodate loading of multiple models
     //TODO error handling : null handling
@@ -42,9 +39,9 @@ public class Renderer {
         pixelBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         myRasterizer= new Rasterizer(width, height);
     }
-    public void loadModelData(Model modelObject)
+    public void loadModelData(Object3D modelObject)
     {
-        System.out.println("FUNCTION CALL : renderer.loadModelData ");
+        System.out.println("FUNCTION CALL : model.renderer.loadModelData ");
         //loads vertex, normal, and texture coords in the order specified by faces
         this.modelObject=modelObject;
         vertexCoords = new Vec3f[modelObject.nFaces()][3];
@@ -84,7 +81,7 @@ public class Renderer {
         //TODO error handling : this function assumes nFaces() always matches coords size
         if (buttonFlag || !modelLoaded)
             return;
-        System.out.println("FUNCTION CALL : renderer.rendererModel");
+        System.out.println("FUNCTION CALL : model.renderer.rendererModel");
         for (int i = 0; i<modelObject.nFaces(); i++)
         {
             //future tip, don't change the coordinates values, only copy them, especially if you're updating every frame :)
@@ -128,7 +125,7 @@ public class Renderer {
     public BufferedImage getPixelBuffer(){return pixelBuffer;}
     public void resize(int newHeight, int newWidth)
     {
-        System.out.println("FUNCTION CALL : renderer.resize()" + newHeight + " " + newWidth);
+        System.out.println("FUNCTION CALL : model.renderer.resize()" + newHeight + " " + newWidth);
         height=newHeight;
         width=newWidth;
         colorBuffer= new int[height*width];

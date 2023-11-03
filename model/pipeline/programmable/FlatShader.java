@@ -1,16 +1,16 @@
-package pipeline.programmable;
+package model.pipeline.programmable;
 
-import math.Matrix;
-import math.Vec3f;
-import math.VecOperator;
-import pipeline.fixed.Shader;
-import pipeline.programmable.shaderUtilities.Transform;
-import pipeline.programmable.shaderUtilities.lighting.Light;
-import pipeline.programmable.shaderUtilities.lighting.LightShader;
+import model.math.Matrix;
+import model.math.Vec3f;
+import model.math.VecOperator;
+import model.pipeline.fixed.Shader;
+import model.pipeline.programmable.shaderUtilities.Transform;
+import model.pipeline.programmable.shaderUtilities.lighting.Light;
+import model.pipeline.programmable.shaderUtilities.lighting.LightShader;
 
 import java.awt.*;
 
-import static math.VecOperator.*;
+import static model.math.VecOperator.*;
 
 public class FlatShader extends Shader
 {
