@@ -1,6 +1,5 @@
 package model.math;
 
-
 public class Vec3f extends Vector
 {
     public void setDepth(float depth)

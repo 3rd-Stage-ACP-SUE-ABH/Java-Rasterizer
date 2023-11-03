@@ -5,7 +5,6 @@ import model.pipeline.programmable.*;
 import model.renderer.*;
 import view.Window;
 
-
 import model.pipeline.programmable.*;
 import model.renderer.*;
 import view.Window;

@@ -9,7 +9,6 @@ import java.util.Arrays;
 
 import static java.lang.Math.*;
 
-
 public class Rasterizer
 {   //responsible for rasterizing triangles
     //this class is agnostic to the type of shader it calls

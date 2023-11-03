@@ -1,6 +1,5 @@
 package model.math;
 
-
 public class Pixel extends Vector
 {
     public Pixel()
