@@ -4,22 +4,27 @@ import model.math.Matrix;
 import model.math.Vec3f;
 import model.math.VecOperator;
 import model.pipeline.fixed.Shader;
-import model.pipeline.fixed.Transform;
+import model.pipeline.programmable.shaderUtilities.Texture;
+import model.pipeline.programmable.shaderUtilities.Transform;
+import model.pipeline.programmable.shaderUtilities.lighting.Light;
+import model.pipeline.programmable.shaderUtilities.lighting.LightShader;
 
 import java.awt.*;
+import java.io.IOException;
 
 import static model.math.VecOperator.*;
 
-public class PhongShader extends Shader {
-    public Vec3f camPos = new Vec3f(0, 0, 2);
-    public Vec3f lookAt = new Vec3f(0, 0, 0);
-    public Vec3f cameraUp = new Vec3f(0, 1, 0);
+public class PhongShader extends Shader
+{
+    public Vec3f camPos = new Vec3f(0,0,2);
+    public Vec3f lookAt = new Vec3f(0,0,0);
+    public Vec3f cameraUp = new Vec3f(0,1,0);
     public float rotationAngle = 0;
     private Matrix modelTransform = VecOperator.yRotationMatrix(rotationAngle);
     private Matrix viewTransform = VecOperator.lookAt(camPos, lookAt, cameraUp);
     private Matrix projectionTransform = Matrix.getIdentityMatrix(4);
     {
-        projectionTransform.setElement(3, 2, -1.f / camPos.z());
+        projectionTransform.setElement(3,2, -1.f/camPos.z());
     }
     private Transform transformMatrix = new Transform();
     {
@@ -27,45 +32,56 @@ public class PhongShader extends Shader {
         transformMatrix.addTransform(viewTransform);
         transformMatrix.addTransform(projectionTransform);
     }
-
-    public void updateMatrices() {
+    public void updateMatrices()
+    {
         modelTransform = VecOperator.yRotationMatrix(rotationAngle);
         viewTransform = VecOperator.lookAt(camPos, lookAt, cameraUp);
-        projectionTransform.setElement(3, 2, -1.f / camPos.z());
+        projectionTransform.setElement(3,2, -1.f/camPos.z());
 
         transformMatrix.clear();
         transformMatrix.addTransform(modelTransform);
         transformMatrix.addTransform(viewTransform);
         transformMatrix.addTransform(projectionTransform);
     }
-
     {
-        LightShader.addLight(new Light(new Vec3f(-1, 0, 0), Color.cyan));
-        LightShader.ambient.lightColor = new Color(0.1f, 0, 0);
-        // LightShader.addLight(new Light(new Vec3f(0f,-0.8f,0.2f), new
-        // Color(0.5f,0.1f,0.35f)));
+        LightShader.addLight(new Light(new Vec3f(-1,0,0), Color.white));
+        LightShader.ambient.lightColor=new Color(0.1f,0,0);
     }
-
-    public PhongShader() {
-    }
-
+    public PhongShader() throws IOException {}
     private Vec3f[] normals = new Vec3f[3];
-
+    private Vec3f[] texCoords = new Vec3f[3];
+    private Vec3f[] positions = new Vec3f[3];
     @Override
-    public void vertex(Vec3f[] objectData) { // expects 3 vertex positions and 3 normals. This shader only works if the
-                                             // model has normal coordinates!
-        for (int i = 0; i < 3; i++) {
+    public void vertex(Vec3f[] objectData)
+    {   //expects 3 vertex positions, 3 normals, and 3 texture coordinates. This shader only works if the model has all those coordinates!
+        for(int i = 0; i<3; i++)
+        {
             objectData[i] = transformMatrix.transform(objectData[i]);
-            normals[i] = transformMatrix.transformNormals(objectData[i + 3]);
+            positions[i]=objectData[i];
+            normals[i] = transformMatrix.transformNormals(objectData[i+3]);
+            texCoords[i] = objectData[i+6];
         }
     }
-
+    Texture diffuseMap= new Texture("C:/Users/msi/Desktop/african_head_diffuse.png");
+    Texture normalMap = new Texture("C:/Users/msi/Desktop/african_head_nm.png");
     @Override
-    public Color fragment(Vec3f fragment, Vec3f bar) {
-        float normalsX = interpolate(new Vec3f(normals[0].x(), normals[1].x(), normals[2].x()), bar);
-        float normalsY = interpolate(new Vec3f(normals[0].y(), normals[1].y(), normals[2].y()), bar);
-        float normalsZ = interpolate(new Vec3f(normals[0].z(), normals[1].z(), normals[2].z()), bar);
-        Vec3f interpolatedNormal = new Vec3f(normalsX, normalsY, normalsZ);
-        return LightShader.shadeChunky(interpolatedNormal, 5);
+    public Color fragment(Vec3f fragment, Vec3f bar)
+    {
+        float texturePixelX = interpolate(new Vec3f(texCoords[0].x(), texCoords[1].x(), texCoords[2].x()), bar);
+        float texturePixelY = interpolate(new Vec3f(texCoords[0].y(), texCoords[1].y(), texCoords[2].y()), bar);
+
+        float normalsX = texturePixelX;
+        float normalsY = texturePixelY;
+        normalsX=map(0,1,0,normalMap.getWidth(), normalsX).floatValue();
+        normalsY=map(0,1,0,normalMap.getHeight(), normalsY).floatValue();
+        Color normalColor = normalMap.getPixel((int)normalsX, (int)normalsY);
+        Vec3f normal = new Vec3f((float) normalColor.getRed()/255, (float) normalColor.getGreen()/255, (float) normalColor.getGreen()/255);
+        normal=transformMatrix.transformNormals(normal).getNormalized();
+
+        texturePixelY=map(0,1,0,diffuseMap.getHeight(), texturePixelY).floatValue();
+        texturePixelX=map(0,1,0,diffuseMap.getWidth(), texturePixelX).floatValue();
+        Color fragmentTextureColor = diffuseMap.getPixel((int)texturePixelX, (int)texturePixelY);
+
+        return mulColor(LightShader.shade(normal), fragmentTextureColor) ;
     }
 }

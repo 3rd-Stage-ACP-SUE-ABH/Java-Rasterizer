@@ -5,15 +5,20 @@ import model.pipeline.programmable.*;
 import model.renderer.*;
 import view.Window;
 
-import static model.math.VecOperator.*;
 
-public class Main {
-    public static void main(String[] args) throws IOException {
+import model.pipeline.programmable.*;
+import model.renderer.*;
+import view.Window;
+
+import static model.math.VecOperator.*;
+public class Main
+{
+    public static void main(String[]args) throws IOException
+    {
         // init renderer
         Renderer myRenderer = new Renderer(pix_width, pix_height);
-        myRenderer.readTexture("C:/Users/msi/Desktop/african_head_diffuse.png");
-        PhongShader myGShader = new PhongShader();
-        myRenderer.setShader(myGShader);
+        PhongShader myShader = new PhongShader();
+        myRenderer.setShader(myShader);
 
         Window myWindow = new Window("Java Rasterizer", myRenderer);
 
@@ -29,9 +34,9 @@ public class Main {
             // specify rotation angle of object around y-axis in radians
             rotationAngle = (float) i / 5;
 
-            // do the magic
-            myGShader.rotationAngle = rotationAngle;
-            myGShader.updateMatrices();
+            //do the magic
+            myShader.rotationAngle = rotationAngle;
+            myShader.updateMatrices();
             myRenderer.renderModel();
 
             // write to the buffer after doing all processing.
