@@ -1,4 +1,5 @@
 package view;
+
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -33,34 +34,5 @@ public class ImageDisplay extends JFrame {
 				imagePanel.repaint();
 			}
 		});
-
 	}
-	/*
-	 * public void loadBufferedImage (BufferedImage pixelBuffer)
-	 * {
-	 * image=pixelBuffer;
-	 * }
-	 */
-	/*
-	 * public void loadBuffer(int[] colorBuffer) { //TODO improve this whole class
-	 * if(pixelBuffer.length == colorBuffer.length)
-	 * {
-	 * pixelBuffer= colorBuffer;
-	 * }
-	 * else
-	 * {
-	 * System.out.println("Error: unexpected color buffer size");;
-	 * }
-	 * }
-	 */
-
-	/*
-	 * public void updateBufferedImage() {
-	 * for (int i = 0; i < height; i++) {
-	 * for (int j = 0; j < width ; j++) {
-	 * image.setRGB(j, i, pixelBuffer[j + i * width]);
-	 * }
-	 * }
-	 * }
-	 */
 }

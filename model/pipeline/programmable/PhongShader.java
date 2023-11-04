@@ -31,7 +31,6 @@ public class PhongShader extends Shader
                 texCoords[i] = objectData[i+6];
         }
     }
-
     Texture diffuseMap = new Texture("C:/Users/msi/Desktop/african_head_diffuse.png");
     Texture normalMap = new Texture("C:/Users/msi/Desktop/african_head_nm.png");
 
