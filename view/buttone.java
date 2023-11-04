@@ -4,11 +4,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import javax.swing.*;
 
 import model.math.Vec3f;
 import model.object3D.Object3D;
 import controller.renderer.Renderer;
+import model.pipeline.programmable.FlatShader;
+import model.pipeline.programmable.PhongShader;
 import model.pipeline.programmable.shaderUtilities.CommonTransformations;
 import model.pipeline.programmable.shaderUtilities.lighting.Light;
 import model.pipeline.programmable.shaderUtilities.lighting.LightShader;
@@ -26,7 +29,7 @@ public class buttone extends JPanel implements ActionListener {
 	JLabel xPosLabel, yPosLabel, zPosLabel, lookAtXlabel, lookAtYlabel, lookAtZlabel, cameraIncXlabel, cameraIncYLabel,
 			cameraZlabel, rotationLabel;
 	JComboBox menulist;
-	String[] menuItems = { "Option1", "Option2" };
+	String[] menuItems = { "Flat Shader", "Phong + Normal Mapping" };
 	Object[] optionButton = { "Point Light", "Directional Light" };
 	float posX, posY, posZ;
 	float lookAt1, lookAt2, lookAt3;
@@ -155,9 +158,15 @@ public class buttone extends JPanel implements ActionListener {
 			clearLight();
 		}
 		if (src == menulist) {
-			// todo call your m
-			System.out.println("printeddd");
-			System.out.println(menulist.getSelectedIndex() + "function is here");
+			if (menulist.getSelectedIndex()==0)
+				renderer.setShader(new FlatShader());
+			if (menulist.getSelectedIndex()==1) {
+				try {
+					renderer.setShader(new PhongShader());
+				} catch (IOException ex) {
+					throw new RuntimeException(ex);
+				}
+			}
 		}
 		if (src == OKbutton)
 			updateInput();
