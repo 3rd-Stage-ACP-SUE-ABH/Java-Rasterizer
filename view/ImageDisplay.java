@@ -34,5 +34,6 @@ public class ImageDisplay extends JFrame {
 				imagePanel.repaint();
 			}
 		});
+
 	}
 }

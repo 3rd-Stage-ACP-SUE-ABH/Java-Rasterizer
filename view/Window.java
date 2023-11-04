@@ -18,6 +18,5 @@ public class Window {
 
     public void update() {
         img.imagePanel.repaint();
-        c.updateInput();
     }
 }

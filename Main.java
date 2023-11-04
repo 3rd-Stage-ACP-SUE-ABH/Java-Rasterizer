@@ -23,8 +23,9 @@ public class Main
 
         //configure light settings
         Light wlight = new Light();
-        wlight.lightColor = Color.white;
-        wlight.position = new Vec3f(1.0f, 1.45f, 0.f);
+        wlight.lightColor = new Color(255,255,0);
+        wlight.direction = new Vec3f(0,-1,0);
+   //     wlight.position = new Vec3f(1.0f, 1.45f, 0.f);
         LightShader.addLight(wlight);
 
         // TODO structure : make breaking of while loop dependent on user input
@@ -37,9 +38,6 @@ public class Main
             myRenderer.myRasterizer.clearPixelBuffer(new Color(50, 50, 50));
 
             // specify rotation angle of object around y-axis in radians
-            rotationAngle = (float) i / 5;
-            CommonTransformations.rotationAngle = rotationAngle;
-            CommonTransformations.offset= new Vec3f(0.5f,0,0);
             updateMatrices();
           
             //do the magic
@@ -51,7 +49,7 @@ public class Main
             myWindow.update();
             i++;
              long time = System.nanoTime() - start;
-             System.out.println("processing time : " + (((double) time / 1_000_000) + "ms/frame"));
+        //     System.out.println("processing time : " + (((double) time / 1_000_000) + "ms/frame"));
         }
     }
     public static final int pix_height = 300;
