@@ -82,12 +82,12 @@ public class Rasterizer
             maxX = min(viewportWidth-1, max(maxX, screenSpaceCoords[i].x()));
             maxY = min(viewportHeight-1, max(maxY, screenSpaceCoords[i].y()));
         }
-        //test every pixel in the bounding box and render those which are inside the triangle.
+        //test every pixel in the bounding box and render those which pass every test.
         Vec3f P;
         int traversalX, traversalY;
-        for (traversalX=(int)minX; traversalX<maxX; traversalX++)
+        for (traversalX = (int)minX; traversalX < maxX; traversalX++)
         {
-            for (traversalY=(int) minY; traversalY<maxY; traversalY++)
+            for (traversalY = (int) minY; traversalY < maxY; traversalY++)
             {
                 P = new Vec3f(traversalX, traversalY, 0.0f);
                 Vec3f test = VecOperator.getBarycentricCoords(screenSpaceCoords[0], screenSpaceCoords[1], screenSpaceCoords[2], P);
