@@ -41,7 +41,7 @@ public class Main
             CommonTransformations.rotationAngle = rotationAngle;
             CommonTransformations.offset= new Vec3f(0.5f,0,0);
             updateMatrices();
-
+          
             //do the magic
             myRenderer.renderModel();
 
@@ -51,8 +51,9 @@ public class Main
             myWindow.update();
             i++;
 
-            long time = System.nanoTime() - start;
-            System.out.println("processing time :  " + (((double) time / 1_000_000) + " ms/frame"));
+            // long time = System.nanoTime() - start;
+            // System.out.println("processing time : " + (((double) time / 1_000_000) + "
+            // ms/frame"));
         }
     }
 
