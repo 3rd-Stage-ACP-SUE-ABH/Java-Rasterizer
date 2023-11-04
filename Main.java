@@ -1,9 +1,12 @@
 import java.awt.*;
 import java.io.IOException;
 
+import model.math.Vec3f;
 import model.pipeline.programmable.*;
 import model.pipeline.programmable.shaderUtilities.CommonTransformations;
-import model.renderer.*;
+import model.pipeline.programmable.shaderUtilities.lighting.Light;
+import model.pipeline.programmable.shaderUtilities.lighting.LightShader;
+import controller.renderer.*;
 import view.Window;
 import static model.math.VecOperator.*;
 import static model.pipeline.programmable.shaderUtilities.CommonTransformations.updateMatrices;
@@ -18,20 +21,28 @@ public class Main
 
         Window myWindow = new Window("Java Rasterizer", myRenderer);
 
-        int i = 0;
+        //configure light settings
+        Light wlight = new Light();
+        wlight.lightColor = Color.white;
+        wlight.position = new Vec3f(1.0f, 1.45f, 0.f);
+        LightShader.addLight(wlight);
+
         // TODO structure : make breaking of while loop dependent on user input
         // render loop
+        int i = 0;
         while (true) {
             long start = System.nanoTime();
-            // clear buffers at the beginning of the frame. 10-15ms
+            // clear buffers at the beginning of the frame
             myRenderer.myRasterizer.clearDepthBuffer();
             myRenderer.myRasterizer.clearPixelBuffer(new Color(50, 50, 50));
 
             // specify rotation angle of object around y-axis in radians
             rotationAngle = (float) i / 5;
-            //do the magic
             CommonTransformations.rotationAngle = rotationAngle;
+            CommonTransformations.offset= new Vec3f(0.5f,0,0);
             updateMatrices();
+
+            //do the magic
             myRenderer.renderModel();
 
             // write to the buffer after doing all processing.

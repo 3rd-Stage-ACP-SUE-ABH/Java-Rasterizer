@@ -1,4 +1,4 @@
-package model.renderer;
+package controller.renderer;
 
 import java.io.BufferedWriter;
 import java.io.File;

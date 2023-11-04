@@ -1,14 +1,11 @@
-package model.renderer;
+package controller.renderer;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import model.object3D.Object3D;
 import model.math.*;
 import model.pipeline.fixed.Rasterizer;
 import model.pipeline.fixed.Shader;
-import model.pipeline.programmable.shaderUtilities.lighting.Light;
-import model.pipeline.programmable.shaderUtilities.lighting.LightShader;
 
 public class Renderer {
     BufferedImage pixelBuffer;
@@ -34,12 +31,6 @@ public class Renderer {
         height=screenHeight;
         pixelBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         myRasterizer= new Rasterizer(width, height);
-
-        //set global light settings
-        Light wlight = new Light();
-        wlight.lightColor = Color.white;
-        wlight.position = new Vec3f(1.0f, 1.45f, 0.f);
-        LightShader.addLight(wlight);
     }
     public void loadModelData(Object3D modelObject)
     {
@@ -104,12 +95,4 @@ public class Renderer {
         pixelBuffer.setRGB(0,0, width, height, myRasterizer.getPixelBuffer(),0, width);
     }
     public BufferedImage getPixelBuffer(){return pixelBuffer;}
-    public void resize(int newHeight, int newWidth)
-    {
-        System.out.println("FUNCTION CALL : model.renderer.resize()" + newHeight + " " + newWidth);
-        height=newHeight;
-        width=newWidth;
-        colorBuffer= new int[height*width];
-        pixelBuffer= new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-    }
 }

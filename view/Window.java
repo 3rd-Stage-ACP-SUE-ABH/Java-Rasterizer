@@ -1,6 +1,6 @@
 package view;
 
-import model.renderer.Renderer;
+import controller.renderer.Renderer;
 
 public class Window {
     Renderer ourRenderer;

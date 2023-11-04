@@ -1,6 +1,6 @@
 package model.pipeline.programmable.shaderUtilities;
 
-import model.renderer.ppmWriter;
+import controller.renderer.ppmWriter;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
