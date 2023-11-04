@@ -24,7 +24,7 @@ public class ImageDisplay extends JFrame {
 
 		imagePanel = new Panel(image);
 
-		getContentPane().setLayout(new BorderLayout());
+		getContentPane().setLayout(new GridLayout(3, 3));
 		getContentPane().add(imagePanel, BorderLayout.CENTER);
 
 		addComponentListener(new ComponentAdapter() {
