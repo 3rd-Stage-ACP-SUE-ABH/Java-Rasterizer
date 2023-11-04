@@ -2,14 +2,13 @@ package model.renderer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 import model.object3D.Object3D;
 import model.math.*;
 import model.pipeline.fixed.Rasterizer;
 import model.pipeline.fixed.Shader;
-
-import static model.math.VecOperator.*;
+import model.pipeline.programmable.shaderUtilities.lighting.Light;
+import model.pipeline.programmable.shaderUtilities.lighting.LightShader;
 
 public class Renderer {
     BufferedImage pixelBuffer;
@@ -23,8 +22,6 @@ public class Renderer {
     Vec3f[][] normalCoords;
     public int width, height;
     public int[] colorBuffer;        //pixel buffer
-    public Color[] textureData;
-    public int texHeight, texWidth;
     public boolean buttonFlag = false;
     public boolean modelLoaded = false;
     public Rasterizer myRasterizer;
@@ -35,9 +32,14 @@ public class Renderer {
     {
         width=screenWidth;
         height=screenHeight;
-        colorBuffer = new int[width*height];
         pixelBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         myRasterizer= new Rasterizer(width, height);
+
+        //set global light settings
+        Light wlight = new Light();
+        wlight.lightColor = Color.white;
+        wlight.position = new Vec3f(1.0f, 1.45f, 0.f);
+        LightShader.addLight(wlight);
     }
     public void loadModelData(Object3D modelObject)
     {
@@ -95,32 +97,11 @@ public class Renderer {
             myRasterizer.rasterize(new Vec3f[]{vertexCoords[i][0], vertexCoords[i][1], vertexCoords[i][2],
                     normalCoords[i][0], normalCoords[i][1], normalCoords[i][2],
                     textureCoords[i][0], textureCoords[i][1], textureCoords[i][2]});
-            copyRasterizer();
         }
     }
-    private void copyRasterizer()
+    public void printBufferOutput()
     {
-        colorBuffer= myRasterizer.getPixelBuffer();
-    }
-
-    private void testTexture () throws IOException
-    {
-        ppmWriter myWriter = new ppmWriter(texWidth, texHeight);
-        int[] colorBuffer = new int[texHeight*texWidth];
-        for (int i = 0;i<texHeight*texWidth;i++)
-        {
-            colorBuffer[i]=textureData[i].getRGB();
-        }
-        myWriter.setTitle("TEXTURE_TEST");
-        myWriter.writeToPPM(colorBufferToString(colorBuffer));
-    }
-    public void printBuffer()
-    {
-        pixelBuffer.setRGB(0,0, width, height, colorBuffer,0, width);
-    }
-
-    public int[] getColorBuffer() {
-        return colorBuffer;
+        pixelBuffer.setRGB(0,0, width, height, myRasterizer.getPixelBuffer(),0, width);
     }
     public BufferedImage getPixelBuffer(){return pixelBuffer;}
     public void resize(int newHeight, int newWidth)

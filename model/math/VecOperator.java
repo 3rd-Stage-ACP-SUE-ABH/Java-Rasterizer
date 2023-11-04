@@ -71,6 +71,14 @@ public final class VecOperator
         }
         return resultMatrix;
     }
+    public static Matrix modelOffset (Vec3f offset)
+    {
+        Matrix translation = Matrix.getIdentityMatrix(4);
+        translation.setElement(0,3,offset.x());
+        translation.setElement(1,3,offset.y());
+        translation.setElement(2,3,offset.z());
+        return translation;
+    }
     public static Matrix yRotationMatrix (float angle)
     {   //this is the model transform
         Matrix rotation = Matrix.getIdentityMatrix(4);

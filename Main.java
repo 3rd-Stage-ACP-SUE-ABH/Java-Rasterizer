@@ -2,22 +2,19 @@ import java.awt.*;
 import java.io.IOException;
 
 import model.pipeline.programmable.*;
+import model.pipeline.programmable.shaderUtilities.CommonTransformations;
 import model.renderer.*;
 import view.Window;
-
-import model.pipeline.programmable.*;
-import model.renderer.*;
-import view.Window;
-
 import static model.math.VecOperator.*;
+import static model.pipeline.programmable.shaderUtilities.CommonTransformations.updateMatrices;
+
 public class Main
 {
     public static void main(String[]args) throws IOException
     {
         // init renderer
         Renderer myRenderer = new Renderer(pix_width, pix_height);
-        PhongShader myShader = new PhongShader();
-        myRenderer.setShader(myShader);
+        myRenderer.setShader(new PhongShader());
 
         Window myWindow = new Window("Java Rasterizer", myRenderer);
 
@@ -32,15 +29,14 @@ public class Main
 
             // specify rotation angle of object around y-axis in radians
             rotationAngle = (float) i / 5;
-
             //do the magic
-            myShader.rotationAngle = rotationAngle;
-            myShader.updateMatrices();
+            CommonTransformations.rotationAngle = rotationAngle;
+            updateMatrices();
             myRenderer.renderModel();
 
             // write to the buffer after doing all processing.
             // avoid writing multiple times per frame as tearing happens.
-            myRenderer.printBuffer();
+            myRenderer.printBufferOutput();
             myWindow.update();
             i++;
 
