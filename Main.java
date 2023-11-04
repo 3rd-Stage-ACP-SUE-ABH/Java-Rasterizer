@@ -3,17 +3,14 @@ import java.io.IOException;
 
 import model.pipeline.programmable.*;
 import model.renderer.*;
-import view.Window;
 
 import model.pipeline.programmable.*;
 import model.renderer.*;
-import view.Window;
 
 import static model.math.VecOperator.*;
-public class Main
-{
-    public static void main(String[]args) throws IOException
-    {
+
+public class Main {
+    public static void main(String[] args) throws IOException {
         // init renderer
         Renderer myRenderer = new Renderer(pix_width, pix_height);
         PhongShader myShader = new PhongShader();
@@ -33,7 +30,7 @@ public class Main
             // specify rotation angle of object around y-axis in radians
             rotationAngle = (float) i / 5;
 
-            //do the magic
+            // do the magic
             myShader.rotationAngle = rotationAngle;
             myShader.updateMatrices();
             myRenderer.renderModel();
@@ -44,8 +41,9 @@ public class Main
             myWindow.update();
             i++;
 
-            long time = System.nanoTime() - start;
-            System.out.println("processing time :  " + (((double) time / 1_000_000) + " ms/frame"));
+            // long time = System.nanoTime() - start;
+            // System.out.println("processing time : " + (((double) time / 1_000_000) + "
+            // ms/frame"));
         }
     }
 
