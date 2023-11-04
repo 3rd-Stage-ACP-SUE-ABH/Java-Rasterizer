@@ -6,7 +6,7 @@ import java.io.File;
 import javax.swing.*;
 
 import model.object3D.Object3D;
-import model.renderer.Renderer;
+import controller.renderer.Renderer;
 
 public class buttone extends JPanel implements ActionListener {
 
