@@ -32,8 +32,8 @@ public class PhongShader extends Shader
         }
     }
 
-    Texture diffuseMap = new Texture("C:/Users/GFC/Desktop/african_head_diffuse.png");
-    Texture normalMap = new Texture("C:/Users/GFC/Desktop/african_head_nm.png");
+    Texture diffuseMap = new Texture("C:/Users/msi/Desktop/african_head_diffuse.png");
+    Texture normalMap = new Texture("C:/Users/msi/Desktop/african_head_nm.png");
 
     @Override
     public Color fragment(Vec3f fragment, Vec3f bar) {

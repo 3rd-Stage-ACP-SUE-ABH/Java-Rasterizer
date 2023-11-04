@@ -1,4 +1,4 @@
-
+package view;
 import controller.renderer.Renderer;
 
 public class Window {
