@@ -19,6 +19,9 @@ public class buttone extends JPanel implements ActionListener {
 
 	JLabel xPosLabel, yPosLabel, zPosLabel, lookAtXlabel, lookAtYlabel, lookAtZlabel, cameraIncXlabel, cameraIncYLabel,
 			cameraZlabel;
+	JComboBox menulist;
+	String[] menuItems = { "Option1", "Option2" };
+
 	Object[] optionButton = { "Point Light", "Directional Light" };
 
 	public buttone(Renderer renderer) {
@@ -28,6 +31,8 @@ public class buttone extends JPanel implements ActionListener {
 		importButton = new JButton("Import File");
 		addLight = new JButton("Add Light");
 		clearLightButton = new JButton("Clear Light");
+
+		menulist = new JComboBox<>(menuItems);
 
 		xPosLabel = new JLabel("Camera X");
 		yPosLabel = new JLabel("Camera Y");
@@ -75,6 +80,8 @@ public class buttone extends JPanel implements ActionListener {
 		add(addLight);
 		add(clearLightButton);
 
+		add(menulist);
+
 		clearLightButton.addActionListener(this);
 		addLight.addActionListener(this);
 		importButton.addActionListener(this);
@@ -105,6 +112,9 @@ public class buttone extends JPanel implements ActionListener {
 		}
 		if (src == clearLightButton) {
 			clearLight();
+		}
+		if (src == menulist) {
+			System.out.println(menulist.getSelectedItem());
 		}
 	}
 
