@@ -48,13 +48,10 @@ public class Main {
             myRenderer.printBufferOutput();
             myWindow.update();
             i++;
-
-            // long time = System.nanoTime() - start;
-            // System.out.println("processing time : " + (((double) time / 1_000_000) + "
-            // ms/frame"));
+             long time = System.nanoTime() - start;
+             System.out.println("processing time : " + (((double) time / 1_000_000) + "ms/frame"));
         }
     }
-
     public static final int pix_height = 300;
     public static final int pix_width = 300;
 }

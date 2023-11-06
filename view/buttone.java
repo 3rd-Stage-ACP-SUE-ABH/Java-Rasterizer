@@ -1,3 +1,4 @@
+package view;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -31,6 +32,7 @@ public class buttone extends JPanel implements ActionListener {
 	float roationFloat, offsetFloat;
 
 	public buttone(Renderer renderer) {
+
 		this.renderer = renderer;
 
 		importButton = new JButton("Import File");
@@ -43,7 +45,6 @@ public class buttone extends JPanel implements ActionListener {
 		offset = new JTextField(2);
 		rotationLabel = new JLabel("Roation");
 		offsetLabel = new JLabel("Offset");
-
 		xPosLabel = new JLabel("Camera X");
 		yPosLabel = new JLabel("Camera Y");
 		zPosLabel = new JLabel("Camera Z");
@@ -80,6 +81,7 @@ public class buttone extends JPanel implements ActionListener {
 		add(lookAtY);
 		add(lookAtZlabel);
 		add(lookAtz);
+
 		// posX = Float.parseFloat(xPos.getText());
 		// posY = Float.parseFloat(yPos.getText());
 		// posZ = Float.parseFloat(zPos.getText());
@@ -90,6 +92,7 @@ public class buttone extends JPanel implements ActionListener {
 		add(yPos);
 		add(zPosLabel);
 		add(zPos);
+
 		// lookAtX1 = Float.parseFloat(lookAtX.getText());
 		// lookAt2 = Float.parseFloat(lookAtY.getText());
 		// lookAt3 = Float.parseFloat(lookAtz.getText());
@@ -173,7 +176,6 @@ public class buttone extends JPanel implements ActionListener {
 		}
 
 	}
-
 	public void updateInput() {
 
 		posX = xPos.getText().length() > 0 ? Float.parseFloat(xPos.getText()) : 0;
@@ -207,7 +209,6 @@ public class buttone extends JPanel implements ActionListener {
 		float floatX = Float.parseFloat(pointX.getText());
 		float floatY = Float.parseFloat(pointY.getText());
 		float floatZ = Float.parseFloat(pointZ.getText());
-
 		// TODO: call renderer
 
 	}
@@ -242,7 +243,6 @@ public class buttone extends JPanel implements ActionListener {
 		restrictToDigitsAndBackspace(green);
 		restrictToDigitsAndBackspace(blue);
 		JOptionPane.showConfirmDialog(null, rgbFields, "RGB Fields", JOptionPane.NO_OPTION);
-
 		// checking if the values are in the range of 0 and 255
 		int intTxt1 = Integer.parseInt(red.getText());
 		int intTxt2 = Integer.parseInt(green.getText());
