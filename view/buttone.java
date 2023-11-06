@@ -2,6 +2,8 @@
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import javax.swing.*;
 
@@ -48,6 +50,9 @@ public class buttone extends JPanel implements ActionListener {
 		xPos = new JTextField(2);
 		yPos = new JTextField(2);
 		zPos = new JTextField(2);
+		restrictToDigitsAndBackspace(xPos);
+		restrictToDigitsAndBackspace(yPos);
+		restrictToDigitsAndBackspace(zPos);
 
 		lookAtXlabel = new JLabel("Look x: ");
 		lookAtYlabel = new JLabel("Look y: ");
@@ -55,6 +60,9 @@ public class buttone extends JPanel implements ActionListener {
 		lookAtX = new JTextField(2);
 		lookAtY = new JTextField(2);
 		lookAtz = new JTextField(2);
+		restrictToDigitsAndBackspace(lookAtX);
+		restrictToDigitsAndBackspace(lookAtY);
+		restrictToDigitsAndBackspace(lookAtz);
 
 		cameraIncXlabel = new JLabel("orientationX ");
 		cameraIncYLabel = new JLabel("orientationY ");
@@ -62,6 +70,9 @@ public class buttone extends JPanel implements ActionListener {
 		cameraIncX = new JTextField(2);
 		cameraIncY = new JTextField(2);
 		cameraIncZ = new JTextField(2);
+		restrictToDigitsAndBackspace(cameraIncX);
+		restrictToDigitsAndBackspace(cameraIncY);
+		restrictToDigitsAndBackspace(cameraIncZ);
 
 		add(lookAtXlabel);
 		add(lookAtX);
@@ -109,6 +120,7 @@ public class buttone extends JPanel implements ActionListener {
 		clearLightButton.addActionListener(this);
 		addLight.addActionListener(this);
 		importButton.addActionListener(this);
+
 	}
 
 	@Override
@@ -131,16 +143,14 @@ public class buttone extends JPanel implements ActionListener {
 			}
 		}
 		if (src == addLight) {
-			addLight();
 
+			addLight();
 		}
 		if (src == clearLightButton) {
 			clearLight();
 		}
 		if (src == menulist) {
-			// todo call your m
-			System.out.println("printeddd");
-			System.out.println(menulist.getSelectedIndex() + "function is here");
+
 		}
 	}
 
@@ -158,6 +168,7 @@ public class buttone extends JPanel implements ActionListener {
 			System.out.println("light point color chosen");
 			addPointLight();
 		} else {
+			System.out.println("direction chose");
 			directions();
 		}
 
@@ -179,21 +190,6 @@ public class buttone extends JPanel implements ActionListener {
 
 		roationFloat = rotation.getText().length() > 0 ? Float.parseFloat(rotation.getText()) : 0;
 		offsetFloat = offset.getText().length() > 0 ? Float.parseFloat(offset.getText()) : 0;
-
-		// System.out.println(posX + posY + posZ);
-		// System.out.println(lookAt1 + lookAt2 + lookAt3);
-		// System.out.println(cameraIncXFloat + cameraIncYFloat + cameraIncZFloat);
-		// System.out.println(roationFloat);
-		// System.out.println(offsetFloat);
-
-		// if (rotation.getText().length() > 0) {
-		// roationFloat = Float.parseFloat(rotation.getText());
-		// System.out.println(roationFloat);
-		// }
-		// if (offset.getText().length() > 0) {
-		// offsetFloat = Float.parseFloat(offset.getText());
-		// System.out.println(offsetFloat);
-		// }
 
 	}
 
@@ -242,7 +238,9 @@ public class buttone extends JPanel implements ActionListener {
 				"Green", green,
 				"Blue", blue,
 		};
-
+		restrictToDigitsAndBackspace(red);
+		restrictToDigitsAndBackspace(green);
+		restrictToDigitsAndBackspace(blue);
 		JOptionPane.showConfirmDialog(null, rgbFields, "RGB Fields", JOptionPane.NO_OPTION);
 
 		// checking if the values are in the range of 0 and 255
@@ -252,6 +250,7 @@ public class buttone extends JPanel implements ActionListener {
 
 		if ((intTxt1 >= 0 && intTxt1 <= 255) && (intTxt2 >= 0 && intTxt2 <= 255)
 				&& (intTxt3 >= 0 && intTxt3 <= 255)) {
+			System.out.println(intTxt1);
 			optionButtons();
 		} else {
 			JOptionPane.showMessageDialog(null, "number not in the range!", "Error pop", JOptionPane.ERROR_MESSAGE);
@@ -261,6 +260,20 @@ public class buttone extends JPanel implements ActionListener {
 
 	public void clearLight() {
 		// TODO: call renderer
+	}
+
+	public static void restrictToDigitsAndBackspace(JTextField textField) {
+		textField.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent ke) {
+				char keyChar = ke.getKeyChar();
+				if ((keyChar >= '0' && keyChar <= '9') || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)
+						|| (ke.getKeyCode() == KeyEvent.VK_PERIOD) || (ke.getKeyCode() == KeyEvent.VK_MINUS)) {
+					textField.setEditable(true);
+				} else {
+					textField.setEditable(false);
+				}
+			}
+		});
 	}
 
 }
