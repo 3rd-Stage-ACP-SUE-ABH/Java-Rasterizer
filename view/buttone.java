@@ -1,4 +1,3 @@
-package view;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -176,6 +175,7 @@ public class buttone extends JPanel implements ActionListener {
 		}
 
 	}
+
 	public void updateInput() {
 
 		posX = xPos.getText().length() > 0 ? Float.parseFloat(xPos.getText()) : 0;

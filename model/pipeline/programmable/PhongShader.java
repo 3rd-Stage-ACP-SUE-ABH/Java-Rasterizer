@@ -10,29 +10,31 @@ import java.io.IOException;
 
 import static model.math.VecOperator.*;
 import static model.pipeline.programmable.shaderUtilities.CommonTransformations.*;
-public class PhongShader extends Shader
-{
-    public PhongShader() throws IOException {}
+
+public class PhongShader extends Shader {
+    public PhongShader() throws IOException {
+    }
+
     private Vec3f[] normals = new Vec3f[3];
     private Vec3f[] texCoords = new Vec3f[3];
     private Vec3f[] positions = new Vec3f[3];
 
     @Override
-    public void vertex(Vec3f[] objectData)
-    {   //expects 3 vertex positions, 3 normals, and 3 texture coordinates. This shader only works if the model has all those coordinates!
-        for(int i = 0; i<3; i++)
-        {
+    public void vertex(Vec3f[] objectData) { // expects 3 vertex positions, 3 normals, and 3 texture coordinates. This
+                                             // shader only works if the model has all those coordinates!
+        for (int i = 0; i < 3; i++) {
             objectData[i] = applyTransform((objectData[i]));
-            positions[i]=objectData[i];
-            //do null handling here
-            if(objectData[i+3]!=null)
-                normals[i] = applyNormalTransform(objectData[i+3]);
-            if (objectData[i+6]!=null)
-                texCoords[i] = objectData[i+6];
+            positions[i] = objectData[i];
+            // do null handling here
+            if (objectData[i + 3] != null)
+                normals[i] = applyNormalTransform(objectData[i + 3]);
+            if (objectData[i + 6] != null)
+                texCoords[i] = objectData[i + 6];
         }
     }
-    Texture diffuseMap = new Texture("C:/Users/msi/Desktop/african_head_diffuse.png");
-    Texture normalMap = new Texture("C:/Users/msi/Desktop/african_head_nm.png");
+
+    Texture diffuseMap = new Texture("C:/Users/GFC/Desktop/african_head_diffuse.png");
+    Texture normalMap = new Texture("C:/Users/GFC/Desktop/african_head_nm.png");
 
     @Override
     public Color fragment(Vec3f fragment, Vec3f bar) {
@@ -46,11 +48,12 @@ public class PhongShader extends Shader
 
         float normalsX = texturePixelX;
         float normalsY = texturePixelY;
-        normalsX=map(0,1,0,normalMap.getWidth(), normalsX).floatValue();
-        normalsY=map(0,1,0,normalMap.getHeight(), normalsY).floatValue();
-        Color normalColor = normalMap.getPixel((int)normalsX, (int)normalsY);
-        Vec3f normal = new Vec3f((float) normalColor.getRed()/255, (float) normalColor.getGreen()/255, (float) normalColor.getGreen()/255);
-        normal=applyNormalTransform(normal).getNormalized();
+        normalsX = map(0, 1, 0, normalMap.getWidth(), normalsX).floatValue();
+        normalsY = map(0, 1, 0, normalMap.getHeight(), normalsY).floatValue();
+        Color normalColor = normalMap.getPixel((int) normalsX, (int) normalsY);
+        Vec3f normal = new Vec3f((float) normalColor.getRed() / 255, (float) normalColor.getGreen() / 255,
+                (float) normalColor.getGreen() / 255);
+        normal = applyNormalTransform(normal).getNormalized();
 
         texturePixelY = map(0, 1, 0, diffuseMap.getHeight(), texturePixelY).floatValue();
         texturePixelX = map(0, 1, 0, diffuseMap.getWidth(), texturePixelX).floatValue();
