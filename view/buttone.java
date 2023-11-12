@@ -3,6 +3,8 @@ package view;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.*;
@@ -22,19 +24,26 @@ public class buttone extends JPanel implements ActionListener {
 	Renderer renderer;
 	File file;
 	private JButton importButton, addLight, clearLightButton, OKbutton;
-	JTextField red, green, blue, pointX, pointY, pointZ, d1, d2, d3;
-	JTextField xPos, yPos, zPos, lookAtX, lookAtY, lookAtz, cameraIncX, cameraIncY, cameraIncZ;
-	JTextField rotation, offsetX, offsetY, offsetZ;
-	JLabel offsetXLabel, offsetYLabel, offsetZLabel;
-	JLabel xPosLabel, yPosLabel, zPosLabel, lookAtXlabel, lookAtYlabel, lookAtZlabel, cameraIncXlabel, cameraIncYLabel,
+	static JTextField red, green, blue, pointX, pointY, pointZ, d1, d2, d3;
+	static JTextField xPos, yPos, zPos, lookAtX, lookAtY, lookAtz, cameraIncX, cameraIncY, cameraIncZ;
+	static JTextField rotation, offsetX, offsetY, offsetZ;
+	static JLabel offsetXLabel, offsetYLabel, offsetZLabel;
+	static JLabel xPosLabel, yPosLabel, zPosLabel, lookAtXlabel, lookAtYlabel, lookAtZlabel, cameraIncXlabel,
+			cameraIncYLabel,
 			cameraZlabel, rotationLabel;
 	JComboBox menulist;
 	String[] menuItems = { "Flat Shader", "Phong + Normal Mapping" };
 	Object[] optionButton = { "Point Light", "Directional Light" };
-	float posX, posY, posZ;
-	float lookAt1, lookAt2, lookAt3;
-	float cameraIncXFloat, cameraIncYFloat, cameraIncZFloat;
-	float roationFloat, offsetXF, offsetYF, offsetZF;
+	Object[] optionNextButton = { "Next", "Cancel" };
+	static float posX, posY, posZ;
+	static float lookAt1, lookAt2, lookAt3;
+	static float cameraIncXFloat, cameraIncYFloat, cameraIncZFloat;
+	static float roationFloat, offsetXF, offsetYF, offsetZF;
+	int intTxt1, intTxt2, intTxt3;
+	int testPane, showMessageDialog;
+	float directionFloat1, directionFloat2, directionFloat3;
+	float floatX, floatY, floatZ;
+
 	public buttone(Renderer renderer) {
 
 		this.renderer = renderer;
@@ -52,6 +61,9 @@ public class buttone extends JPanel implements ActionListener {
 		offsetXLabel = new JLabel("Offset X");
 		offsetYLabel = new JLabel("Offset Y");
 		offsetZLabel = new JLabel("Offset Z");
+		restrictToDigitsAndBackspace(offsetX);
+		restrictToDigitsAndBackspace(offsetY);
+		restrictToDigitsAndBackspace(offsetZ);
 
 		rotationLabel = new JLabel("Roation");
 
@@ -61,6 +73,9 @@ public class buttone extends JPanel implements ActionListener {
 		xPos = new JTextField(2);
 		yPos = new JTextField(2);
 		zPos = new JTextField(2);
+		restrictToDigitsAndBackspace(xPos);
+		restrictToDigitsAndBackspace(yPos);
+		restrictToDigitsAndBackspace(zPos);
 
 		lookAtXlabel = new JLabel("Look x: ");
 		lookAtYlabel = new JLabel("Look y: ");
@@ -68,6 +83,9 @@ public class buttone extends JPanel implements ActionListener {
 		lookAtX = new JTextField(2);
 		lookAtY = new JTextField(2);
 		lookAtz = new JTextField(2);
+		restrictToDigitsAndBackspace(lookAtX);
+		restrictToDigitsAndBackspace(lookAtY);
+		restrictToDigitsAndBackspace(lookAtz);
 
 		cameraIncXlabel = new JLabel("orientationX ");
 		cameraIncYLabel = new JLabel("orientationY ");
@@ -75,6 +93,9 @@ public class buttone extends JPanel implements ActionListener {
 		cameraIncX = new JTextField(2);
 		cameraIncY = new JTextField(2);
 		cameraIncZ = new JTextField(2);
+		restrictToDigitsAndBackspace(cameraIncX);
+		restrictToDigitsAndBackspace(cameraIncY);
+		restrictToDigitsAndBackspace(cameraIncZ);
 
 		add(lookAtXlabel);
 		add(lookAtX);
@@ -83,10 +104,6 @@ public class buttone extends JPanel implements ActionListener {
 		add(lookAtZlabel);
 		add(lookAtz);
 
-		// posX = Float.parseFloat(xPos.getText());
-		// posY = Float.parseFloat(yPos.getText());
-		// posZ = Float.parseFloat(zPos.getText());
-
 		add(xPosLabel);
 		add(xPos);
 		add(yPosLabel);
@@ -94,19 +111,12 @@ public class buttone extends JPanel implements ActionListener {
 		add(zPosLabel);
 		add(zPos);
 
-		// lookAtX1 = Float.parseFloat(lookAtX.getText());
-		// lookAt2 = Float.parseFloat(lookAtY.getText());
-		// lookAt3 = Float.parseFloat(lookAtz.getText());
-
 		add(cameraIncXlabel);
 		add(cameraIncX);
 		add(cameraIncYLabel);
 		add(cameraIncY);
 		add(cameraZlabel);
 		add(cameraIncZ);
-		// cameraIncXFloat = Float.parseFloat(cameraIncX.getText());
-		// cameraIncYFloat = Float.parseFloat(cameraIncY.getText());
-		// cameraIncZFloat = Float.parseFloat(cameraIncZ.getText());
 
 		add(importButton);
 		add(addLight);
@@ -136,8 +146,7 @@ public class buttone extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("BUTTON PRESSED");
 		Object src = e.getSource();
-		if (src == importButton)
-		{
+		if (src == importButton) {
 			JFileChooser chooser = new JFileChooser();
 			int result = chooser.showOpenDialog(null);
 			if (JFileChooser.APPROVE_OPTION == result) {
@@ -152,15 +161,16 @@ public class buttone extends JPanel implements ActionListener {
 			}
 		}
 		if (src == addLight) {
-			addLight();
+			addLightGUI();
 		}
 		if (src == clearLightButton) {
+
 			clearLight();
 		}
 		if (src == menulist) {
-			if (menulist.getSelectedIndex()==0)
+			if (menulist.getSelectedIndex() == 0)
 				renderer.setShader(new FlatShader());
-			if (menulist.getSelectedIndex()==1) {
+			if (menulist.getSelectedIndex() == 1) {
 				try {
 					renderer.setShader(new PhongShader());
 				} catch (IOException ex) {
@@ -178,19 +188,20 @@ public class buttone extends JPanel implements ActionListener {
 
 	public void optionButtons() {
 
-		int result = JOptionPane.showOptionDialog(null, null, "Enter a light color option",
-				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+		int result = JOptionPane.showOptionDialog(this, null, "Enter a light color option",
+				JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 				optionButton, null);
 
 		if (result == JOptionPane.YES_OPTION) {
 			System.out.println("light point color chosen");
 			addPointLight();
-		} else {
+		} else if (result == JOptionPane.NO_OPTION) {
 			directions();
 		}
 
 	}
-	public void updateInput() {
+
+	public static void updateInput() {
 
 		posX = xPos.getText().length() > 0 ? Float.parseFloat(xPos.getText()) : 0;
 		posY = yPos.getText().length() > 0 ? Float.parseFloat(yPos.getText()) : 0;
@@ -212,27 +223,12 @@ public class buttone extends JPanel implements ActionListener {
 
 		roationFloat = rotation.getText().length() > 0 ? Float.parseFloat(rotation.getText()) : 0;
 
-		offsetXF = offsetX.getText().length()>0?Float.parseFloat(offsetX.getText()) : 0;
-		offsetYF = offsetY.getText().length()>0?Float.parseFloat(offsetY.getText()) : 0;
-		offsetZF = offsetZ.getText().length()>0?Float.parseFloat(offsetZ.getText()) : 0;
+		offsetXF = offsetX.getText().length() > 0 ? Float.parseFloat(offsetX.getText()) : 0;
+		offsetYF = offsetY.getText().length() > 0 ? Float.parseFloat(offsetY.getText()) : 0;
+		offsetZF = offsetZ.getText().length() > 0 ? Float.parseFloat(offsetZ.getText()) : 0;
 
 		CommonTransformations.rotationAngle = roationFloat;
 		CommonTransformations.offset = new Vec3f(offsetXF, offsetYF, offsetZF);
-
-		// System.out.println(posX + posY + posZ);
-		// System.out.println(lookAt1 + lookAt2 + lookAt3);
-		// System.out.println(cameraIncXFloat + cameraIncYFloat + cameraIncZFloat);
-		// System.out.println(roationFloat);
-		// System.out.println(offsetFloat);
-
-		// if (rotation.getText().length() > 0) {
-		// roationFloat = Float.parseFloat(rotation.getText());
-		// System.out.println(roationFloat);
-		// }
-		// if (offset.getText().length() > 0) {
-		// offsetFloat = Float.parseFloat(offset.getText());
-		// System.out.println(offsetFloat);
-		// }
 
 	}
 
@@ -247,12 +243,41 @@ public class buttone extends JPanel implements ActionListener {
 				"Point Y", pointY,
 				"Point Z", pointZ,
 		};
-		JOptionPane.showConfirmDialog(null, fileds, "Point Felds", JOptionPane.OK_OPTION);
-		float floatX = Float.parseFloat(pointX.getText());
-		float floatY = Float.parseFloat(pointY.getText());
-		float floatZ = Float.parseFloat(pointZ.getText());
+		restrictToDigitsAndBackspace(pointX);
+		restrictToDigitsAndBackspace(pointY);
+		restrictToDigitsAndBackspace(pointZ);
+		boolean flag = false;
 
-		tempLight.position=new Vec3f(floatX, floatY, floatZ);
+		while (!flag) {
+
+			testPane = JOptionPane.showOptionDialog(this, fileds, "title", JOptionPane.YES_NO_OPTION,
+					JOptionPane.DEFAULT_OPTION,
+					null,
+					optionNextButton,
+					optionNextButton[0]);
+			if (testPane == JOptionPane.YES_OPTION) {
+				if ((pointX.getText().length() != 0) && (pointY.getText().length() != 0)
+						&& (pointZ.getText().length() != 0)) {
+					floatX = Float.parseFloat(pointX.getText());
+					floatY = Float.parseFloat(pointY.getText());
+					floatZ = Float.parseFloat(pointZ.getText());
+
+				} else {
+					int option = JOptionPane.showConfirmDialog(this,
+							"please input some values", "Warning", JOptionPane.YES_OPTION);
+					if (option == JOptionPane.YES_OPTION) {
+						continue;
+					} else {
+						break;
+					}
+				}
+			} else {
+				break;
+			}
+			flag = true;
+		}
+
+		tempLight.position = new Vec3f(floatX, floatY, floatZ);
 		System.out.println(tempLight.position);
 		LightShader.addLight(tempLight);
 	}
@@ -268,41 +293,94 @@ public class buttone extends JPanel implements ActionListener {
 				"Point Y ", d2,
 				"Point Z ", d3,
 		};
-		JOptionPane.showConfirmDialog(null, directionFields, "Direction Fields", JOptionPane.OK_OPTION);
-		float directionFloat1 = Float.parseFloat(d1.getText());
-		float directionFloat2 = Float.parseFloat(d2.getText());
-		float directionFloat3 = Float.parseFloat(d3.getText());
+		restrictToDigitsAndBackspace(d1);
+		restrictToDigitsAndBackspace(d2);
+		restrictToDigitsAndBackspace(d3);
+		boolean flag = false;
+
+		while (!flag) {
+
+			testPane = JOptionPane.showOptionDialog(this, directionFields, "title", JOptionPane.YES_NO_OPTION,
+					JOptionPane.DEFAULT_OPTION,
+					null,
+					optionNextButton,
+					optionNextButton[0]);
+			if (testPane == JOptionPane.YES_OPTION) {
+				if ((d1.getText().length() != 0) && (d2.getText().length() != 0) && (d3.getText().length() != 0)) {
+					directionFloat1 = Float.parseFloat(d1.getText());
+					directionFloat2 = Float.parseFloat(d2.getText());
+					directionFloat3 = Float.parseFloat(d3.getText());
+				} else {
+					int option = JOptionPane.showConfirmDialog(this,
+							"please input some values", "Warning", JOptionPane.YES_OPTION);
+					if (option == JOptionPane.YES_OPTION) {
+						continue;
+					} else {
+						break;
+					}
+				}
+			} else {
+				break;
+			}
+			flag = true;
+		}
+
 		tempLight.direction = new Vec3f(directionFloat1, directionFloat2, directionFloat3);
 		System.out.println(tempLight.direction);
 		LightShader.addLight(tempLight);
 	}
+
 	Light tempLight;
-	public void addLight() {
+
+	public void addLightGUI() {
+		boolean flag = false;
 		red = new JTextField(4);
 		green = new JTextField(4);
 		blue = new JTextField(4);
-
 		Object[] rgbFields = {
 				"Red", red,
 				"Green", green,
 				"Blue", blue,
 		};
+		restrictToDigitsAndBackspace(red);
+		restrictToDigitsAndBackspace(green);
+		restrictToDigitsAndBackspace(blue);
+		while (!flag) {
 
-		JOptionPane.showConfirmDialog(null, rgbFields, "RGB Fields", JOptionPane.NO_OPTION);
-		// checking if the values are in the range of 0 and 255
-		int intTxt1 = Integer.parseInt(red.getText());
-		int intTxt2 = Integer.parseInt(green.getText());
-		int intTxt3 = Integer.parseInt(blue.getText());
+			testPane = JOptionPane.showOptionDialog(this, rgbFields, "title", JOptionPane.YES_NO_OPTION,
+					JOptionPane.DEFAULT_OPTION,
+					null,
+					optionNextButton,
+					optionNextButton[0]);
+			if (testPane == JOptionPane.YES_OPTION) {
+				if ((red.getText().length() != 0) && (green.getText().length() != 0)
+						&& (blue.getText().length() != 0)) {
+					intTxt1 = Integer.parseInt(red.getText());
+					intTxt2 = Integer.parseInt(green.getText());
+					intTxt3 = Integer.parseInt(blue.getText());
+				} else {
+					int option = JOptionPane.showConfirmDialog(this,
+							"please input some values", "Warning", JOptionPane.YES_OPTION);
+					if (option == JOptionPane.YES_OPTION) {
+						continue;
+					} else {
+						break;
+					}
+				}
+			} else {
+				break;
+			}
+			flag = true;
 
-		if ((intTxt1 >= 0 && intTxt1 <= 255) && (intTxt2 >= 0 && intTxt2 <= 255)
-				&& (intTxt3 >= 0 && intTxt3 <= 255)) {
-			tempLight = new Light();
-			System.out.println(intTxt1+" "+intTxt2+ " " + intTxt3);
-			tempLight.lightColor= new Color(intTxt1, intTxt2, intTxt3);
-
-			optionButtons();
-		} else {
-			JOptionPane.showMessageDialog(null, "number not in the range!", "Error pop", JOptionPane.ERROR_MESSAGE);
+			if ((intTxt1 >= 0 && intTxt1 <= 255) && (intTxt2 >= 0 && intTxt2 <= 255)
+					&& (intTxt3 >= 0 && intTxt3 <= 255)) {
+				tempLight = new Light();
+				System.out.println(intTxt1 + " " + intTxt2 + " " + intTxt3);
+				tempLight.lightColor = new Color(intTxt1, intTxt2, intTxt3);
+				optionButtons();
+			} else {
+				JOptionPane.showMessageDialog(this, "number not in the range!", "Error pop", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 
@@ -310,4 +388,25 @@ public class buttone extends JPanel implements ActionListener {
 		LightShader.clearLights();
 	}
 
+	public static void restrictToDigitsAndBackspace(JTextField textField) {
+		textField.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent ke) {
+				char keyChar = ke.getKeyChar();
+				if ((keyChar >= '0' && keyChar <= '9') || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)
+						|| (ke.getKeyCode() == KeyEvent.VK_PERIOD) || (ke.getKeyCode() == KeyEvent.VK_MINUS)) {
+					textField.setEditable(true);
+				} else if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+					updateInput();
+				} else {
+					textField.setEditable(false);
+				}
+			}
+		});
+	}
 }
+
+// old jOption pane model
+// old option pane...
+// JOptionPane.showConfirmDialog(null, rgbFields, "RGB Fields",
+// JOptionPane.DEFAULT_OPTION);
+// checking if the values are in the range of 0 and 255

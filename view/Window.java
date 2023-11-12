@@ -1,4 +1,5 @@
 package view;
+
 import controller.renderer.Renderer;
 
 public class Window {
@@ -11,7 +12,7 @@ public class Window {
         ourRenderer = yourRenderer;
         c = new buttone(yourRenderer);
         img = new ImageDisplay(yourRenderer.height, yourRenderer.width, title, yourRenderer.getPixelBuffer());
-        img.setSize(yourRenderer.width, yourRenderer.height);
+        img.setSize(600, 600);
         img.setVisible(true);
         img.add(c);
     }
