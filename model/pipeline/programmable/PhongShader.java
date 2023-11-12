@@ -13,13 +13,15 @@ import static model.pipeline.programmable.shaderUtilities.CommonTransformations.
 public class PhongShader extends Shader
 {
     public PhongShader() throws IOException {}
-    private Vec3f[] normals = new Vec3f[3];
-    private Vec3f[] texCoords = new Vec3f[3];
+    private Vec3f[] normals;
+    private Vec3f[] texCoords;
     private Vec3f[] positions = new Vec3f[3];
 
     @Override
     public void vertex(Vec3f[] objectData)
-    {   //expects 3 vertex positions, 3 normals, and 3 texture coordinates. This shader only works if the model has all those coordinates!
+    {   //expects at least 3 vertex positions.Optionally 3 normals and 3 texture coordinates.
+        normals = new Vec3f[3];
+        texCoords = new Vec3f[3];
         for(int i = 0; i<3; i++)
         {
             objectData[i] = applyTransform((objectData[i]));
@@ -33,7 +35,6 @@ public class PhongShader extends Shader
     }
     Texture diffuseMap = new Texture("C:/Users/msi/Desktop/african_head_diffuse.png");
     Texture normalMap = new Texture("C:/Users/msi/Desktop/african_head_nm.png");
-
     @Override
     public Color fragment(Vec3f fragment, Vec3f bar) {
         float posX = interpolate(new Vec3f(positions[0].x(), positions[1].x(), positions[2].x()), bar);
@@ -41,6 +42,11 @@ public class PhongShader extends Shader
         float posZ = interpolate(new Vec3f(positions[0].z(), positions[1].z(), positions[2].z()), bar);
         Vec3f interpolatedPosition = new Vec3f(posX, posY, posZ);
 
+        //we have texture coordinates?
+        if (texCoords[0]==null||texCoords[1]==null||texCoords[2]==null)
+            return fragmentNoTex(fragment, bar, interpolatedPosition);
+        System.out.println(texCoords[0]);
+        //interpolate texture and normal map
         float texturePixelX = interpolate(new Vec3f(texCoords[0].x(), texCoords[1].x(), texCoords[2].x()), bar);
         float texturePixelY = interpolate(new Vec3f(texCoords[0].y(), texCoords[1].y(), texCoords[2].y()), bar);
 
@@ -57,5 +63,24 @@ public class PhongShader extends Shader
         Color fragmentTextureColor = diffuseMap.getPixel((int) texturePixelX, (int) texturePixelY);
 
         return mulColor(LightShader.shade(normal, interpolatedPosition), fragmentTextureColor);
+    }
+    private Color fragmentNoTex (Vec3f fragment, Vec3f bar, Vec3f interpolatedPosition)
+    {
+        //We have normal coordinates?
+        if (normals[0]==null||normals[1]==null||normals[2]==null)
+            return fragmentNoNormal(fragment, bar, interpolatedPosition);
+        //Interpolate normal
+        float normalX = interpolate(new Vec3f(normals[0].x(), normals[1].x(), normals[2].x()), bar);
+        float normalY = interpolate(new Vec3f(normals[0].y(), normals[1].y(), normals[2].y()), bar);
+        float normalZ = interpolate(new Vec3f(normals[0].z(), normals[1].z(), normals[2].z()), bar);
+        Vec3f normal = new Vec3f(normalX, normalY, normalZ);
+
+        return LightShader.shade(normal, interpolatedPosition);
+    }
+    private Color fragmentNoNormal (Vec3f fragment, Vec3f bar, Vec3f interpolatedPosition)
+    {
+        //Flat shading.
+        Vec3f normal = cross(minus(positions[1], positions[0]), minus(positions[2], positions[0])).getNormalized();
+        return LightShader.shade(normal, interpolatedPosition);
     }
 }

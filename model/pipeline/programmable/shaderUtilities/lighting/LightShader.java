@@ -11,7 +11,6 @@ public class LightShader {
     public static Vec3f surfaceNormal;
     private static ArrayList<Light> diffuseLights = new ArrayList<>();
     public static Light ambient = new Light();
-
     {
         ambient.direction = null;
     }

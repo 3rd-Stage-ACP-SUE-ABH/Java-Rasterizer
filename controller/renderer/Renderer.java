@@ -54,7 +54,7 @@ public class Renderer {
                     textureCoords[i][j] = new Vec3f(modelObject.getTexCoords(indexT));
                 }
                 if (modelObject.nNormals()!=0)
-                {   //TODO bug fixing : transform normals in their own way
+                {
                     int indexN = modelObject.getNormalIndices(i)[j];
                     normalCoords[i][j] = new Vec3f(modelObject.getNormalCoords(indexN));
                 }
@@ -70,7 +70,6 @@ public class Renderer {
     public void renderModel()
     {
         //calls drawTriangle function on loaded model data
-        //TODO error handling : assumes model data is loaded
         //TODO error handling : this function assumes nFaces() always matches coords size
         if (buttonFlag || !modelLoaded)
             return;
