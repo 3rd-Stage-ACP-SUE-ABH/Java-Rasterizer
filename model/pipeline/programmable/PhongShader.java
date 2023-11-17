@@ -69,8 +69,7 @@ public class PhongShader extends Shader
         float specTexLocX = map(0, 1, 0, diffuseMap.getWidth(), texturePixelX).floatValue();
         Color fragmentSpecColor = specMap.getPixel((int)specTexLocX, (int) specTexLocY);
 
-        return fragmentSpecColor;
-    //    return mulColor(LightShader.shade(normal, interpolatedPosition), fragmentTextureColor);
+        return LightShader.shade(normal, interpolatedPosition, fragmentSpecColor.getRed(), fragmentTextureColor);
     }
 
 
@@ -85,12 +84,12 @@ public class PhongShader extends Shader
         float normalZ = interpolate(new Vec3f(normals[0].z(), normals[1].z(), normals[2].z()), bar);
         Vec3f normal = new Vec3f(normalX, normalY, normalZ);
 
-        return LightShader.shade(normal, interpolatedPosition);
+        return LightShader.shade(normal, interpolatedPosition, 0);
     }
     private Color fragmentNoNormal (Vec3f fragment, Vec3f bar, Vec3f interpolatedPosition)
     {
         //Flat shading.
         Vec3f normal = cross(minus(positions[1], positions[0]), minus(positions[2], positions[0])).getNormalized();
-        return LightShader.shade(normal, interpolatedPosition);
+        return LightShader.shade(normal, interpolatedPosition, 0);
     }
 }
