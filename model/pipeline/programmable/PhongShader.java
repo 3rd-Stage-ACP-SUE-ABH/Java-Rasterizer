@@ -4,12 +4,11 @@ import model.math.Vec3f;
 import model.pipeline.fixed.Shader;
 import model.pipeline.programmable.shaderUtilities.Texture;
 import model.pipeline.programmable.shaderUtilities.lighting.LightShader;
-
 import java.awt.*;
 import java.io.IOException;
-
 import static model.math.VecOperator.*;
 import static model.pipeline.programmable.shaderUtilities.CommonTransformations.*;
+
 public class PhongShader extends Shader
 {
     public PhongShader() throws IOException {}
@@ -33,8 +32,10 @@ public class PhongShader extends Shader
                 texCoords[i] = objectData[i+6];
         }
     }
-    Texture diffuseMap = new Texture("C:/Users/msi/Desktop/african_head_diffuse.png");
-    Texture normalMap = new Texture("C:/Users/msi/Desktop/african_head_nm.png");
+    Texture diffuseMap = new Texture("assets/african_head_diffuse.png");
+    Texture normalMap = new Texture("assets/african_head_nm.png");
+    Texture specMap = new Texture("assets/african_head_spec.png");
+
     @Override
     public Color fragment(Vec3f fragment, Vec3f bar) {
         float posX = interpolate(new Vec3f(positions[0].x(), positions[1].x(), positions[2].x()), bar);
@@ -45,11 +46,12 @@ public class PhongShader extends Shader
         //we have texture coordinates?
         if (texCoords[0]==null||texCoords[1]==null||texCoords[2]==null)
             return fragmentNoTex(fragment, bar, interpolatedPosition);
-        System.out.println(texCoords[0]);
+
         //interpolate texture and normal map
         float texturePixelX = interpolate(new Vec3f(texCoords[0].x(), texCoords[1].x(), texCoords[2].x()), bar);
         float texturePixelY = interpolate(new Vec3f(texCoords[0].y(), texCoords[1].y(), texCoords[2].y()), bar);
 
+        //retrieve normal from normal map
         float normalsX = texturePixelX;
         float normalsY = texturePixelY;
         normalsX=map(0,1,0,normalMap.getWidth(), normalsX).floatValue();
@@ -58,12 +60,20 @@ public class PhongShader extends Shader
         Vec3f normal = new Vec3f((float) normalColor.getRed()/255, (float) normalColor.getGreen()/255, (float) normalColor.getGreen()/255);
         normal=applyNormalTransform(normal).getNormalized();
 
-        texturePixelY = map(0, 1, 0, diffuseMap.getHeight(), texturePixelY).floatValue();
-        texturePixelX = map(0, 1, 0, diffuseMap.getWidth(), texturePixelX).floatValue();
-        Color fragmentTextureColor = diffuseMap.getPixel((int) texturePixelX, (int) texturePixelY);
+        //retrieve diffuse color from diffuse map
+        float diffuseTexLocY = map(0, 1, 0, diffuseMap.getHeight(), texturePixelY).floatValue();
+        float diffuseTexLocX = map(0, 1, 0, diffuseMap.getWidth(), texturePixelX).floatValue();
+        Color fragmentTextureColor = diffuseMap.getPixel((int) diffuseTexLocX, (int) diffuseTexLocY);
 
-        return mulColor(LightShader.shade(normal, interpolatedPosition), fragmentTextureColor);
+        float specTexLocY = map(0, 1, 0, specMap.getHeight(), texturePixelY).floatValue();
+        float specTexLocX = map(0, 1, 0, diffuseMap.getWidth(), texturePixelX).floatValue();
+        Color fragmentSpecColor = specMap.getPixel((int)specTexLocX, (int) specTexLocY);
+
+        return fragmentSpecColor;
+    //    return mulColor(LightShader.shade(normal, interpolatedPosition), fragmentTextureColor);
     }
+
+
     private Color fragmentNoTex (Vec3f fragment, Vec3f bar, Vec3f interpolatedPosition)
     {
         //We have normal coordinates?
