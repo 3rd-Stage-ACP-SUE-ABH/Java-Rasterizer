@@ -44,6 +44,10 @@ public class Vec3f extends Vector
     {
         return new Vec3f(-x(), -y(), -z());
     }
+    public Vec3f scale (float t)
+    { 
+        return new Vec3f(this.x()*t, this.y()*t, this.z()*t);
+    }
     public Float x(){return super.x().floatValue();}
     public Float y(){return super.y().floatValue();}
     public Float z(){return super.z().floatValue();}
