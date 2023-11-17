@@ -51,13 +51,15 @@ public class LightShader {
         {
             if(diffuseLights.get(i).position!=null)
             {
-                diffuseLights.get(i).direction = minus( interpolatedPosition, diffuseLights.get(i).position);
+                diffuseLights.get(i).direction = minus(interpolatedPosition, diffuseLights.get(i).position);
             }
-         //   result = sumColor(result, shadeDiffuseLight(diffuseLights.get(i)));
+            result = sumColor(result, shadeDiffuseLight(diffuseLights.get(i)));
+            result = mulColor(result, 0.75f);    //scale down diffuse
             result = sumColor(result, mulColor(diffuseLights.get(i).lightColor,
             shadeSpecLight(diffuseLights.get(i), fragSpecStregnth, interpolatedPosition)));
-            result = mulColor(result, fragDiffuseColor);
         }
+        //multiply texture once and only once. Order matters ?
+        result = mulColor(fragDiffuseColor, result);
         return sumColor(result, ambient.lightColor);
     }
     private static float shadeSpecLight (Light specular, float specStrength, Vec3f interpolatedPos)
@@ -67,7 +69,6 @@ public class LightShader {
         Vec3f r = minus(l, n.scale(2.f*dot(l, n))).getNormalized();
         Vec3f v =  minus(CommonTransformations.camPos, interpolatedPos).getNormalized();
         float spec = max (r.z(), 0.f);
-    //    float spec = max(dot(r, v), 0.f);
         spec = (float)pow(spec, specStrength);
         return spec;
     }

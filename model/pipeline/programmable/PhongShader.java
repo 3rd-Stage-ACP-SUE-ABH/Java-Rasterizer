@@ -68,7 +68,6 @@ public class PhongShader extends Shader
         float specTexLocY = map(0, 1, 0, specMap.getHeight(), texturePixelY).floatValue();
         float specTexLocX = map(0, 1, 0, diffuseMap.getWidth(), texturePixelX).floatValue();
         Color fragmentSpecColor = specMap.getPixel((int)specTexLocX, (int) specTexLocY);
-
         return LightShader.shade(normal, interpolatedPosition, fragmentSpecColor.getRed(), fragmentTextureColor);
     }
 
