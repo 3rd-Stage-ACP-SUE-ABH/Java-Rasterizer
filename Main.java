@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.io.IOException;
-
 import model.math.Vec3f;
 import model.pipeline.programmable.*;
 import model.pipeline.programmable.shaderUtilities.CommonTransformations;
