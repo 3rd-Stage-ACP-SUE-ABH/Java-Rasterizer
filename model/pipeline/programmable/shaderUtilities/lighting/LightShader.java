@@ -2,11 +2,8 @@ package model.pipeline.programmable.shaderUtilities.lighting;
 
 import model.math.Vec3f;
 import model.pipeline.programmable.shaderUtilities.CommonTransformations;
-
 import java.awt.*;
 import java.util.ArrayList;
-
-import static java.lang.Math.floor;
 import static java.lang.Math.max;
 import static java.lang.Math.pow;
 import static model.math.VecOperator.*;
@@ -19,15 +16,20 @@ public class LightShader {
         ambient.direction = null;
     }
 
-    public static void addLight(Light yourLight) {
+    public static void addLight(Light yourLight) 
+    {
         diffuseLights.add(yourLight);
     }
-
-    public static void clearLights() {
-        diffuseLights.clear();
+    private static boolean currentlyRendering = false;
+    public static void clearLights()
+    {
+        if (!currentlyRendering)
+            diffuseLights.clear();
     }
     public static Color shadeChunky(Vec3f surfaceNormal, int numberOfChunks)
     {
+        currentlyRendering = true;
+    
         Color result = Color.black;
         for (int i = 0; i < diffuseLights.size(); i++)
         {
@@ -41,10 +43,14 @@ public class LightShader {
             intensity = map(0,numberOfChunks, 0,1, intensity).floatValue();
             result = sumColor(result, scaleColor(diffuseLights.get(i).lightColor, intensity));
         }
+        currentlyRendering = false;
         return sumColor(result, ambient.lightColor);
     }
 
-    public static Color shade(Vec3f normal, Vec3f interpolatedPosition, float fragSpecStregnth, Color fragDiffuseColor) {
+    public static Color shade(Vec3f normal, Vec3f interpolatedPosition, float fragSpecStregnth, Color fragDiffuseColor) 
+    {
+        currentlyRendering = true;
+
         surfaceNormal = normal;
         Color result = Color.black;
         for (int i = 0; i < diffuseLights.size(); i++) 
@@ -60,6 +66,7 @@ public class LightShader {
         }
         //multiply texture once and only once. Order matters ?
         result = mulColor(fragDiffuseColor, result);
+        currentlyRendering = false;
         return sumColor(result, ambient.lightColor);
     }
     private static float shadeSpecLight (Light specular, float specStrength, Vec3f interpolatedPos)

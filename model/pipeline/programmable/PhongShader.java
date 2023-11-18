@@ -37,7 +37,8 @@ public class PhongShader extends Shader
     Texture specMap = new Texture("assets/african_head_spec.png");
 
     @Override
-    public Color fragment(Vec3f fragment, Vec3f bar) {
+    public Color fragment(Vec3f fragment, Vec3f bar) 
+    {
         float posX = interpolate(new Vec3f(positions[0].x(), positions[1].x(), positions[2].x()), bar);
         float posY = interpolate(new Vec3f(positions[0].y(), positions[1].y(), positions[2].y()), bar);
         float posZ = interpolate(new Vec3f(positions[0].z(), positions[1].z(), positions[2].z()), bar);
@@ -57,7 +58,7 @@ public class PhongShader extends Shader
         normalsX=map(0,1,0,normalMap.getWidth(), normalsX).floatValue();
         normalsY=map(0,1,0,normalMap.getHeight(), normalsY).floatValue();
         Color normalColor = normalMap.getPixel((int)normalsX, (int)normalsY);
-        Vec3f normal = new Vec3f((float) normalColor.getRed()/255, (float) normalColor.getGreen()/255, (float) normalColor.getGreen()/255);
+        Vec3f normal = new Vec3f((float) normalColor.getRed()/255, (float) normalColor.getGreen()/255, (float) normalColor.getBlue()/255);
         normal=applyNormalTransform(normal).getNormalized();
 
         //retrieve diffuse color from diffuse map
@@ -65,9 +66,11 @@ public class PhongShader extends Shader
         float diffuseTexLocX = map(0, 1, 0, diffuseMap.getWidth(), texturePixelX).floatValue();
         Color fragmentTextureColor = diffuseMap.getPixel((int) diffuseTexLocX, (int) diffuseTexLocY);
 
+        //retreieve specular intensity from spec map
         float specTexLocY = map(0, 1, 0, specMap.getHeight(), texturePixelY).floatValue();
         float specTexLocX = map(0, 1, 0, diffuseMap.getWidth(), texturePixelX).floatValue();
         Color fragmentSpecColor = specMap.getPixel((int)specTexLocX, (int) specTexLocY);
+        
         return LightShader.shade(normal, interpolatedPosition, fragmentSpecColor.getRed(), fragmentTextureColor);
     }
 
