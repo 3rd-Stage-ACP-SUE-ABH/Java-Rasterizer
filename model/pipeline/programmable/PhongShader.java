@@ -86,12 +86,12 @@ public class PhongShader extends Shader
         float normalZ = interpolate(new Vec3f(normals[0].z(), normals[1].z(), normals[2].z()), bar);
         Vec3f normal = new Vec3f(normalX, normalY, normalZ);
 
-        return LightShader.shade(normal, interpolatedPosition, 0);
+        return LightShader.shade(normal, interpolatedPosition, 32.f, Color.white);
     }
     private Color fragmentNoNormal (Vec3f fragment, Vec3f bar, Vec3f interpolatedPosition)
     {
         //Flat shading.
         Vec3f normal = cross(minus(positions[1], positions[0]), minus(positions[2], positions[0])).getNormalized();
-        return LightShader.shade(normal, interpolatedPosition, 0);
+        return LightShader.shade(normal, interpolatedPosition, 32.f, Color.white);
     }
 }
