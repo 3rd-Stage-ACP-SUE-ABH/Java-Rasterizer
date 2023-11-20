@@ -16,6 +16,8 @@ This project uses no dependencies other than the Java Class library.
 * Shader can shade any number of directional light sources.
 * Renderer re-sizes object coordinates based on viewport dimensions, keeping the aspect ratio of the object intact.
 * Pipeline has programmable vertex and fragment shaders.
+* Shaders have specular mapping and Phong specular shading.
+* GUI now reflects shader state.
 * [More functionality will be appended here]
 
 ### Development Diary : 
@@ -189,4 +191,28 @@ Now this is real normal mapping
 Okay, in this one I projected the normal map as a light source, and did some funky shading 
 
 ![normalMapProjection](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/72922be8-7a37-4b08-949c-dcbbde199c1d)
+
+#### november 20th
+It's been a long time without an update, but we have some good updates this time.
+I don't have many interesting bugs this time around but here are some cool screenshots :
+
+##### Specular
+
+
+![Screenshot from 2023-11-20 16-50-51](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/2f2a055c-2dd8-41a6-84a6-a9ec49ed3066)
+![Screenshot from 2023-11-20 16-51-07](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/424368b6-abf1-43cd-9d31-8bf4eae26d04)
+
+
+Note that the specular highlight changes according the angle we view the model from.
+
+
+##### Specular + diffuse
+
+![Screenshot from 2023-11-20 16-57-42](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/d0b8834b-bcd5-41c5-bddc-feb747ee0d3b)
+![Screenshot from 2023-11-20 16-54-24](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/5a57f390-ea1c-49a8-ae9f-97cf83373c3d)
+
+##### (specular + diffuse) * texture 
+
+![Screenshot from 2023-11-20 16-55-44](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/4add82aa-dc73-426f-9f31-02b09b6387e6)
+![Screenshot from 2023-11-20 16-55-29](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/131815e4-3de2-421d-bd56-f45cb67c62c9)
 
