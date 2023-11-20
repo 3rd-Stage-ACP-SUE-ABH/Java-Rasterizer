@@ -193,7 +193,7 @@ Okay, in this one I projected the normal map as a light source, and did some fun
 ![normalMapProjection](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/72922be8-7a37-4b08-949c-dcbbde199c1d)
 
 #### november 20th
-It's been a long time without an update, but we have some good updates this time.
+It's been a long time without an update.
 I don't have many interesting bugs this time around but here are some cool screenshots :
 
 ##### Specular
