@@ -32,6 +32,7 @@ public class PhongShader extends Shader
                 texCoords[i] = objectData[i+6];
         }
     }
+    
     Texture diffuseMap = new Texture("assets/african_head_diffuse.png");
     Texture normalMap = new Texture("assets/african_head_nm.png");
     Texture specMap = new Texture("assets/african_head_spec.png");
@@ -73,8 +74,6 @@ public class PhongShader extends Shader
         
         return LightShader.shade(normal, interpolatedPosition, fragmentSpecColor.getRed(), fragmentTextureColor);
     }
-
-
     private Color fragmentNoTex (Vec3f fragment, Vec3f bar, Vec3f interpolatedPosition)
     {
         //We have normal coordinates?

@@ -15,42 +15,66 @@ public class LightShader {
     {
         ambient.direction = null;
     }
-
     public static void addLight(Light yourLight) 
     {
         diffuseLights.add(yourLight);
     }
     private static boolean currentlyRendering = false;
+
+    private static boolean hideDiffuse = false;
+    private static boolean hideAmbient = false;
+    private static boolean hideSpecular = false;
+    private static boolean hideTexture = false;
+    private static boolean shadeChunky = false;
+    public static boolean specRdotZ = true;
+    private static int numberOfChunks = 3;
+
+    //public interface for settings 
+
+    public static void setDefaults()
+    {
+        hideDiffuse = false;
+        hideAmbient = false;
+        hideSpecular = false;
+        hideTexture = false;
+        shadeChunky = false;
+        specRdotZ = true;
+    }
+    public static void toggleChunky()
+    {
+        shadeChunky = !shadeChunky;
+        if (shadeChunky == true)
+            hideTexture = true;
+    }
+    public static void toggleDiffuse()
+    {
+        hideDiffuse = !hideDiffuse;
+    }
+    public static void toggleSpec()
+    {
+        hideSpecular = !hideSpecular;
+    }
+    public static void toggleAmbient()
+    {
+        hideAmbient = !hideAmbient;
+    }
+    public static void toggleTex()
+    {
+        hideTexture = !hideTexture;
+    }
+    public static void toggleSpecMode()
+    {
+        specRdotZ = !specRdotZ;
+    }
+
     public static void clearLights()
     {
         if (!currentlyRendering)
             diffuseLights.clear();
     }
-    public static Color shadeChunky(Vec3f surfaceNormal, int numberOfChunks)
-    {
-        currentlyRendering = true;
-    
-        Color result = Color.black;
-        for (int i = 0; i < diffuseLights.size(); i++)
-        {
-            float intensity = Math.max(dot(surfaceNormal.getNormalized(), diffuseLights.get(i).direction.getNormalized().neg()), 0.0f);
-            intensity = map(0,1,0,numberOfChunks,intensity).floatValue();
-            for (int j = 0; j < numberOfChunks; j++)
-            {
-               if(Math.abs(j-intensity)<0.5)
-                   intensity= j;
-            }
-            intensity = map(0,numberOfChunks, 0,1, intensity).floatValue();
-            result = sumColor(result, scaleColor(diffuseLights.get(i).lightColor, intensity));
-        }
-        currentlyRendering = false;
-        return sumColor(result, ambient.lightColor);
-    }
-
     public static Color shade(Vec3f normal, Vec3f interpolatedPosition, float fragSpecStregnth, Color fragDiffuseColor) 
     {
         currentlyRendering = true;
-
         surfaceNormal = normal;
         Color result = Color.black;
         for (int i = 0; i < diffuseLights.size(); i++) 
@@ -59,15 +83,37 @@ public class LightShader {
             {
                 diffuseLights.get(i).direction = minus(interpolatedPosition, diffuseLights.get(i).position);
             }
-            result = sumColor(result, shadeDiffuseLight(diffuseLights.get(i)));
-            result = mulColor(result, 0.75f);    //scale down diffuse
-            result = sumColor(result, mulColor(diffuseLights.get(i).lightColor,
-            shadeSpecLight(diffuseLights.get(i), fragSpecStregnth, interpolatedPosition)));
+            if (shadeChunky)
+            {   //TODO : this is repeating code
+
+                float intensity = Math.max(dot(surfaceNormal.getNormalized(), diffuseLights.get(i).direction.getNormalized().neg()), 0.0f);
+                float specIntensity = shadeSpecLight(diffuseLights.get(i), fragSpecStregnth, interpolatedPosition);
+                intensity = map(0,1,0,numberOfChunks,intensity).floatValue();
+                specIntensity = map(0,1, 0, numberOfChunks, specIntensity).floatValue();
+                for (int j = 0; j < numberOfChunks; j++)
+                {
+                    if(Math.abs(j - intensity)<0.5)
+                        intensity = j;
+                    if(Math.abs(j - specIntensity)<0.5)
+                        specIntensity = j;
+                }
+                intensity = map(0, numberOfChunks, 0, 1, intensity).floatValue();
+                specIntensity = map(0, numberOfChunks, 0, 1, specIntensity).floatValue();
+                result = hideDiffuse ? result : sumColor(result, scaleColor(diffuseLights.get(i).lightColor, intensity));
+                result = hideSpecular ? result : sumColor(result, mulColor(diffuseLights.get(i).lightColor, specIntensity));
+            }
+            else 
+            {
+                result = hideDiffuse ? result : sumColor(result, shadeDiffuseLight(diffuseLights.get(i)));
+                result = hideDiffuse ? result : mulColor(result, 0.75f);    //scale down diffuse
+                result = hideSpecular ? result : sumColor(result, mulColor(diffuseLights.get(i).lightColor,
+                shadeSpecLight(diffuseLights.get(i), fragSpecStregnth, interpolatedPosition)));
+            }
         }
-        //multiply texture once and only once. Order matters ?
-        result = mulColor(fragDiffuseColor, result);
+        //multiply texture once and only once. Order probably matters here.
+        result = hideTexture ? result : mulColor(fragDiffuseColor, result);
         currentlyRendering = false;
-        return sumColor(result, ambient.lightColor);
+        return hideAmbient ? result : sumColor(result, ambient.lightColor);
     }
     private static float shadeSpecLight (Light specular, float specStrength, Vec3f interpolatedPos)
     {
@@ -75,7 +121,7 @@ public class LightShader {
         Vec3f l = specular.direction.getNormalized();
         Vec3f r = minus(l, n.scale(2.f*dot(l, n))).getNormalized();
         Vec3f v =  minus(CommonTransformations.camPos, interpolatedPos).getNormalized();
-        float spec = max (r.z(), 0.f);
+        float spec = max (specRdotZ ? r.z() : dot(r, v), 0.f);
         spec = (float)pow(spec, specStrength);
         return spec;
     }

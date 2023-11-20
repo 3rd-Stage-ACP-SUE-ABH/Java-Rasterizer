@@ -1,36 +1,48 @@
 package controller.renderer;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import model.object3D.Object3D;
 import model.math.*;
 import model.pipeline.fixed.Rasterizer;
 import model.pipeline.fixed.Shader;
+//TODO structure : accommodate loading of multiple models
+//TODO error handling : null handling
 
 public class Renderer {
     BufferedImage pixelBuffer;
+    // model data. stored such that index 0 corresponds to the 3 coordinates specified by the first face.
     Object3D modelObject;
-    //model data. stored such that index 0 corresponds to the 3 3D coordinates specified by face 0.
-    //TODO structure : accommodate loading of multiple models
-    //TODO error handling : null handling
-    //TODO structure : implement a way to handle objects that have no texture coords, or false texture coords. Also implement a texture loading function
-    Vec3f[][] vertexCoords;
-    Vec3f[][] textureCoords;
-    Vec3f[][] normalCoords;
+    private Vec3f[][] vertexCoords;
+    private Vec3f[][] textureCoords;
+    private Vec3f[][] normalCoords;
+    // render data
     public int width, height;
-    public int[] colorBuffer;        //pixel buffer
     public boolean buttonFlag = false;
-    public boolean modelLoaded = false;
-    public Rasterizer myRasterizer;
-    public Shader myShader;
+    private boolean modelLoaded = false;
+    private Rasterizer myRasterizer;
+    private Shader myShader;
 
-    //TODO structure : probably better to use an entire array of lights. Improve the general structure.
     public Renderer(int screenWidth, int screenHeight)
     {
         width=screenWidth;
         height=screenHeight;
         pixelBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         myRasterizer= new Rasterizer(width, height);
+    }
+    public void setShader(Shader yourShader)
+    {
+        myShader=yourShader;
+        myRasterizer.setActiveShader(myShader);
+    }
+    public void clearDepthBuffer()
+    {
+        myRasterizer.clearDepthBuffer();
+    }
+    public void clearColorBuffer(Color clearColor)
+    {
+        myRasterizer.clearPixelBuffer(clearColor);
     }
     public void loadModelData(Object3D modelObject)
     {
@@ -62,14 +74,8 @@ public class Renderer {
         }
         modelLoaded=true;
     }
-    public void setShader(Shader yourShader)
-    {
-        myShader=yourShader;
-        myRasterizer.setActiveShader(myShader);
-    }
     public void renderModel()
     {
-        //calls drawTriangle function on loaded model data
         //TODO error handling : this function assumes nFaces() always matches coords size
         if (buttonFlag || !modelLoaded)
             return;
@@ -77,20 +83,22 @@ public class Renderer {
         for (int i = 0; i<modelObject.nFaces(); i++)
         {
             //future tip, don't change the coordinates values, only copy them, especially if you're updating every frame :)
-            //deliver data
-            //TODO structure : implement this as an optional?
+            //TODO structure : implement these as optionals ?
             if (vertexCoords[i][0]==null||vertexCoords[i][1]==null||vertexCoords[i][2]==null)
             {
                 return;
             }
             //deliver data.
-            myRasterizer.rasterize(new Vec3f[]{vertexCoords[i][0], vertexCoords[i][1], vertexCoords[i][2],
+            myRasterizer.rasterize(
+                    new Vec3f[]{
+                    vertexCoords[i][0], vertexCoords[i][1], vertexCoords[i][2],
                     normalCoords[i][0], normalCoords[i][1], normalCoords[i][2],
-                    textureCoords[i][0], textureCoords[i][1], textureCoords[i][2]});
+                    textureCoords[i][0], textureCoords[i][1], textureCoords[i][2]}
+                    );
         }
     }
-    public void printBufferOutput()
-    {
+    public void writePixelBuffer()
+    {   //writes content of the virtual buffer inside the rasterizer to the buffered image.
         pixelBuffer.setRGB(0,0, width, height, myRasterizer.getPixelBuffer(),0, width);
     }
     public BufferedImage getPixelBuffer(){return pixelBuffer;}

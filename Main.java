@@ -20,7 +20,7 @@ public class Main
 
         Window myWindow = new Window("Java Rasterizer", myRenderer);
 
-        //configure light settings
+        // default global light settings
         Light wlight = new Light();
         wlight.lightColor = new Color(255,255,0);
         wlight.position = new Vec3f(1.0f, 1.45f, 0.f);
@@ -28,14 +28,13 @@ public class Main
 
         // TODO structure : make breaking of while loop dependent on user input
         // render loop
-        int i = 0;
         while (true) {
             long start = System.nanoTime();
             // clear buffers at the beginning of the frame
-            myRenderer.myRasterizer.clearDepthBuffer();
-            myRenderer.myRasterizer.clearPixelBuffer(new Color(50, 50, 50));
+            myRenderer.clearDepthBuffer();
+            myRenderer.clearColorBuffer(new Color(50, 50, 50));
 
-            // specify rotation angle of object around y-axis in radians
+            // upate global geometric variables
             updateMatrices();
           
             //do the magic
@@ -43,13 +42,12 @@ public class Main
 
             // write to the buffer after doing all processing.
             // avoid writing multiple times per frame as tearing happens.
-            myRenderer.printBufferOutput();
+            myRenderer.writePixelBuffer();
             myWindow.update();
-            i++;
-             long time = System.nanoTime() - start;
+            long time = System.nanoTime() - start;
         //     System.out.println("processing time : " + (((double) time / 1_000_000) + "ms/frame"));
         }
     }
-    public static final int pix_height = 300;
-    public static final int pix_width = 300;
+    public static final int pix_height = 350;
+    public static final int pix_width = 350;
 }
