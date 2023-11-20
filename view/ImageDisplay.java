@@ -6,12 +6,16 @@ import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 
+import controller.renderer.Renderer;
+
 public class ImageDisplay extends JFrame {
 
 	public BufferedImage image;
 	public static Panel imagePanel;
+	public buttone c;
 	public int width;
 	public int height;
+
 	private String frameTitle;
 	private Color backgroundColor = new Color(50, 50, 50);
 
@@ -25,8 +29,8 @@ public class ImageDisplay extends JFrame {
 
 		imagePanel = new Panel(image);
 
-		getContentPane().setLayout(new GridLayout(3, 3));
-		getContentPane().add(imagePanel, BorderLayout.CENTER);
+		setLayout(new GridLayout(1, 3));
+		add(imagePanel);
 
 		addComponentListener(new ComponentAdapter() {
 			@Override
