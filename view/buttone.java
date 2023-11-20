@@ -32,7 +32,8 @@ public class buttone extends JPanel implements ActionListener {
 			cameraIncYLabel,
 			cameraZlabel, rotationLabel;
 	JComboBox menulist;
-	String[] menuItems = { "Flat Shader", "Phong + Normal Mapping" };
+	String[] menuItems = { "Default", "Toggle Chunky", "Toggle Texture",
+	 "Toggle Diffuse", "Toggle Specular", "Toggle Ambient", "Toggle Spec Mode"};
 	Object[] optionButton = { "Point Light", "Directional Light" };
 	Object[] optionNextButton = { "Next", "Cancel" };
 	static float posX, posY, posZ;
@@ -168,15 +169,33 @@ public class buttone extends JPanel implements ActionListener {
 			clearLight();
 		}
 		if (src == menulist) {
-			if (menulist.getSelectedIndex() == 0)
-				renderer.setShader(new FlatShader());
-			if (menulist.getSelectedIndex() == 1) {
-				try {
-					renderer.setShader(new PhongShader());
-				} catch (IOException ex) {
-					throw new RuntimeException(ex);
-				}
-			}
+			// { "Default", "Toggle Chunky", "Toggle Texture", 
+			// "Toggle Diffuse", "Toggle Specular",
+			// "Toggle Ambient", "Toggle Spec Mode"}
+			switch (menulist.getSelectedIndex()) {
+				case 0:
+					LightShader.setDefaults();
+					break;
+				case 1:
+					LightShader.toggleChunky();
+					break;
+				case 2:
+					LightShader.toggleTex();
+					break;
+				case 3:
+					LightShader.toggleDiffuse();
+					break;
+				case 4:
+					LightShader.toggleSpec();
+					break;
+				case 5:
+					LightShader.toggleAmbient();
+					break;
+				case 6:
+					LightShader.toggleSpecMode();
+				default:
+					break;
+			} 
 		}
 		if (src == OKbutton)
 			updateInput();
