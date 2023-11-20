@@ -1,6 +1,9 @@
 # The Rasterizer
 This is (an attempt at) a real-time software rasterizer. The graphics logic is mainly based on the renderer described in [Tiny Renderer](https://github.com/ssloy/tinyrenderer/wiki/Lesson-0:-getting-started).
 
+![Screenshot from 2023-11-20 17-30-05](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/e91e30ce-6cdc-4526-9171-3d2e347c2cf5)
+
+
 This project uses no dependencies other than the Java Class library.
 
 ### Current status of Rasterizer :
