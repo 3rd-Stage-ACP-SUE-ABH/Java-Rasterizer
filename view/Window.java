@@ -12,7 +12,7 @@ public class Window {
         ourRenderer = yourRenderer;
         c = new buttone(yourRenderer);
         img = new ImageDisplay(yourRenderer.height, yourRenderer.width, title, yourRenderer.getPixelBuffer());
-        img.setSize(600, 600);
+        img.setSize(1500, 900);
         img.setVisible(true);
         img.add(c);
     }

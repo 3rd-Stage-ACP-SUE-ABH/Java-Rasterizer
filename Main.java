@@ -10,10 +10,8 @@ import view.Window;
 import static model.math.VecOperator.*;
 import static model.pipeline.programmable.shaderUtilities.CommonTransformations.updateMatrices;
 
-public class Main
-{
-    public static void main(String[]args) throws IOException
-    {
+public class Main {
+    public static void main(String[] args) throws IOException {
         // init renderer
         Renderer myRenderer = new Renderer(pix_width, pix_height);
         myRenderer.setShader(new PhongShader());
@@ -22,7 +20,7 @@ public class Main
 
         // default global light settings
         Light wlight = new Light();
-        wlight.lightColor = new Color(255,255,0);
+        wlight.lightColor = new Color(255, 255, 0);
         wlight.position = new Vec3f(1.0f, 1.45f, 0.f);
         LightShader.addLight(wlight);
 
@@ -36,8 +34,8 @@ public class Main
 
             // upate global geometric variables
             updateMatrices();
-          
-            //do the magic
+
+            // do the magic
             myRenderer.renderModel();
 
             // write to the buffer after doing all processing.
@@ -45,9 +43,11 @@ public class Main
             myRenderer.writePixelBuffer();
             myWindow.update();
             long time = System.nanoTime() - start;
-        //     System.out.println("processing time : " + (((double) time / 1_000_000) + "ms/frame"));
+            // System.out.println("processing time : " + (((double) time / 1_000_000) +
+            // "ms/frame"));
         }
     }
+
     public static final int pix_height = 350;
     public static final int pix_width = 350;
 }

@@ -1,4 +1,5 @@
 package view;
+
 import java.awt.Graphics;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
@@ -16,8 +17,8 @@ public class Panel extends JPanel {
 		super.paintComponent(g);
 		int panelWidth = getWidth();
 		int panelHeight = getHeight();
-		int imageWidth = image.getWidth();
-		int imageHeight = image.getHeight();
+		int imageWidth = 700;
+		int imageHeight = 700;
 		// center
 		int x = (panelWidth - imageWidth) / 2;
 		int y = (panelHeight - imageHeight) / 2;
