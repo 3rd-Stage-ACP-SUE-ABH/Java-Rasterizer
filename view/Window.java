@@ -10,14 +10,10 @@ public class Window {
     public Window(String title, Renderer yourRenderer) {
         // init window
         ourRenderer = yourRenderer;
-        c = new buttone(yourRenderer);
-        img = new ImageDisplay(yourRenderer.height, yourRenderer.width, title, yourRenderer.getPixelBuffer());
-        img.setSize(1500, 900);
-        img.setVisible(true);
-        img.add(c);
-    }
-
-    public void update() {
-        img.imagePanel.repaint();
+        // c = new buttone(yourRenderer);
+        // img = new ImageDisplay(yourRenderer.height, yourRenderer.width, title, yourRenderer.getPixelBuffer());
+        // img.setSize(1500, 900);
+        // img.setVisible(true);
+        // img.add(c);
     }
 }

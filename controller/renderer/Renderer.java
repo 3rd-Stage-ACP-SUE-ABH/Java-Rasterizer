@@ -21,7 +21,7 @@ public class Renderer {
     public int width, height;
     public boolean buttonFlag = false;
     private boolean modelLoaded = false;
-    private Rasterizer myRasterizer;
+    public Rasterizer myRasterizer;
     private Shader myShader;
 
     public Renderer(int screenWidth, int screenHeight)
@@ -101,5 +101,11 @@ public class Renderer {
     {   //writes content of the virtual buffer inside the rasterizer to the buffered image.
         pixelBuffer.setRGB(0,0, width, height, myRasterizer.getPixelBuffer(),0, width);
     }
+
     public BufferedImage getPixelBuffer(){return pixelBuffer;}
+
+    public int[] getRasterizerOutput()
+    {
+       return myRasterizer.getPixelBuffer();
+    }
 }

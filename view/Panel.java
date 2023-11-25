@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Graphics;
-import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
@@ -15,13 +14,13 @@ public class Panel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		int panelWidth = getWidth();
-		int panelHeight = getHeight();
-		int imageWidth = 700;
-		int imageHeight = 700;
+		final int panelWidth = getWidth();
+		final int panelHeight = getHeight();
+		final int imageWidth = 700;
+		final int imageHeight = 700;
 		// center
-		int x = (panelWidth - imageWidth) / 2;
-		int y = (panelHeight - imageHeight) / 2;
+		final int x = (panelWidth - imageWidth) / 2;
+		final int y = (panelHeight - imageHeight) / 2;
 		g.drawImage(image, x, y, imageWidth, imageHeight, this);
 	}
 }
