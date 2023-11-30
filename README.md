@@ -6,11 +6,11 @@ This is (an attempt at) a real-time software rasterizer. The graphics logic is m
 
 This project uses no dependencies other than the Java Class library.
 ### How To Use
-Simply run Main with your IDE of choice, or from a terminal,
-thrn import a .obj file using the import button.
+Simply run Main.java with your IDE of choice, or from a terminal,
+then import a .obj file using the import button.
 You can import the .obj file found inside the assets folder for a quick start.
 
-You can also configure texture paths by accessing model/pipeline/proframmable/PhongShader. 
+You can also configure texture paths by accessing model/pipeline/programmable/PhongShader.java, which is the default shader.
 
 ### Current status of Rasterizer ![agkj3-mf8w6-002](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/080953d9-7d03-4f81-bdb3-12df78d8dfe5) :
 
