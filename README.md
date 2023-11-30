@@ -12,6 +12,9 @@ You can import the .obj file found inside the assets folder for a quick start.
 
 You can also configure texture paths by accessing model/pipeline/programmable/PhongShader.java, which is the default shader.
 
+Keep in mind that some .obj files may not laod properly, as this engine uses a fairly primitive way of loading objects. Since we do not intend to develop this engine further,
+we are unlikely to fix this. Feel free to implement your own model loader ;).
+
 ### Current status of Rasterizer ![agkj3-mf8w6-002](https://github.com/3rd-Stage-ACP-SUE-ABH/Java-Rasterizer/assets/50342436/080953d9-7d03-4f81-bdb3-12df78d8dfe5) :
 
 * ~All~ testing done with a .PPM file.
